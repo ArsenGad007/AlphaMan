@@ -19,19 +19,23 @@ public class PlayerAnimator : MonoBehaviour
     void Start()
     {
         animator = player.GetComponent<Animator>();
-        setAnimation("idle");
+        setAnimation(currentAnimation);
     }
 
     void Update()
     {
-        if (player.IsRunning() && currentAnimation != "run")
-            setAnimation("run");
-
-        else if (player.IsWalking() && !player.IsRunning() && currentAnimation != "walk")
-            setAnimation("walk");
-
-        else if (!player.IsWalking() && !player.IsRunning() && currentAnimation != "idle")
+        if (player.IsRunning())
+        {
+            // ѕровер€ю потому что параметры состо€ний animator типа trigger (а не bool)
+            if (currentAnimation != "run")  
+                setAnimation("run");
+        }
+        else if (player.IsWalking())
+        {
+            if (currentAnimation != "walk")
+                setAnimation("walk");
+        }
+        else if (currentAnimation != "idle")
             setAnimation("idle");
-
     }
 }
