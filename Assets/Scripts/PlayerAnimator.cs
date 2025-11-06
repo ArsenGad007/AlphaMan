@@ -11,7 +11,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void setAnimation(string tag)
     {
-        // Debug.Log("Current animation: " + tag);
+        Debug.Log("Current animation: " + tag);
         animator.SetTrigger(tag);
         currentAnimation = tag;
     }
