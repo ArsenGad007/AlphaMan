@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private float speedMove = 2.0f;
 
     [SerializeField]
-    private float speedShiftMove = 5.0f;
+    private float speedRunMove = 5.0f;
 
     [SerializeField]
     private float speedRotate = 15.0f;
@@ -16,38 +16,32 @@ public class PlayerController : MonoBehaviour
 
     private bool isRun = false;
 
+    /// <summary>
+    /// Новая система управления
+    /// </summary>
+    private PlayerInputActions playerInputActions;
+
+    private void Start()
+    {
+        playerInputActions = new();
+        playerInputActions.Player.Enable();
+    }
+
     private void Update()
     {
-        Vector2 inputVector = new(0, 0);
-
-        if (Input.GetKey(KeyCode.W))
-            inputVector.x += 1;
-        if (Input.GetKey(KeyCode.S))
-            inputVector.x = -1;
-        if (Input.GetKey(KeyCode.D))
-            inputVector.y = 1;
-        if (Input.GetKey(KeyCode.A))
-            inputVector.y = -1;
+        Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
+        //Debug.Log(inputVector);
 
         isRun = Input.GetKey(KeyCode.LeftShift);
-        float speed_move = isRun ? speedShiftMove : speedMove;
+        float speed_move = isRun ? speedRunMove : speedMove;
 
-        inputVector = inputVector.normalized;
-
-        Vector3 move_dir = new(inputVector.x, 0, -inputVector.y);
+        Vector3 move_dir = new(inputVector.y, 0, -inputVector.x);
         isWalking = move_dir != Vector3.zero;
 
         transform.position += move_dir * speed_move * Time.deltaTime;
         transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
     }
 
-    public bool IsWalking()
-    {
-        return isWalking;
-    }
-
-    public bool IsRunning()
-    {
-        return isRun && IsWalking();
-    }
+    public bool IsWalking() => isWalking;
+    public bool IsRunning() => isRun && IsWalking();  
 }
