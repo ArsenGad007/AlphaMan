@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,47 +8,25 @@ public class PlayerController : MonoBehaviour
     private float speedMove = 2.0f;
 
     [SerializeField]
-    private float speedShiftMove = 5.0f;
+    private float speedRunMove = 5.0f;
 
     [SerializeField]
     private float speedRotate = 15.0f;
 
-    private bool isWalking = false;
-
-    private bool isRun = false;
+    [SerializeField]
+    private GameInput gameInput;
 
     private void Update()
     {
-        Vector2 inputVector = new(0, 0);
+        if (gameInput.IsWalking())
+        {
+            Vector2 inputVector = gameInput.GetInputVector();
+            float speed_move = gameInput.IsRunning() ? speedRunMove : speedMove;
 
-        if (Input.GetKey(KeyCode.W))
-            inputVector.x += 1;
-        if (Input.GetKey(KeyCode.S))
-            inputVector.x = -1;
-        if (Input.GetKey(KeyCode.D))
-            inputVector.y = 1;
-        if (Input.GetKey(KeyCode.A))
-            inputVector.y = -1;
+            Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
 
-        isRun = Input.GetKey(KeyCode.LeftShift);
-        float speed_move = isRun ? speedShiftMove : speedMove;
-
-        inputVector = inputVector.normalized;
-
-        Vector3 move_dir = new(inputVector.x, 0, -inputVector.y);
-        isWalking = move_dir != Vector3.zero;
-
-        transform.position += move_dir * speed_move * Time.deltaTime;
-        transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
-    }
-
-    public bool IsWalking()
-    {
-        return isWalking;
-    }
-
-    public bool IsRunning()
-    {
-        return isRun && IsWalking();
+            transform.position += move_dir * speed_move * Time.deltaTime;
+            transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
+        }
     }
 }
