@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
@@ -5,33 +6,52 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField]
     private PlayerController player;
 
+    [SerializeField]
+    private GameInput gameInput;
+
+    [SerializeField]
+    private float animationChangeDelay = 0.1f;
+
     private Animator animator;
 
     private string currentAnimation = "idle";
 
-    public void setAnimation(string tag)
+    private bool isChangingAnimation = false;
+
+    public IEnumerator SetAnimationWithDelay(string tag)
     {
-        // Debug.Log("Current animation: " + tag);
+        if (isChangingAnimation && tag != "idle") 
+            yield break;
+
+        isChangingAnimation = true;
+
+        animator.ResetTrigger(currentAnimation);
         animator.SetTrigger(tag);
         currentAnimation = tag;
+        Debug.Log("Current animation: " + tag);
+
+        // Немедленно переходим в idle, остальное — с небольшой задержкой
+        yield return new WaitForSeconds(tag == "idle" ? 0f : animationChangeDelay);
+
+        isChangingAnimation = false;
     }
 
     void Start()
     {
         animator = player.GetComponent<Animator>();
-        setAnimation("idle");
+        StartCoroutine(SetAnimationWithDelay(currentAnimation));
     }
 
     void Update()
     {
-        if (player.IsRunning() && currentAnimation != "run")
-            setAnimation("run");
+        string next_animation = "idle";
 
-        else if (player.IsWalking() && !player.IsRunning() && currentAnimation != "walk")
-            setAnimation("walk");
+        if (gameInput.IsRunning())
+            next_animation = "run";
+        else if (gameInput.IsWalking())
+            next_animation = "walk";
 
-        else if (!player.IsWalking() && !player.IsRunning() && currentAnimation != "idle")
-            setAnimation("idle");
-
+        if (currentAnimation != next_animation)
+            StartCoroutine(SetAnimationWithDelay(next_animation));
     }
 }
