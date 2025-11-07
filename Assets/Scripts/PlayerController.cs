@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
             Vector2 inputVector = gameInput.GetInputVector();
             float speed_move = gameInput.IsRunning() ? speedRunMove : speedMove;
 
-            Vector3 move_dir = new(inputVector.y, 0, -inputVector.x);
+            Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
 
             transform.position += move_dir * speed_move * Time.deltaTime;
             transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
