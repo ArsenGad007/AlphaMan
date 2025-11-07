@@ -9,37 +9,21 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField]
     private GameInput gameInput;
 
-    [SerializeField]
-    private float animationChangeDelay = 0.1f;
-
     private Animator animator;
 
     private string currentAnimation = "idle";
 
-    private bool isChangingAnimation = false;
-
-    public IEnumerator SetAnimationWithDelay(string tag)
+    public void SetAnimation(string tag)
     {
-        if (isChangingAnimation && tag != "idle") 
-            yield break;
-
-        isChangingAnimation = true;
-
         animator.ResetTrigger(currentAnimation);
         animator.SetTrigger(tag);
         currentAnimation = tag;
         Debug.Log("Current animation: " + tag);
-
-        // Немедленно переходим в idle, остальное — с небольшой задержкой
-        yield return new WaitForSeconds(tag == "idle" ? 0f : animationChangeDelay);
-
-        isChangingAnimation = false;
     }
 
     void Start()
     {
         animator = player.GetComponent<Animator>();
-        StartCoroutine(SetAnimationWithDelay(currentAnimation));
     }
 
     void Update()
@@ -52,6 +36,6 @@ public class PlayerAnimator : MonoBehaviour
             next_animation = "walk";
 
         if (currentAnimation != next_animation)
-            StartCoroutine(SetAnimationWithDelay(next_animation));
+            SetAnimation(next_animation);
     }
 }

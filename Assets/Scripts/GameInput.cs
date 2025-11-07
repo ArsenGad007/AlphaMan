@@ -3,8 +3,17 @@ using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
-    private bool isWalking = false;
+    [SerializeField] private float runDelay = 0.1f; 
+    [SerializeField] private float walkDelay = 0.05f;
+
+    private bool isWalkingPressed = false;
     private bool isRunPressed = false;
+
+    private bool isActuallyWalking = false;
+    private bool isActuallyRunning = false;
+
+    private float walkChangeTime;
+    private float runChangeTime;
 
     private Vector2 inputVector;
 
@@ -31,22 +40,37 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Run.canceled -= OnRunCanceled;
     }
 
+    private void Update()
+    {
+        // WALK задержка
+        if (isWalkingPressed && !isActuallyWalking && Time.time - walkChangeTime >= walkDelay)
+            isActuallyWalking = true;
+        else if (!isWalkingPressed && isActuallyWalking)
+            isActuallyWalking = false;
+
+        // RUN задержка
+        if (isRunPressed && isActuallyWalking && !isActuallyRunning && Time.time - runChangeTime >= runDelay)
+            isActuallyRunning = true;
+        else if ((!isRunPressed || !isActuallyWalking) && isActuallyRunning)
+            isActuallyRunning = false;
+    }
+
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
         inputVector = context.ReadValue<Vector2>();
-        isWalking = inputVector != Vector2.zero;
+        isWalkingPressed = inputVector != Vector2.zero;
+        walkChangeTime = Time.time;
     }
-
     private void OnMoveCanceled(InputAction.CallbackContext context)
     {
         inputVector = Vector2.zero;
-        isWalking = false;
+        isWalkingPressed = false;
     }
 
-    private void OnRunPerformed(InputAction.CallbackContext context) => isRunPressed = true;
+    private void OnRunPerformed(InputAction.CallbackContext context) => (isRunPressed, runChangeTime) = (true, Time.time);
     private void OnRunCanceled(InputAction.CallbackContext context) => isRunPressed = false;
 
-    public bool IsWalking() => isWalking;
-    public bool IsRunning() => isRunPressed && isWalking;
-    public Vector2 GetInputVector() => inputVector;
+    public bool IsWalking() => isActuallyWalking;
+    public bool IsRunning() => isActuallyRunning;
+    public Vector2 GetInputVector() => isActuallyWalking ? inputVector : Vector2.zero;
 }
