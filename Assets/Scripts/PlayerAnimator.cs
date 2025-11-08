@@ -1,13 +1,10 @@
-using System.Collections;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-    [SerializeField]
-    private PlayerController player;
+    [SerializeField] private PlayerController player;
 
-    [SerializeField]
-    private GameInput gameInput;
+    [SerializeField] private GameInput gameInput;
 
     private Animator animator;
 
