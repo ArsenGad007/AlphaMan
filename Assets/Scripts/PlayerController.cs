@@ -1,23 +1,14 @@
-using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float speedMove = 2.0f;
+    [SerializeField] private float speedMove = 2.0f;
+    [SerializeField] private float speedRunMove = 5.0f;
+    [SerializeField] private float speedRotate = 15.0f;
 
-    [SerializeField]
-    private float speedRunMove = 5.0f;
+    [SerializeField] private float acceleration = 30.0f;
 
-    [SerializeField]
-    private float speedRotate = 15.0f;
-
-    [SerializeField] 
-    private float acceleration = 30.0f;
-
-    [SerializeField]
-    private GameInput gameInput;
+    [SerializeField] private GameInput gameInput;
 
     private Vector3 smooth_movement;
 
