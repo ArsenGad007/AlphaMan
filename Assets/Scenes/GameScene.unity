@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedMove: 2
-  speedRunMove: 5
+  speedRunMove: 4.5
   speedRotate: 15
   acceleration: 25
   gameInput: {fileID: 1119582196}
@@ -530,8 +530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5877ab5d5887040a18ba2425bece8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runDelay: 0
-  walkDelay: 0
 --- !u!4 &1119582197
 Transform:
   m_ObjectHideFlags: 0
