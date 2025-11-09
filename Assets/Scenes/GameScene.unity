@@ -137,8 +137,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedMove: 2
-  speedRunMove: 5
+  speedRunMove: 4.5
   speedRotate: 15
+  acceleration: 25
   gameInput: {fileID: 1119582196}
 --- !u!114 &177326041
 MonoBehaviour:
@@ -154,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 177326040}
   gameInput: {fileID: 1119582196}
-  animationChangeDelay: 0.1
+  minAnimationInterval: 0.25
 --- !u!4 &177326043 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1303869121318198942, guid: 3625b8aaa69cde2449bff0b4bc37913b, type: 3}
@@ -636,7 +637,7 @@ Transform:
   m_GameObject: {fileID: 1119582195}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5090895, y: 0.03796968, z: -0.654736}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1072,7 +1073,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0fc291490756f05449324efa5f493ed0, type: 2}
+  - {fileID: 2100000, guid: 5cd9c4cb641f84d44a3f09754979864b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

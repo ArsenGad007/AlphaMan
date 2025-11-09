@@ -1,32 +1,28 @@
-using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float speedMove = 2.0f;
+    [SerializeField] private float speedMove = 2.0f;
+    [SerializeField] private float speedRunMove = 5.0f;
+    [SerializeField] private float speedRotate = 15.0f;
 
-    [SerializeField]
-    private float speedRunMove = 5.0f;
+    [SerializeField] private float acceleration = 25.0f;
 
-    [SerializeField]
-    private float speedRotate = 15.0f;
+    [SerializeField] private GameInput gameInput;
 
-    [SerializeField]
-    private GameInput gameInput;
+    private Vector3 smooth_movement;
 
     private void Update()
     {
-        if (gameInput.IsWalking())
-        {
-            Vector2 inputVector = gameInput.GetInputVector();
-            float speed_move = gameInput.IsRunning() ? speedRunMove : speedMove;
+        Vector2 inputVector = gameInput.GetInputVector();
+        Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
 
-            Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
+        float speed_move = gameInput.IsRunning() ? speedRunMove : speedMove;
 
-            transform.position += move_dir * speed_move * Time.deltaTime;
+        smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, acceleration * Time.deltaTime);
+      
+        transform.position += smooth_movement * Time.deltaTime;
+        if (move_dir != Vector3.zero)
             transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
-        }
     }
 }
