@@ -3,12 +3,13 @@ using UnityEngine;
 public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private PlayerController player;
-
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private float minAnimationInterval = 0.25f; 
 
     private Animator animator;
 
     private string currentAnimation = "idle";
+    private float lastChangeTime;
 
     public void SetAnimation(string tag)
     {
@@ -32,7 +33,10 @@ public class PlayerAnimator : MonoBehaviour
         else if (gameInput.IsWalking())
             next_animation = "walk";
 
-        if (currentAnimation != next_animation)
+        if (currentAnimation != next_animation && Time.time - lastChangeTime > minAnimationInterval)
+        {
             SetAnimation(next_animation);
+            lastChangeTime = Time.time;
+        }
     }
 }
