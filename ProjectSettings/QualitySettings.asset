@@ -6,7 +6,7 @@ QualitySettings:
   serializedVersion: 5
   m_CurrentQuality: 1
   m_QualitySettings:
-  - serializedVersion: 5
+  - serializedVersion: 4
     name: Mobile
     pixelLightCount: 2
     shadows: 2
@@ -34,7 +34,6 @@ QualitySettings:
     adaptiveVsyncExtraA: 0
     adaptiveVsyncExtraB: 0
     lodBias: 1
-    meshLodThreshold: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
@@ -60,7 +59,7 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms:
     - Standalone
-  - serializedVersion: 5
+  - serializedVersion: 4
     name: PC
     pixelLightCount: 2
     shadows: 2
@@ -88,7 +87,6 @@ QualitySettings:
     adaptiveVsyncExtraA: 0
     adaptiveVsyncExtraB: 0
     lodBias: 2
-    meshLodThreshold: 1
     maximumLODLevel: 0
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
