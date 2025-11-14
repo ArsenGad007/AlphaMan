@@ -1,10 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
-public class GuardScript : MonoBehaviour
+public class GuardPatrol : MonoBehaviour
 {
-    public Transform[] patrolPoints;
-    public float speed = 5.0f;
+    [SerializeField] private Transform[] patrolPoints;
+    [SerializeField] private float speedMove = 2f;
+    [SerializeField] private float speedRotate = 15f;
+
     private int currentPointIndex = 0;
+    
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,31 +20,39 @@ public class GuardScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (patrolPoints == null || patrolPoints.Length == 0)
-        {
-            //Debug.Log("нет точек патрулирования");
-            return;
-        }
-        
+        Patrol();
+    }
+
+    private void Patrol()
+    {
+        if (patrolPoints == null || patrolPoints.Length == 0) return;
+
         Transform target = patrolPoints[currentPointIndex];
 
-        Vector3 dir = target.position - transform.position;
-        dir.y = 0;
-        if (dir != Vector3.zero)
-        {     
-            transform.rotation = Quaternion.LookRotation(dir);
+
+        transform.position = Vector3.MoveTowards(transform.position, target.position, speedMove * Time.deltaTime);
+
+
+        Vector3 directionToTarget = target.position - transform.position;
+        directionToTarget.y = 0f;
+
+        if (directionToTarget != Vector3.zero)
+        {
+            Vector3 targetForward = directionToTarget.normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(targetForward, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speedRotate * Time.deltaTime);
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
         if (Vector3.Distance(transform.position, target.position) < 0.1f)
         {
-            //Debug.Log("дошел до точки" + currentPointIndex);
-            currentPointIndex++;
-            if (currentPointIndex >= patrolPoints.Length)
-            {
-                currentPointIndex = 0;
-                // Debug.Log("возвращается");
-            }
+            currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
         }
+    }    
+    //связка с анимацией
+    public bool IsMoving()
+    {
+        if (patrolPoints == null || patrolPoints.Length == 0) return false;
+        Transform target = patrolPoints[currentPointIndex];
+        return Vector3.Distance(transform.position, target.position) > 0.1f;
     }
 }
