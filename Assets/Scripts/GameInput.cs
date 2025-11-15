@@ -44,5 +44,5 @@ public class GameInput : MonoBehaviour
 
     public bool IsWalking() => isWalking;
     public bool IsRunning() => isWalking && isRunning;
-    public Vector2 GetInputVector() => inputVector;
+    public Vector2 GetInputVectorNormalized() => inputVector;
 }
