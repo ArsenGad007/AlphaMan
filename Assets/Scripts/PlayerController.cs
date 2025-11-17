@@ -33,6 +33,27 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 MovementForCollisions(Vector3 delta)
     {
+        if (delta == Vector3.zero) return Vector3.zero;
+
+        // Если можем двигаться целиком — двигаемся
+        if (CanMove(delta)) return delta;   
+
+        // Если столкнулись, то пробуем скользить вдоль препятствия
+        Vector3 slideDirection = GetSlideDirection(delta);  
+        if (slideDirection != Vector3.zero && CanMove(slideDirection))
+            return slideDirection;
+
+        // Попробуем движение только по X
+        Vector3 moveX = new Vector3(delta.x, 0, 0);     
+        if (CanMove(moveX)) return moveX;
+
+        // Попробуем движение только по Z
+        Vector3 moveZ = new Vector3(0, 0, delta.z);     
+        if (CanMove(moveZ)) return moveZ;
+
+        // Если всё заблокировано
+        return Vector3.zero;    
+
         bool CanMove(Vector3 moveDir)
         {
             if (moveDir == Vector3.zero)
@@ -46,21 +67,21 @@ public class PlayerController : MonoBehaviour
                 speedRunMove * Time.deltaTime);
         }
 
-        if (delta == Vector3.zero) return Vector3.zero;
-
-        // Если можем двигаться целиком — двигаемся
-        if (CanMove(delta)) return delta;
-
-        // Попробуем движение только по X
-        Vector3 moveX = new Vector3(delta.x, 0, 0);
-        if (CanMove(moveX)) return moveX;
-
-        // Попробуем движение только по Z
-        Vector3 moveZ = new Vector3(0, 0, delta.z);
-        if (CanMove(moveZ)) return moveZ;
-
-        // Если всё заблокировано
-        return Vector3.zero;
+        Vector3 GetSlideDirection(Vector3 delta)
+        {
+            // Получаем нормаль столкновения
+            RaycastHit hit;
+            if (Physics.CapsuleCast(
+                transform.position,
+                transform.position + Vector3.up * playerCollisionHeight,
+                playerCollisionRadius,
+                delta,
+                out hit))
+            {
+                // Возвращаем направление скольжения вдоль поверхности
+                return Vector3.ProjectOnPlane(delta, hit.normal);
+            }
+            return Vector3.zero;
+        }
     }
-
 }
