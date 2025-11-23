@@ -6,6 +6,7 @@ public class GuardPatrol : MonoBehaviour
     [SerializeField] private Transform[] patrolPoints;
     [SerializeField] private float speedMove = 2f;
     [SerializeField] private float speedRotate = 15f;
+    [SerializeField] private FieldOfView fieldOfView;
 
     private int currentPointIndex = 0;
     
@@ -21,6 +22,11 @@ public class GuardPatrol : MonoBehaviour
     void Update()
     {
         Patrol();
+
+        if (fieldOfView != null)
+        {
+            fieldOfView.UpdateFOV(transform.position, transform.forward);
+        }
     }
 
     private void Patrol()
