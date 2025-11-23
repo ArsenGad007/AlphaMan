@@ -1,13 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class FieldOfView : MonoBehaviour
 {
     [SerializeField] private float viewDistance = 10f;
-    [SerializeField] private float fov = 90f;          // полный угол в градусах
+    [SerializeField] private float fov = 90f;          
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField, Range(20, 100)] private int rayCount = 50;
     [SerializeField, Range(0f, 1f)] private float updateInterval = 0.05f;
+    [SerializeField] private GameObject player;
 
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
@@ -39,6 +41,7 @@ public class FieldOfView : MonoBehaviour
         lastPosition = originPosition;
         lastForward = forward;
         lastUpdateTime = Time.time;
+        CheckForPlayer();
     }
 
     private void RebuildMesh(Vector3 originPosition, Vector3 forwardDirection)
@@ -50,7 +53,7 @@ public class FieldOfView : MonoBehaviour
         Vector2[] uvs = new Vector2[vertices.Length];
         int[] triangles = new int[rayCount * 3];
 
-        // Центр в локальных координатах FieldOfView
+
         vertices[0] = transform.InverseTransformPoint(originPosition);
 
         for (int i = 0; i <= rayCount; i++)
@@ -58,7 +61,6 @@ public class FieldOfView : MonoBehaviour
             float angle = -halfFov + i * angleStep;
             Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * forwardDirection.normalized;
 
-            // Используем позицию основного объекта как начало луча
             if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask))
             {
                 vertices[i + 1] = transform.InverseTransformPoint(hit.point);
@@ -76,6 +78,7 @@ public class FieldOfView : MonoBehaviour
                 triangles[idx + 1] = i;
                 triangles[idx + 2] = i + 1;
             }
+            
         }
 
         mesh.Clear();
@@ -83,5 +86,41 @@ public class FieldOfView : MonoBehaviour
         mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+    }
+
+    //проверка для обнаружения
+    private void CheckForPlayer()
+    {
+        if (player == null) return;
+
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        directionToPlayer.y = 0f;
+        float distanceToPlayer = directionToPlayer.magnitude;
+
+       
+        if (distanceToPlayer > viewDistance) return;
+
+        
+        if (Vector3.Angle(transform.forward, directionToPlayer) > fov / 2f) return;
+
+        
+        if (Physics.Raycast(transform.position, directionToPlayer.normalized, out RaycastHit hit, distanceToPlayer, obstacleMask))
+        {
+           
+            if (hit.collider.gameObject == player)
+            {
+                OnPlayerDetected();
+            }
+        }
+        else
+        {
+            OnPlayerDetected();
+        }
+    }
+
+    //что делать при обнаружении
+    private void OnPlayerDetected()
+    {
+        Debug.Log("Охранник заметил игрока!");
     }
 }
