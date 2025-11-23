@@ -12,28 +12,25 @@ public class GuardAnimator : MonoBehaviour
 
     void Start()
     {
-
         if (animator != null)
-        {
             StartCoroutine(SetAnimationWithDelay(currentAnimation));
-        }
     }
 
     void Update()
     {
-        if (guardPatrol == null) return;
+        if (guardPatrol == null) 
+            return;
 
         string nextAnimation = guardPatrol.IsMoving() ? "walk" : "idle";
 
         if (animator != null && currentAnimation != nextAnimation)
-        {
             StartCoroutine(SetAnimationWithDelay(nextAnimation));
-        }
     }
 
     public IEnumerator SetAnimationWithDelay(string tag)
     {
-        if (isChangingAnimation && tag != "idle") yield break;
+        if (isChangingAnimation && tag != "idle") 
+            yield break;
         isChangingAnimation = true;
 
         animator.ResetTrigger(currentAnimation);
