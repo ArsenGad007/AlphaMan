@@ -7,12 +7,17 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] private int gameTimeSec = 60;
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private GameObject gameOverPanel;  // Ссылка на панель проигрыша;
+    [SerializeField] private Button restartButton;
 
     private float timeRemaining;
+    private bool isGameOver = false;
 
     void Start()
     {
         timeRemaining = gameTimeSec;
+        gameOverPanel.SetActive(false);
+        restartButton.onClick.AddListener(RestartGame);
         UpdateTimerDisplay();
     }
 
@@ -23,8 +28,11 @@ public class Timer : MonoBehaviour
             timeRemaining -= Time.deltaTime;
             UpdateTimerDisplay();
         }
-        else
-            RestartGame();
+        else if (!isGameOver)
+        {
+            isGameOver = true;
+            GameOver();
+        }        
     }
     private void UpdateTimerDisplay()
     {
@@ -37,9 +45,23 @@ public class Timer : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+    private void GameOver()
+    {
+        // Остановка игрового процесса
+        Time.timeScale = 0;
+
+        // Показать панель проигрыша
+        gameOverPanel.SetActive(true);
+
+        // Разблокировать курсор (если была блокировка)
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     private void RestartGame()
     {
+        isGameOver = true;
+        gameOverPanel.SetActive(false);
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);   
     }
 }
