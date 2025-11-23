@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class GuardPatrol : MonoBehaviour
 {
@@ -61,4 +62,5 @@ public class GuardPatrol : MonoBehaviour
         Transform target = patrolPoints[currentPointIndex];
         return Vector3.Distance(transform.position, target.position) > 0.1f;
     }
+
 }
