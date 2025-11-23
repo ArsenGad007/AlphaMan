@@ -1,52 +1,87 @@
 using UnityEngine;
 
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class FieldOfView : MonoBehaviour
-{ [SerializeField] float viewDistance = 10f;
-  [SerializeField] float fov = 90f;  
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+{
+    [SerializeField] private float viewDistance = 10f;
+    [SerializeField] private float fov = 90f;          // полный угол в градусах
+    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField, Range(20, 100)] private int rayCount = 50;
+    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.05f;
+
+    private Mesh mesh;
+    private Vector3 lastPosition = Vector3.zero;
+    private Vector3 lastForward = Vector3.forward;
+    private float lastUpdateTime;
+
+    void Awake()
     {
-        Mesh mesh = new Mesh();
+        mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        
-        Vector3 origin = Vector3.zero; 
-        int rayCount = 25;
-        float angle = 0f;
-        float angleIncrease = fov / rayCount;
-        
+    }
+
+    public void UpdateFOV(Vector3 originPosition, Vector3 forwardDirection)
+    {
+        if (Time.time - lastUpdateTime < updateInterval)
+            return;
+
+        Vector3 forward = forwardDirection;
+        forward.y = 0f;
+        if (forward == Vector3.zero) forward = Vector3.forward;
+
+        bool shouldUpdate =
+            Vector3.Distance(originPosition, lastPosition) > 0.1f ||
+            Vector3.Angle(lastForward, forward) > 2f;
+
+        if (!shouldUpdate) return;
+
+        RebuildMesh(originPosition, forward);
+        lastPosition = originPosition;
+        lastForward = forward;
+        lastUpdateTime = Time.time;
+    }
+
+    private void RebuildMesh(Vector3 originPosition, Vector3 forwardDirection)
+    {
+        float halfFov = fov * 0.5f;
+        float angleStep = fov / rayCount;
 
         Vector3[] vertices = new Vector3[rayCount + 2];
-        Vector2[] uv = new Vector2[vertices.Length];
+        Vector2[] uvs = new Vector2[vertices.Length];
         int[] triangles = new int[rayCount * 3];
 
-        vertices[0] = origin;
-        int vInd = 1;
-        int tInd = 0;
+        // Центр в локальных координатах FieldOfView
+        vertices[0] = transform.InverseTransformPoint(originPosition);
+
         for (int i = 0; i <= rayCount; i++)
         {
-            Vector3 vertex = origin + GetVectorFromAngle3D(angle) * viewDistance;
-            vertices[vInd] = vertex;
+            float angle = -halfFov + i * angleStep;
+            Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * forwardDirection.normalized;
+
+            // Используем позицию основного объекта как начало луча
+            if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask))
+            {
+                vertices[i + 1] = transform.InverseTransformPoint(hit.point);
+            }
+            else
+            {
+                Vector3 globalEndPoint = originPosition + rayDirection * viewDistance;
+                vertices[i + 1] = transform.InverseTransformPoint(globalEndPoint);
+            }
 
             if (i > 0)
             {
-                triangles[tInd + 0] = 0;
-                triangles[tInd + 1] = vInd - 1;
-                triangles[tInd + 2] = vInd;
-                tInd += 3;
+                int idx = (i - 1) * 3;
+                triangles[idx] = 0;
+                triangles[idx + 1] = i;
+                triangles[idx + 2] = i + 1;
             }
-
-            vInd++;
-            angle -= angleIncrease;
         }
+
+        mesh.Clear();
         mesh.vertices = vertices;
-        mesh.uv = uv;
+        mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
-    }
-
-    public static Vector3 GetVectorFromAngle3D(float angle)
-    {
-        float angleRad = angle * (Mathf.PI / 180f);
-        return new Vector3(Mathf.Cos(angleRad), 0f, Mathf.Sin(angleRad));
     }
 }
