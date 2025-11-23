@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -11,15 +10,6 @@ public class GuardPatrol : MonoBehaviour
 
     private int currentPointIndex = 0;
     
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         Patrol();
@@ -32,13 +22,12 @@ public class GuardPatrol : MonoBehaviour
 
     private void Patrol()
     {
-        if (patrolPoints == null || patrolPoints.Length == 0) return;
+        if (patrolPoints == null || patrolPoints.Length == 0)
+            return;
 
         Transform target = patrolPoints[currentPointIndex];
 
-
         transform.position = Vector3.MoveTowards(transform.position, target.position, speedMove * Time.deltaTime);
-
 
         Vector3 directionToTarget = target.position - transform.position;
         directionToTarget.y = 0f;
@@ -51,14 +40,15 @@ public class GuardPatrol : MonoBehaviour
         }
 
         if (Vector3.Distance(transform.position, target.position) < 0.1f)
-        {
             currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
-        }
-    }    
+    }   
+    
     //связка с анимацией
     public bool IsMoving()
     {
-        if (patrolPoints == null || patrolPoints.Length == 0) return false;
+        if (patrolPoints == null || patrolPoints.Length == 0) 
+            return false;
+
         Transform target = patrolPoints[currentPointIndex];
         return Vector3.Distance(transform.position, target.position) > 0.1f;
     }
