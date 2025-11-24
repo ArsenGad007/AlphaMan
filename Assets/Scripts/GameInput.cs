@@ -44,5 +44,6 @@ public class GameInput : MonoBehaviour
 
     public bool IsWalking() => isWalking;
     public bool IsRunning() => isWalking && isRunning;
+    public void DisablePlayerInputActions() => playerInputActions.Disable();
     public Vector2 GetInputVectorNormalized() => inputVector;
 }
