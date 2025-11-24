@@ -15900,7 +15900,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: e8f569e9b4f73cb4da85ad4ead915966, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -35312,10 +35312,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faec1547f37666f4b88284ffe62c1047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimeSec: 70
+  gameTimeSec: 5
   timerText: {fileID: 1677870532}
   gameOverPanel: {fileID: 1418639857}
   restartButton: {fileID: 1240374452}
+  gameInput: {fileID: 1119582196}
 --- !u!4 &1692654596
 Transform:
   m_ObjectHideFlags: 0

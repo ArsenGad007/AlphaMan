@@ -9,6 +9,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject gameOverPanel;  // —сылка на панель проигрыша;
     [SerializeField] private Button restartButton;
+    [SerializeField] private GameInput gameInput;
 
     private float timeRemaining;
     private bool isGameOver = false;
@@ -59,7 +60,7 @@ public class Timer : MonoBehaviour
 
     private void RestartGame()
     {
-        isGameOver = true;
+        gameInput.DisablePlayerInputActions();
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);   
