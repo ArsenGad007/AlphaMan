@@ -10,6 +10,7 @@ public class FieldOfView : MonoBehaviour
     [SerializeField, Range(20, 100)] private int rayCount = 50;
     [SerializeField, Range(0f, 1f)] private float updateInterval = 0.05f;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameOver gameOver;
 
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
@@ -122,5 +123,6 @@ public class FieldOfView : MonoBehaviour
     private void OnPlayerDetected()
     {
         Debug.Log("Охранник заметил игрока!");
+        gameOver.GameOverPanel();
     }
 }
