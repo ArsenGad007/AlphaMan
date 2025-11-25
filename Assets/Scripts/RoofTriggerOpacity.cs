@@ -1,9 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-public class TriggerOpacity : MonoBehaviour
+public class RoofTriggerOpacity : MonoBehaviour
 {
-    [Header("Objects to fade")]
     [SerializeField] private GameObject[] objectsToFade;
 
     [Header("Fade settings")]
