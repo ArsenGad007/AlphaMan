@@ -98,12 +98,17 @@ public class FieldOfView : MonoBehaviour
         directionToPlayer.y = 0f;
         float distanceToPlayer = directionToPlayer.magnitude;
 
-        // ПЕРВЫМ ДЕЛОМ проверяем круговую зону (ближний радиус)
+
         if (distanceToPlayer <= detectionRadius)
         {
-            OnPlayerDetected();
-            return; // Выходим, так как игрок уже обнаружен
+            if (!Physics.Raycast(transform.position, directionToPlayer.normalized, out RaycastHit hitCircular, distanceToPlayer, obstacleMask) ||
+                hitCircular.collider.gameObject == player)
+            {
+                OnPlayerDetected();
+                return;
+            }
         }
+
 
         if (distanceToPlayer > viewDistance) return;
 
