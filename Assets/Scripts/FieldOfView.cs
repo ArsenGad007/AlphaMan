@@ -49,13 +49,21 @@ public class FieldOfView : MonoBehaviour
     {
         float halfFov = fov * 0.5f;
         float angleStep = fov / rayCount;
+        const int circleSegments = 32;
 
-        Vector3[] vertices = new Vector3[rayCount + 2];
+        int coneVerticesCount = rayCount + 2; 
+        int circleVerticesCount = circleSegments + 1; 
+
+        Vector3[] vertices = new Vector3[coneVerticesCount + circleVerticesCount];
         Vector2[] uvs = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3];
+        int[] triangles = new int[rayCount * 3 + circleSegments * 3];
 
+        int vertexIndex = 0;
+        int triangleIndex = 0;
 
-        vertices[0] = transform.InverseTransformPoint(originPosition);
+        //конус
+        vertices[vertexIndex] = transform.InverseTransformPoint(originPosition); 
+        vertexIndex++;
 
         for (int i = 0; i <= rayCount; i++)
         {
@@ -64,22 +72,47 @@ public class FieldOfView : MonoBehaviour
 
             if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask))
             {
-                vertices[i + 1] = transform.InverseTransformPoint(hit.point);
+                vertices[vertexIndex] = transform.InverseTransformPoint(hit.point);
             }
             else
             {
                 Vector3 globalEndPoint = originPosition + rayDirection * viewDistance;
-                vertices[i + 1] = transform.InverseTransformPoint(globalEndPoint);
+                vertices[vertexIndex] = transform.InverseTransformPoint(globalEndPoint);
             }
 
             if (i > 0)
             {
-                int idx = (i - 1) * 3;
-                triangles[idx] = 0;
-                triangles[idx + 1] = i;
-                triangles[idx + 2] = i + 1;
+                triangles[triangleIndex] = 0;
+                triangles[triangleIndex + 1] = vertexIndex - 1;
+                triangles[triangleIndex + 2] = vertexIndex;
+                triangleIndex += 3;
             }
-            
+            vertexIndex++;
+        }
+
+        //круг
+        int circleCenterIndex = vertexIndex;
+        vertices[vertexIndex] = transform.InverseTransformPoint(originPosition); 
+        vertexIndex++;
+
+        for (int i = 0; i < circleSegments; i++)
+        {
+            float angle = (i / (float)circleSegments) * 360f;
+            Vector3 circleDirection = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            Vector3 circlePoint = originPosition + circleDirection * detectionRadius;
+            vertices[vertexIndex] = transform.InverseTransformPoint(circlePoint);
+            vertexIndex++;
+        }
+
+        for (int i = 0; i < circleSegments; i++)
+        {
+            int currentVertex = circleCenterIndex + 1 + i;
+            int nextVertex = circleCenterIndex + 1 + ((i + 1) % circleSegments);
+
+            triangles[triangleIndex] = circleCenterIndex; 
+            triangles[triangleIndex + 1] = currentVertex; 
+            triangles[triangleIndex + 2] = nextVertex;    
+            triangleIndex += 3;
         }
 
         mesh.Clear();
