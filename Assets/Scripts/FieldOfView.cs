@@ -99,10 +99,18 @@ public class FieldOfView : MonoBehaviour
         {
             float angle = (i / (float)circleSegments) * 360f;
             Vector3 circleDirection = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-            Vector3 circlePoint = originPosition + circleDirection * detectionRadius;
-            vertices[vertexIndex] = transform.InverseTransformPoint(circlePoint);
+            if (Physics.Raycast(originPosition, circleDirection, out RaycastHit hit, detectionRadius, obstacleMask))
+            {
+                vertices[vertexIndex] = transform.InverseTransformPoint(hit.point);
+            }
+            else
+            {
+                Vector3 circlePoint = originPosition + circleDirection * detectionRadius;
+                vertices[vertexIndex] = transform.InverseTransformPoint(circlePoint);
+            }
             vertexIndex++;
         }
+    
 
         for (int i = 0; i < circleSegments; i++)
         {
