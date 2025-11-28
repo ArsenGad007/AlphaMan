@@ -2,18 +2,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class FieldOfView : MonoBehaviour
 {
-    [SerializeField] private float viewDistance = 10f;
+    [SerializeField] private float viewDistance = 5f;
     [SerializeField] private float fov = 90f;          
     [SerializeField] private LayerMask obstacleMask;
-    [SerializeField, Range(20, 100)] private int rayCount = 100;
-    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.0005f;
+    [SerializeField, Range(20, 100)] private int rayCount = 80;
+    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.001f;
     [SerializeField] private GameObject player;
     [SerializeField] private GameOver gameOver;
 
-    [SerializeField] private float detectionRadius = 1f;
+    [SerializeField] private float detectionRadius = 1.7f;
 
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
