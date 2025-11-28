@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,11 +8,13 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] private float viewDistance = 10f;
     [SerializeField] private float fov = 90f;          
     [SerializeField] private LayerMask obstacleMask;
-    [SerializeField, Range(20, 100)] private int rayCount = 50;
-    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.05f;
+    [SerializeField, Range(20, 100)] private int rayCount = 100;
+    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.0005f;
     [SerializeField] private GameObject player;
     [SerializeField] private GameOver gameOver;
+
     [SerializeField] private float detectionRadius = 1f;
+
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
     private Vector3 lastForward = Vector3.forward;
@@ -62,7 +65,7 @@ public class FieldOfView : MonoBehaviour
         int triangleIndex = 0;
 
         //конус
-        vertices[vertexIndex] = transform.InverseTransformPoint(originPosition); 
+        vertices[vertexIndex] = transform.InverseTransformPoint(originPosition);
         vertexIndex++;
 
         for (int i = 0; i <= rayCount; i++)
@@ -70,15 +73,56 @@ public class FieldOfView : MonoBehaviour
             float angle = -halfFov + i * angleStep;
             Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * forwardDirection.normalized;
 
-            if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask))
+            // интерпол€ци€
+            Vector3 finalPoint;
+
+            if (i == 0)
             {
-                vertices[vertexIndex] = transform.InverseTransformPoint(hit.point);
+                if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask, QueryTriggerInteraction.Ignore))
+                {
+                    finalPoint = hit.point;
+                }
+                else
+                {
+                    finalPoint = originPosition + rayDirection * viewDistance;
+                }
             }
             else
             {
-                Vector3 globalEndPoint = originPosition + rayDirection * viewDistance;
-                vertices[vertexIndex] = transform.InverseTransformPoint(globalEndPoint);
+                Vector3 prevPoint = vertices[vertexIndex - 1];
+                Vector3 currentPoint;
+
+                if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask, QueryTriggerInteraction.Ignore))
+                {
+                    currentPoint = hit.point;
+                }
+                else
+                {
+                    currentPoint = originPosition + rayDirection * viewDistance;
+                }
+
+                if (Vector3.Distance(prevPoint, currentPoint) > 1f)
+                {
+                    float midAngle = -halfFov + (i - 0.5f) * angleStep;
+                    Vector3 midDirection = Quaternion.Euler(0, midAngle, 0) * forwardDirection.normalized;
+
+                    if (Physics.Raycast(originPosition, midDirection, out RaycastHit midHit, viewDistance, obstacleMask, QueryTriggerInteraction.Ignore))
+                    {
+                        Vector3[] candidates = { prevPoint, midHit.point, currentPoint };
+                        finalPoint = candidates.OrderBy(p => Vector3.Distance(p, originPosition)).First();
+                    }
+                    else
+                    {
+                        finalPoint = currentPoint;
+                    }
+                }
+                else
+                {
+                    finalPoint = currentPoint;
+                }
             }
+
+            vertices[vertexIndex] = transform.InverseTransformPoint(finalPoint);
 
             if (i > 0)
             {
