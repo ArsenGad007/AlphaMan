@@ -5,6 +5,7 @@ public class GameInput : MonoBehaviour
 {
     private bool isWalking = false;
     private bool isRunning = false;
+    private bool isInteract = false;
 
     private Vector2 inputVector;
     private PlayerInputActions playerInputActions;
@@ -18,6 +19,8 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Move.canceled += OnMoveCanceled;
         playerInputActions.Player.Run.performed += OnRunPerformed;
         playerInputActions.Player.Run.canceled += OnRunCanceled;
+        playerInputActions.Player.Interact.performed += OnInteractPerformed;
+        playerInputActions.Player.Interact.canceled += OnInteractCanceled;
     }
 
     private void OnDestroy()
@@ -26,6 +29,8 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Move.canceled -= OnMoveCanceled;
         playerInputActions.Player.Run.performed -= OnRunPerformed;
         playerInputActions.Player.Run.canceled -= OnRunCanceled;
+        playerInputActions.Player.Interact.performed -= OnInteractPerformed;
+        playerInputActions.Player.Interact.canceled -= OnInteractCanceled;
     }
 
     private void OnMovePerformed(InputAction.CallbackContext context)
@@ -40,9 +45,12 @@ public class GameInput : MonoBehaviour
     }
     private void OnRunPerformed(InputAction.CallbackContext context) => isRunning = true;
     private void OnRunCanceled(InputAction.CallbackContext context) => isRunning = false;
-
+    private void OnInteractPerformed(InputAction.CallbackContext obj) => isInteract = true;
+    private void OnInteractCanceled(InputAction.CallbackContext obj) => isInteract = false;
 
     public bool IsWalking() => isWalking;
     public bool IsRunning() => isWalking && isRunning;
+    public bool IsInteract() => isInteract;
+    public void DisablePlayerInputActions() => playerInputActions.Disable();
     public Vector2 GetInputVectorNormalized() => inputVector;
 }

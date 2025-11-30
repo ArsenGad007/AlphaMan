@@ -1,16 +1,23 @@
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class GuardPatrol : MonoBehaviour
 {
     [SerializeField] private Transform[] patrolPoints;
     [SerializeField] private float speedMove = 2f;
     [SerializeField] private float speedRotate = 15f;
+    [SerializeField] private FieldOfView fieldOfView;
 
     private int currentPointIndex = 0;
     
     void Update()
     {
         Patrol();
+
+        if (fieldOfView != null)
+        {
+            fieldOfView.UpdateFOV(transform.position, transform.forward);
+        }
     }
 
     private void Patrol()
@@ -45,4 +52,5 @@ public class GuardPatrol : MonoBehaviour
         Transform target = patrolPoints[currentPointIndex];
         return Vector3.Distance(transform.position, target.position) > 0.1f;
     }
+
 }
