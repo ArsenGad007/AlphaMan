@@ -1,9 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-public class TriggerOpacity : MonoBehaviour
+public class RoofTriggerOpacity : MonoBehaviour
 {
-    [Header("Objects to fade")]
     [SerializeField] private GameObject[] objectsToFade;
 
     [Header("Fade settings")]
@@ -33,6 +32,10 @@ public class TriggerOpacity : MonoBehaviour
         if (renderer == null) yield break;
 
         Material material = renderer.material;
+
+        if (!material.HasProperty("_Color"))
+            yield break;
+
         float startAlpha = material.color.a;
 
         float elapsed = 0f;

@@ -1,0 +1,37 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class GameWin : MonoBehaviour
+{
+    [SerializeField] private GameObject gameWinPanel;  // Ссылка на панель победы;
+    [SerializeField] private GameInput gameInput;
+    [SerializeField] private Button restartButton;
+
+    void Start()
+    {
+        gameWinPanel.SetActive(false);
+        restartButton.onClick.RemoveListener(RestartGameWin); // Удаляем если был
+        restartButton.onClick.AddListener(RestartGameWin);
+    }
+
+    public void GameWinPanel()
+    {
+        // Остановка игрового процесса
+        Time.timeScale = 0;
+
+        // Показать панель выйгрыша
+        gameWinPanel.SetActive(true);
+
+        // Разблокировать курсор (если была блокировка)
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void RestartGameWin()
+    {
+        gameInput.DisablePlayerInputActions();
+        gameWinPanel.SetActive(false);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+}
