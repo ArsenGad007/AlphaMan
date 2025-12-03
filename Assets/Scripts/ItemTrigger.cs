@@ -20,7 +20,7 @@ public class ItemTrigger : MonoBehaviour
                 flagInteract = false;
 
                 // Воспроизведение звука взятия предмета
-                Sounds.Instance.PlaySound(5);
+                Sounds.Instance.PlayPickup();
             }            
             else if (!gameInput.IsInteract())
                 flagInteract = true;
