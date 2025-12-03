@@ -19,6 +19,9 @@ public class GameOver : MonoBehaviour
     {
         // Остановка игрового процесса
         Time.timeScale = 0;
+        
+        // Воспроизведение звука проигрыша
+        Sounds.Instance.PlaySound(3);
 
         // Показать панель проигрыша
         gameOverPanel.SetActive(true);
