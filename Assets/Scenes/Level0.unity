@@ -5695,14 +5695,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f976d5b8963af7429624ec071afae4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds:
-  - {fileID: 8300000, guid: 88bf02679a2ae5647a8a8c3ea48defcd, type: 3}
-  - {fileID: 8300000, guid: 910e5fe67e581e6488b212772f867758, type: 3}
-  - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
-  - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
-  - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
-  - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
-  randSound: []
+  walkSound: {fileID: 0}
+  runSound: {fileID: 0}
+  pickupSound: {fileID: 0}
+  winSound: {fileID: 0}
+  loseSound: {fileID: 0}
+  randomSteps: []
 --- !u!82 &226994040
 AudioSource:
   m_ObjectHideFlags: 0

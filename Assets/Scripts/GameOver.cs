@@ -21,7 +21,7 @@ public class GameOver : MonoBehaviour
         Time.timeScale = 0;
         
         // Воспроизведение звука проигрыша
-        Sounds.Instance.PlaySound(3);
+        Sounds.Instance.PlayLose();
 
         // Показать панель проигрыша
         gameOverPanel.SetActive(true);

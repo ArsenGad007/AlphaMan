@@ -21,7 +21,7 @@ public class GameWin : MonoBehaviour
         Time.timeScale = 0;
 
         // Воспроизведение звука выигрыша
-        Sounds.Instance.PlaySound(4);
+        Sounds.Instance.PlayWin();
 
         // Показать панель выйгрыша
         gameWinPanel.SetActive(true);
