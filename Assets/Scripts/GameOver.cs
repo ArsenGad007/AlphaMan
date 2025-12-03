@@ -11,8 +11,6 @@ public class GameOver : MonoBehaviour
     void Start()
     {
         gameOverPanel.SetActive(false);
-        restartButton.onClick.RemoveListener(RestartGameOver); // Удаляем если был
-        restartButton.onClick.AddListener(RestartGameOver);
     }
     
     public void GameOverPanel()
@@ -26,8 +24,8 @@ public class GameOver : MonoBehaviour
         // Показать панель проигрыша
         gameOverPanel.SetActive(true);
 
-        // Разблокировать курсор (если была блокировка)
-        Cursor.lockState = CursorLockMode.None;
+        restartButton.onClick.RemoveListener(RestartGameOver); 
+        restartButton.onClick.AddListener(RestartGameOver);
     }
 
     private void RestartGameOver()
