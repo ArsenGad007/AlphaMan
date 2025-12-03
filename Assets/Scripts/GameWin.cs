@@ -11,8 +11,6 @@ public class GameWin : MonoBehaviour
     void Start()
     {
         gameWinPanel.SetActive(false);
-        restartButton.onClick.RemoveListener(RestartGameWin); // Удаляем если был
-        restartButton.onClick.AddListener(RestartGameWin);
     }
 
     public void GameWinPanel()
@@ -23,8 +21,8 @@ public class GameWin : MonoBehaviour
         // Показать панель выйгрыша
         gameWinPanel.SetActive(true);
 
-        // Разблокировать курсор (если была блокировка)
-        Cursor.lockState = CursorLockMode.None;
+        restartButton.onClick.RemoveListener(RestartGameWin); 
+        restartButton.onClick.AddListener(RestartGameWin);
     }
 
     private void RestartGameWin()
