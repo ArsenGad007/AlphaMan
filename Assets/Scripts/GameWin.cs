@@ -20,6 +20,9 @@ public class GameWin : MonoBehaviour
         // Остановка игрового процесса
         Time.timeScale = 0;
 
+        // Воспроизведение звука выигрыша
+        Sounds.Instance.PlaySound(4);
+
         // Показать панель выйгрыша
         gameWinPanel.SetActive(true);
 
