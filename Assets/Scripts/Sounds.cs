@@ -7,6 +7,9 @@ public class Sounds : MonoBehaviour
     public static Sounds Instance;
     private AudioSource audioSrc;
 
+    public event System.Action OnImportantSoundStarted;
+    public event System.Action OnImportantSoundEnded;
+
     private void Awake()
     {
         Instance = this;
@@ -17,27 +20,56 @@ public class Sounds : MonoBehaviour
 
     [Header("Одиночные звуки (One Shot)")]
     [SerializeField] private AudioClip walkSound;
+    [Range(0f, 1f)] public float walkVolume = 1f;
+
     [SerializeField] private AudioClip runSound;
+    [Range(0f, 1f)] public float runVolume = 1f;
+
     [SerializeField] private AudioClip pickupSound;
+    [Range(0f, 1f)] public float pickupVolume = 1f;
+
     [SerializeField] private AudioClip winSound;
+    [Range(0f, 1f)] public float winVolume = 1f;
+
     [SerializeField] private AudioClip loseSound;
+    [Range(0f, 1f)] public float loseVolume = 1f;
 
     [Header("Наборы случайных звуков")]
     [SerializeField] private AudioClip[] randomSteps;
+    [Range(0f, 1f)] public float randomStepVolume = 1f;
 
-    // Отделльные звуки
-    public void PlayWalk() => PlayOne(walkSound);
-    public void PlayRun() => PlayOne(runSound);
-    public void PlayPickup() => PlayOne(pickupSound);
-    public void PlayWin() => PlayOne(winSound);
-    public void PlayLose() => PlayOne(loseSound);
+    // --- Важные звуки победы/поражения ---
+    public void PlayWin() => PlayImportant(winSound, winVolume);
+    public void PlayLose() => PlayImportant(loseSound, loseVolume);
+
+
+    // --- Обычные ---
+    public void PlayWalk() => PlayOne(walkSound, walkVolume);
+    public void PlayRun() => PlayOne(runSound, runVolume);
+    public void PlayPickup() => PlayOne(pickupSound, pickupVolume);
 
     /// <summary>
     /// Рандомные звуки шагов
     /// </summary>
-    public void PlayRandomStep()
+    public void PlayRandomStep() =>
+        PlayOne(randomSteps[Random.Range(0, randomSteps.Length)], randomStepVolume);
+
+    private void PlayImportant(AudioClip clip, float volume)
     {
-        PlayOne(randomSteps[Random.Range(0, randomSteps.Length)]);
+        if (clip == null) return;
+        StartCoroutine(PlayImportantRoutine(clip, volume));
+    }
+
+    private IEnumerator PlayImportantRoutine(AudioClip clip, float volume)
+    {
+        OnImportantSoundStarted?.Invoke();
+
+        audioSrc.pitch = 1f;
+        audioSrc.PlayOneShot(clip, volume);
+
+        yield return new WaitForSeconds(clip.length);
+
+        OnImportantSoundEnded?.Invoke();
     }
 
     /// <summary>
