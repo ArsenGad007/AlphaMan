@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,9 @@ public class GameExit : MonoBehaviour
     [SerializeField] private Button exitButton;
     [SerializeField] private Button yesButton;
     [SerializeField] private Button noButton;
+
+    public static event Action OnMenuOpened;
+    public static event Action OnMenuClosed;
 
     void Start()
     {
@@ -23,6 +27,9 @@ public class GameExit : MonoBehaviour
 
         // Показать панель выхода
         gameExitPanel.SetActive(true);
+
+        // Поставить фоновую музыку на паузу
+        OnMenuOpened?.Invoke();
 
         yesButton.onClick.RemoveListener(YesButton);
         yesButton.onClick.AddListener(YesButton);
@@ -51,5 +58,7 @@ public class GameExit : MonoBehaviour
 
         // Убрать панель выхода
         gameExitPanel.SetActive(false);
+
+        OnMenuClosed?.Invoke(); // Снять с паузы музыку
     }
 }

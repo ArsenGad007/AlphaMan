@@ -10,13 +10,11 @@ public class Music : MonoBehaviour
 
         Sounds.Instance.OnImportantSoundStarted += PauseMusic;
         Sounds.Instance.OnImportantSoundEnded += ResumeMusic;
+
+        GameExit.OnMenuOpened += PauseMusic;
+        GameExit.OnMenuClosed += ResumeMusic;
     }
 
-    //private void PauseMusic()
-    //{
-    //    if (music.isPlaying)
-    //        music.Pause();
-    //}
     private void PauseMusic()
     {
         music.Pause();
