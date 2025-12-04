@@ -17,11 +17,13 @@ public class Music : MonoBehaviour
 
     private void PauseMusic()
     {
+        if (music == null) return;  // защита от ошибки
         music.Pause();
     }
 
     private void ResumeMusic()
     {
+        if (music == null) return;  // защита от ошибки
         music.UnPause();
     }
 }
