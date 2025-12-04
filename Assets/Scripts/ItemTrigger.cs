@@ -13,7 +13,7 @@ public class ItemTrigger : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            if (gameInput.IsInteract() && flagInteract)
+            if (gameInput.IsInteract() && flagInteract && !itemCollected)
             {
                 targetObject.SetActive(false);
                 itemCollected = true;
