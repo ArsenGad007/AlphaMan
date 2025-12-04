@@ -17,6 +17,9 @@ public class ItemTrigger : MonoBehaviour
             {
                 targetObject.SetActive(false);
                 itemCollected = true;
+
+                Sounds.Instance.PlayPickup();  // звук взятия предмета
+                flagInteract = false;
             }            
             else if (!gameInput.IsInteract())
                 flagInteract = true;
