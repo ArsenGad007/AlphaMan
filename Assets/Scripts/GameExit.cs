@@ -25,11 +25,11 @@ public class GameExit : MonoBehaviour
         // Остановка игрового процесса
         Time.timeScale = 0;
 
-        // Показать панель выхода
-        gameExitPanel.SetActive(true);
-
         // Поставить фоновую музыку на паузу
         OnMenuOpened?.Invoke();
+
+        // Показать панель выхода
+        gameExitPanel.SetActive(true);
 
         yesButton.onClick.RemoveListener(YesButton);
         yesButton.onClick.AddListener(YesButton);
