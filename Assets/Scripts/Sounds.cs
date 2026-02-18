@@ -12,11 +12,11 @@ public class Sounds : MonoBehaviour
 
     private void Awake()
     {
-       Instance = this;
+        Instance = this;
 
         if (!TryGetComponent(out audioSrc))
             audioSrc = gameObject.AddComponent<AudioSource>();
-        }
+    }
 
     [Header("Одиночные звуки (One Shot)")]
     [SerializeField] private AudioClip walkSound;
@@ -44,15 +44,20 @@ public class Sounds : MonoBehaviour
 
 
     // --- Обычные ---
-    public void PlayWalk() => PlayOne(walkSound, walkVolume);
-    public void PlayRun() => PlayOne(runSound, runVolume);
+    [SerializeField] public AudioClip[] walkSteps;
+
+    [SerializeField] public AudioClip[] runSteps;
+
+    public void PlayWalk() => PlayRandomStep(walkSteps);
+
+    public void PlayRun() => PlayRandomStep(runSteps);
     public void PlayPickup() => PlayOne(pickupSound, pickupVolume);
 
     /// <summary>
     /// Рандомные звуки шагов
     /// </summary>
-    public void PlayRandomStep() =>
-        PlayOne(randomSteps[Random.Range(0, randomSteps.Length)], randomStepVolume);
+    public void PlayRandomStep(AudioClip[] clips) =>
+        PlayOne(clips[Random.Range(0, clips.Length)], randomStepVolume);
 
     private void PlayImportant(AudioClip clip, float volume)
     {
@@ -81,5 +86,5 @@ public class Sounds : MonoBehaviour
 
         audioSrc.pitch = Random.Range(pMin, pMax);
         audioSrc.PlayOneShot(clip, volume);
-    }    
+    }
 }
