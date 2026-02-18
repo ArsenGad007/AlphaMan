@@ -12,11 +12,11 @@ public class Sounds : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+       Instance = this;
 
         if (!TryGetComponent(out audioSrc))
             audioSrc = gameObject.AddComponent<AudioSource>();
-    }
+        }
 
     [Header("Одиночные звуки (One Shot)")]
     [SerializeField] private AudioClip walkSound;

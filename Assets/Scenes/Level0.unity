@@ -37454,9 +37454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f976d5b8963af7429624ec071afae4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSound: {fileID: 0}
+  walkSound: {fileID: 8300000, guid: 88bf02679a2ae5647a8a8c3ea48defcd, type: 3}
   walkVolume: 1
-  runSound: {fileID: 0}
+  runSound: {fileID: 8300000, guid: 910e5fe67e581e6488b212772f867758, type: 3}
   runVolume: 1
   pickupSound: {fileID: 8300000, guid: 7cc4c6e4516c4464eac2492e16d18e54, type: 3}
   pickupVolume: 0.45
@@ -37478,7 +37478,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
