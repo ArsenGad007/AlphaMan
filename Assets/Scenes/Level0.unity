@@ -37454,18 +37454,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f976d5b8963af7429624ec071afae4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSound: {fileID: 0}
-  walkVolume: 1
-  runSound: {fileID: 0}
-  runVolume: 1
+  walkSound: {fileID: 8300000, guid: 8eddbd906baf2c144b57c9bd9f16b30f, type: 3}
+  walkVolume: 0
+  runSound: {fileID: 8300000, guid: 95844d4a849add04bb7a6dde908c5756, type: 3}
+  runVolume: 0
   pickupSound: {fileID: 8300000, guid: 7cc4c6e4516c4464eac2492e16d18e54, type: 3}
-  pickupVolume: 0.45
+  pickupVolume: 0.06
   winSound: {fileID: 8300000, guid: 64e9635aca33e844b93007cdbe9a290c, type: 3}
   winVolume: 0.07
   loseSound: {fileID: 8300000, guid: 3b4b3c93449e0c64686aa252646b3690, type: 3}
   loseVolume: 0.07
-  randomSteps: []
+  randomSteps:
+  - {fileID: 8300000, guid: 88bf02679a2ae5647a8a8c3ea48defcd, type: 3}
   randomStepVolume: 1
+  walkSteps:
+  - {fileID: 8300000, guid: ee61721591b5260488b4edf81833fe9d, type: 3}
+  - {fileID: 8300000, guid: 23abdb92e68cdb74aa302b48c02cb95e, type: 3}
+  - {fileID: 8300000, guid: 510c17d5c4f2bf8498710805f9801fb4, type: 3}
+  runSteps:
+  - {fileID: 8300000, guid: 28c260e682290934a80c76208327c64d, type: 3}
+  - {fileID: 8300000, guid: a6755901ca7b27e4b9b611284555bd7f, type: 3}
+  - {fileID: 8300000, guid: 78833ec3fcd92304fa229b1133a87a51, type: 3}
 --- !u!82 &1377799024
 AudioSource:
   m_ObjectHideFlags: 0
@@ -37478,7 +37487,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -57823,7 +57832,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 42ed1fa7fd09a9e4ab7ef17e655e102d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.05
+  m_Volume: 0.283
   m_Pitch: 1
   Loop: 1
   Mute: 0

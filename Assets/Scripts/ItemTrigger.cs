@@ -15,10 +15,10 @@ public class ItemTrigger : MonoBehaviour
         {
             if (gameInput.IsInteract() && flagInteract && !itemCollected)
             {
+                Sounds.Instance.PlayPickup();// звук взятия предмета
                 targetObject.SetActive(false);
                 itemCollected = true;
 
-                Sounds.Instance.PlayPickup();  // звук взятия предмета
                 flagInteract = false;
             }            
             else if (!gameInput.IsInteract())
