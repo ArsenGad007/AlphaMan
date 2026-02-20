@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameInput gameInput;
 
     private Vector3 smooth_movement;
-
+    private float lastStepTime = 0f;
+     private float stepInterval = 0.4f;
     private void Update()
     {
         Vector2 inputVector = gameInput.GetInputVectorNormalized();
@@ -28,7 +29,19 @@ public class PlayerController : MonoBehaviour
         transform.position += desired_move;
 
         if (move_dir != Vector3.zero)
+        {
             transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
+            if (Time.time - lastStepTime > stepInterval)
+            {
+                if (gameInput.IsRunning())
+                    Sounds.Instance.PlayRun();
+                else
+                    Sounds.Instance.PlayWalk();
+
+                lastStepTime = Time.time;
+            }
+
+        }
     }
 
     private Vector3 MovementForCollisions(Vector3 delta)
