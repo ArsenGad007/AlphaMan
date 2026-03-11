@@ -3,7 +3,7 @@ using UnityEngine.Splines;
 
 public class GuardPatrol : MonoBehaviour
 {
-    public enum State { Walking, LookingAround }
+    public enum State { Walking, LookingAround , Alerted, Searching}
     [SerializeField] private Transform[] patrolPoints;
     [SerializeField] private float speedMove = 2f;
     [SerializeField] private float speedRotate = 15f;
@@ -14,10 +14,19 @@ public class GuardPatrol : MonoBehaviour
     private float lookAngle = 45f;
     private float stateTimer = 0f;
     private State currentState = State.Walking;
-   
+    [SerializeField] private GameOver gameOver;
+    private Vector3 lastSeenPlayerPosition;
+    [SerializeField] private float searchDuration = 3f;
+
     void Update()
     {
-        Patrol();
+        if (currentState != State.Alerted && currentState != State.Searching)
+        {
+            PlayerCheck();
+            Patrol();
+        }
+        else
+            HandleAlertedOrSearching();
 
         if (fieldOfView != null)
         {
@@ -84,6 +93,64 @@ public class GuardPatrol : MonoBehaviour
             currentState = State.Walking; 
             currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
         }
+    }
+
+    private void PlayerCheck()
+    {
+        if (!fieldOfView.IsPlayerVisible())
+            return;
+        OnPlayerDetected(fieldOfView.PlayerTransform.position);
+    }
+    private void OnPlayerDetected(Vector3 playerPosition)
+    {
+        switch (currentState)
+        {
+            case State.Walking:
+            case State.LookingAround:
+                EnterAlertedState(playerPosition);
+                break;
+
+            case State.Alerted:
+            case State.Searching:
+                TriggerGameOver();
+                break;
+        }
+    }
+
+    private void EnterAlertedState(Vector3 playerPosition)
+    {
+        currentState = State.Alerted;
+        lastSeenPlayerPosition = playerPosition;
+        stateTimer = 0f;
+        Debug.Log("заметил");
+    }
+
+    private void HandleAlertedOrSearching()
+    {
+        stateTimer += Time.deltaTime;
+        Vector3 dirToPlayer = lastSeenPlayerPosition - transform.position;
+        dirToPlayer.y = 0f;
+        if (dirToPlayer != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dirToPlayer.normalized, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
+        }
+        if (currentState == State.Alerted && stateTimer >= 1f)
+        {
+            currentState = State.Searching;
+            stateTimer = 0f;
+            Debug.Log("ищет");
+        }
+        if ((currentState == State.Searching)&&(stateTimer >= searchDuration))
+        {
+            currentState = State.Walking;
+            Debug.Log("успокоился");
+        }
+    }
+
+    private void TriggerGameOver()
+    {
+       gameOver.GameOverPanel();
     }
 
     //связка с анимацией

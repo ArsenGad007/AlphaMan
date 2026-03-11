@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 public class FieldOfView : MonoBehaviour
 {
+    public Transform PlayerTransform => player?.transform;
     [SerializeField] private float viewDistance = 5f;
     [SerializeField] private float fov = 90f;          
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField, Range(20, 100)] private int rayCount = 80;
     [SerializeField, Range(0f, 1f)] private float updateInterval = 0.001f;
     [SerializeField] private GameObject player;
-    [SerializeField] private GameOver gameOver;
+    //[SerializeField] private GameOver gameOver;
 
     [SerializeField] private float detectionRadius = 1.7f;
 
@@ -217,7 +218,27 @@ public class FieldOfView : MonoBehaviour
     //что делать при обнаружении
     private void OnPlayerDetected()
     {
-        Debug.Log("Охранник заметил игрока!");
-        gameOver.GameOverPanel();
+        //gameOver.GameOverPanel();
+    }
+    public bool IsPlayerVisible()
+    {
+        if (player == null) return false;
+
+        Vector3 dir = player.transform.position - transform.position;
+        dir.y = 0f;
+        float dist = dir.magnitude;
+
+        RaycastHit hit;
+
+        if (dist <= detectionRadius)
+        {
+            if (!Physics.Raycast(transform.position, dir.normalized, out hit, dist, obstacleMask)||hit.collider.gameObject == player)
+                return true;
+        }
+        if (dist > viewDistance) return false;
+        if (Vector3.Angle(transform.forward, dir) > fov * 0.5f) return false;
+        if (Physics.Raycast(transform.position, dir.normalized, out hit, dist, obstacleMask))
+            return hit.collider.gameObject == player;
+        return true;
     }
 }
