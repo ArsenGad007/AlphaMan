@@ -87,4 +87,11 @@ public class Sounds : MonoBehaviour
         audioSrc.pitch = Random.Range(pMin, pMax);
         audioSrc.PlayOneShot(clip, volume);
     }
+
+    //для 3д проигрывания у охранника
+    public void PlayOneShotAt(AudioClip clip, Vector3 position, float volume)
+    {
+        if (clip == null) return;
+        AudioSource.PlayClipAtPoint(clip, position, volume);
+    }
 }
