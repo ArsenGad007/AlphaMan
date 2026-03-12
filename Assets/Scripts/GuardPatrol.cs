@@ -18,15 +18,22 @@ public class GuardPatrol : MonoBehaviour
     private Vector3 lastSeenPlayerPosition;
     [SerializeField] private float searchDuration = 3f;
 
+    //для обнаружения
+    private bool isHiding = false;
+
     void Update()
     {
+         PlayerCheck();
         if (currentState != State.Alerted && currentState != State.Searching)
         {
-            PlayerCheck();
             Patrol();
         }
         else
+        {   
             HandleAlertedOrSearching();
+
+
+        }  
 
         if (fieldOfView != null)
         {
@@ -98,6 +105,11 @@ public class GuardPatrol : MonoBehaviour
     private void PlayerCheck()
     {
         if (!fieldOfView.IsPlayerVisible())
+        {
+            isHiding = false;
+            return;
+        }
+        if (isHiding)
             return;
         OnPlayerDetected(fieldOfView.PlayerTransform.position);
     }
@@ -122,29 +134,46 @@ public class GuardPatrol : MonoBehaviour
         currentState = State.Alerted;
         lastSeenPlayerPosition = playerPosition;
         stateTimer = 0f;
+        isHiding = true;
         Debug.Log("заметил");
     }
 
     private void HandleAlertedOrSearching()
     {
         stateTimer += Time.deltaTime;
-        Vector3 dirToPlayer = lastSeenPlayerPosition - transform.position;
-        dirToPlayer.y = 0f;
-        if (dirToPlayer != Vector3.zero)
+        if (currentState == State.Alerted)
         {
-            Quaternion targetRot = Quaternion.LookRotation(dirToPlayer.normalized, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
+            Vector3 dirToPlayer = lastSeenPlayerPosition - transform.position;
+            dirToPlayer.y = 0f;
+            if (dirToPlayer != Vector3.zero)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(dirToPlayer.normalized, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
+            }
+            if (stateTimer >= 1f)
+            {
+                currentState = State.Searching;
+                stateTimer = 0f;
+                Debug.Log("ищет");
+            }
         }
-        if (currentState == State.Alerted && stateTimer >= 1f)
+        else if (currentState == State.Searching)
         {
-            currentState = State.Searching;
-            stateTimer = 0f;
-            Debug.Log("ищет");
-        }
-        if ((currentState == State.Searching)&&(stateTimer >= searchDuration))
-        {
-            currentState = State.Walking;
-            Debug.Log("успокоился");
+            Vector3 baseDir = lastSeenPlayerPosition - transform.position;
+            baseDir.y = 0f;
+            if (baseDir == Vector3.zero) baseDir = transform.forward;
+
+            float angleOffset = lookAngle * Mathf.Sin(Mathf.PI * 2 * stateTimer / searchDuration);
+            Quaternion baseRot = Quaternion.LookRotation(baseDir.normalized, Vector3.up);
+            Quaternion searchRot = baseRot * Quaternion.Euler(0, angleOffset, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, searchRot, speedRotate * Time.deltaTime);
+
+            if (stateTimer >= searchDuration)
+            {
+                currentState = State.Walking;
+                isHiding = false;
+                Debug.Log("успокоился");
+            }
         }
     }
 
@@ -156,11 +185,10 @@ public class GuardPatrol : MonoBehaviour
     //связка с анимацией
     public bool IsMoving()
     {
-        if (patrolPoints == null || patrolPoints.Length == 0) 
-            return false;
+        return currentState == State.Walking;
 
-        Transform target = patrolPoints[currentPointIndex];
-        return Vector3.Distance(transform.position, target.position) > 0.1f;
+        // Transform target = patrolPoints[currentPointIndex];
+        //  return Vector3.Distance(transform.position, target.position) > 0.1f;
     }
 
 }
