@@ -109,6 +109,11 @@ public class GuardPatrol : MonoBehaviour
             isHiding = false;
             return;
         }
+        if (currentState == State.Searching)
+        {
+            TriggerGameOver();
+            return;
+        }
         if (isHiding)
             return;
         OnPlayerDetected(fieldOfView.PlayerTransform.position);
@@ -135,7 +140,7 @@ public class GuardPatrol : MonoBehaviour
         lastSeenPlayerPosition = playerPosition;
         stateTimer = 0f;
         isHiding = true;
-        Debug.Log("заметил");
+      //  Debug.Log("заметил");
     }
 
     private void HandleAlertedOrSearching()
@@ -154,11 +159,17 @@ public class GuardPatrol : MonoBehaviour
             {
                 currentState = State.Searching;
                 stateTimer = 0f;
-                Debug.Log("ищет");
+               // Debug.Log("ищет");
             }
         }
         else if (currentState == State.Searching)
         {
+            if (fieldOfView.IsPlayerVisible())
+            {
+                TriggerGameOver();
+                return;
+            }
+
             Vector3 baseDir = lastSeenPlayerPosition - transform.position;
             baseDir.y = 0f;
             if (baseDir == Vector3.zero) baseDir = transform.forward;
@@ -172,7 +183,7 @@ public class GuardPatrol : MonoBehaviour
             {
                 currentState = State.Walking;
                 isHiding = false;
-                Debug.Log("успокоился");
+               // Debug.Log("успокоился");
             }
         }
     }
