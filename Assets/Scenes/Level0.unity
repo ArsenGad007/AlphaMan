@@ -25644,8 +25644,6 @@ MonoBehaviour:
   speedMove: 2
   speedRotate: 15
   fieldOfView: {fileID: 963179014}
-  gameOver: {fileID: 1639945800}
-  searchDuration: 3
 --- !u!95 &963179012 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5339130301091616329, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
@@ -25671,6 +25669,7 @@ MonoBehaviour:
   rayCount: 100
   updateInterval: 0.0001
   player: {fileID: 177326035}
+  gameOver: {fileID: 1639945800}
   detectionRadius: 1
 --- !u!23 &963179015
 MeshRenderer:
@@ -31658,10 +31657,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
-      propertyPath: gameOver
-      value: 
-      objectReference: {fileID: 1639945800}
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
