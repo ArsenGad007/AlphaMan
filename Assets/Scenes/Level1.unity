@@ -23156,6 +23156,7 @@ MonoBehaviour:
   rayCount: 100
   updateInterval: 0.0001
   player: {fileID: 1393008117}
+  gameOver: {fileID: 1604182756}
   detectionRadius: 1
 --- !u!23 &860778504
 MeshRenderer:
@@ -23245,8 +23246,6 @@ MonoBehaviour:
   speedMove: 2
   speedRotate: 15
   fieldOfView: {fileID: 860778503}
-  gameOver: {fileID: 1604182756}
-  searchDuration: 3
 --- !u!1001 &862006678
 PrefabInstance:
   m_ObjectHideFlags: 0
