@@ -16,9 +16,7 @@ public class ItemTrigger : MonoBehaviour
             if (gameInput.IsInteract() && flagInteract && !itemCollected)
             {
                 Sounds.Instance.PlayPickup();// звук взятия предмета
-                Invoke(nameof(HideObject), 0.05f);
-
-               // targetObject.SetActive(false);
+                targetObject.SetActive(false);
                 itemCollected = true;
 
                 flagInteract = false;
@@ -27,8 +25,6 @@ public class ItemTrigger : MonoBehaviour
                 flagInteract = true;
         }
     }
-
-    private void HideObject() => targetObject.SetActive(false);
 
     private void OnTriggerExit(Collider other)
     {
