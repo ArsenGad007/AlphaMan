@@ -17600,7 +17600,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameWinPanel: {fileID: 676290868}
   gameInput: {fileID: 1446372444}
-  restartButton: {fileID: 1894666418}
+  continueButton: {fileID: 0}
+  nextLevel: 2
 --- !u!4 &538688966
 Transform:
   m_ObjectHideFlags: 0
@@ -34773,6 +34774,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800ae5ffa47befa47b76202d37bd3668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameInput: {fileID: 1446372444}
+  gameExitPlace: 0
   gameExitPanel: {fileID: 723906107}
   exitButton: {fileID: 763191145}
   yesButton: {fileID: 72887974}
