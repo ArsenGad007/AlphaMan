@@ -4,8 +4,8 @@ public class GuardSounds : MonoBehaviour
 {
     [SerializeField] public AudioClip[] gruntSounds;
     [Range(0f, 1f)] private float groanVolume = 1f;
-    private float minInterval = 5f;  
-    private float maxInterval = 9f;
+    private float minInterval = 15f;  
+    private float maxInterval = 25f;
     private float nextGroanTime;
 
     void Start()
@@ -24,6 +24,7 @@ public class GuardSounds : MonoBehaviour
 
     private void PlayRandomGroan()
     {
+        if (gruntSounds == null) return;
         if (gruntSounds == null) return;
         var clip = gruntSounds[Random.Range(0, gruntSounds.Length)];
         Sounds.Instance.PlayOneShotAt(clip, transform.position, groanVolume);

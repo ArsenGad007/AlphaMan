@@ -41,6 +41,15 @@ public class FieldOfView : MonoBehaviour
 
         if (!shouldUpdate) return;
 
+        float verticalAngle = -transform.localEulerAngles.x;
+
+        Vector3 correctedForward = Quaternion.Euler(verticalAngle, 0, 0) * forwardDirection;
+
+        forward = correctedForward;
+        forward.y = 0f;
+        if (forward == Vector3.zero) forward = Vector3.forward;
+
+
         RebuildMesh(originPosition, forward);
         lastPosition = originPosition;
         lastForward = forward;
