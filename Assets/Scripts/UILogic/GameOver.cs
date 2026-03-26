@@ -7,17 +7,22 @@ public class GameOver : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;  // Ссылка на панель проигрыша;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Button restartButton;
+    private bool isGameOver = false;
 
     void Start()
     {
         gameOverPanel.SetActive(false);
+        Time.timeScale = 1;
     }
     
     public void GameOverPanel()
     {
+        if (isGameOver) return; 
+        isGameOver = true;
         // Остановка игрового процесса
+        gameOverPanel.SetActive(false);
         Time.timeScale = 0;
-        
+
         // Воспроизведение звука проигрыша
         Sounds.Instance.PlayLose();
 
@@ -34,5 +39,10 @@ public class GameOver : MonoBehaviour
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    private void OnDestroy()
+    {
+        if (restartButton != null)
+            restartButton.onClick.RemoveListener(RestartGameOver);
     }
 }
