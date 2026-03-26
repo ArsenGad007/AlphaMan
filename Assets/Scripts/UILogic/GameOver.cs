@@ -38,7 +38,8 @@ public class GameOver : MonoBehaviour
         gameInput.DisablePlayerInputActions();
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneTransition.Load(SceneManager.GetActiveScene().name);
     }
     private void OnDestroy()
     {
