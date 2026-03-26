@@ -25642,8 +25642,11 @@ MonoBehaviour:
   - {fileID: 776151043}
   - {fileID: 1000710990}
   speedMove: 2
-  speedRotate: 15
+  speedRotate: 10
   fieldOfView: {fileID: 963179014}
+  gameOver: {fileID: 1639945800}
+  searchDuration: 3
+  alertTime: 0.5
 --- !u!95 &963179012 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5339130301091616329, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
@@ -25669,7 +25672,6 @@ MonoBehaviour:
   rayCount: 100
   updateInterval: 0.0001
   player: {fileID: 177326035}
-  gameOver: {fileID: 1639945800}
   detectionRadius: 1
 --- !u!23 &963179015
 MeshRenderer:
@@ -25941,6 +25943,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gruntSounds:
   - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
+--- !u!114 &986616396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986616380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4016e95819d7ca64cbd82b2a0b39db7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints: []
+  speedMove: 2
+  speedRotate: 10
+  fieldOfView: {fileID: 963179014}
+  currentPointIndex: 0
+  lookAngle: 45
+  stateTimer: 0
+  currentState: 0
+  gameOver: {fileID: 1639945800}
+  lastSeenPlayerPosition: {x: 0, y: 0, z: 0}
+  searchDuration: 3
+  alertTime: 0.5
+  isHiding: 0
 --- !u!1001 &986861222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31662,6 +31689,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: gameOver
+      value: 
+      objectReference: {fileID: 1639945800}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1000710990}
@@ -31744,6 +31775,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 986616388}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 986616396}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!1 &1220416814 stripped
 GameObject:
@@ -37386,7 +37420,7 @@ MonoBehaviour:
   walkVolume: 0
   runSound: {fileID: 8300000, guid: 95844d4a849add04bb7a6dde908c5756, type: 3}
   runVolume: 0
-  pickupSound: {fileID: 8300000, guid: 7cc4c6e4516c4464eac2492e16d18e54, type: 3}
+  pickupSound: {fileID: 8300000, guid: b00717ced804e0c498e173aad7610011, type: 3}
   pickupVolume: 1
   winSound: {fileID: 8300000, guid: 64e9635aca33e844b93007cdbe9a290c, type: 3}
   winVolume: 0.4
