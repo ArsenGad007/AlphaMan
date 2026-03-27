@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class GameWin : MonoBehaviour
 {
     [SerializeField] private GameObject gameWinPanel;  // —сылка на панель победы;
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private Button continueButton;
     [SerializeField] private int numLevel;
 
@@ -36,9 +35,8 @@ public class GameWin : MonoBehaviour
             PlayerPrefs.Save();     // —охранение результата
         }
 
-        gameInput.DisablePlayerInputActions();
-        gameWinPanel.SetActive(false);
         Time.timeScale = 1;
+        gameWinPanel.SetActive(false);
         //SceneManager.LoadScene("LevelSelect");
         SceneTransition.Load("LevelSelect");
     }
