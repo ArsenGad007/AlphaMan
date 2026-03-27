@@ -8,7 +8,7 @@ LightingSettings:
   m_PrefabAsset: {fileID: 0}
   m_Name: FastLightingSettings
   serializedVersion: 9
-  m_EnableBakedLightmaps: 0
+  m_EnableBakedLightmaps: 1
   m_EnableRealtimeLightmaps: 0
   m_RealtimeEnvironmentLighting: 1
   m_BounceScale: 1
@@ -21,7 +21,7 @@ LightingSettings:
   m_UseMipmapLimits: 1
   m_BakeResolution: 10
   m_Padding: 2
-  m_LightmapCompression: 2
+  m_LightmapCompression: 0
   m_AO: 0
   m_AOMaxDistance: 1
   m_CompAOExponent: 1
@@ -40,8 +40,8 @@ LightingSettings:
   m_PVRCulling: 1
   m_PVRSampling: 1
   m_PVRDirectSampleCount: 4
-  m_PVRSampleCount: 16
-  m_PVREnvironmentSampleCount: 16
+  m_PVRSampleCount: 32
+  m_PVREnvironmentSampleCount: 128
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 2
   m_PVRBounces: 2
