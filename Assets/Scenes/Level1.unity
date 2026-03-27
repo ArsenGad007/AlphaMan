@@ -19605,7 +19605,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameWinPanel: {fileID: 336743726}
-  gameInput: {fileID: 1446372444}
   continueButton: {fileID: 1823564501}
   numLevel: 1
 --- !u!4 &538688966
@@ -29130,27 +29129,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4372630867790831570, guid: 12664a6a04758104f9be3b4407202a69, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38526,7 +38525,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800ae5ffa47befa47b76202d37bd3668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameInput: {fileID: 1446372444}
   gameExitPlace: 0
   gameExitPanel: {fileID: 392716181}
   exitButton: {fileID: 1634451637}
@@ -44748,7 +44746,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverPanel: {fileID: 73425906}
-  gameInput: {fileID: 1446372444}
   restartButton: {fileID: 1334601536}
 --- !u!4 &1604182757
 Transform:
@@ -55839,10 +55836,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
