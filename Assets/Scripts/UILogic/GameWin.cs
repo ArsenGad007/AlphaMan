@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameWin : MonoBehaviour
@@ -40,6 +39,7 @@ public class GameWin : MonoBehaviour
         gameInput.DisablePlayerInputActions();
         gameWinPanel.SetActive(false);
         Time.timeScale = 1;
-        SceneManager.LoadScene("LevelSelect");
+        //SceneManager.LoadScene("LevelSelect");
+        SceneTransition.Load("LevelSelect");
     }
 }

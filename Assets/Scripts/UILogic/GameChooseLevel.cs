@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -22,6 +21,7 @@ public class GameChooseLevel : MonoBehaviour
 
     public void LoadSceneByName(string name)
     {
-        SceneManager.LoadScene(name);
+        //SceneManager.LoadScene(name);
+        SceneTransition.Load(name);
     }
 }
