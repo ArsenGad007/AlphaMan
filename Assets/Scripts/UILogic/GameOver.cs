@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class GameOver : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;  // —сылка на панель проигрыша;
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private Button restartButton;
     private bool isGameOver = false;
 
@@ -35,10 +34,10 @@ public class GameOver : MonoBehaviour
 
     private void RestartGameOver()
     {
-        gameInput.DisablePlayerInputActions();
-        gameOverPanel.SetActive(false);
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        gameOverPanel.SetActive(false);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneTransition.Load(SceneManager.GetActiveScene().name);
     }
     private void OnDestroy()
     {

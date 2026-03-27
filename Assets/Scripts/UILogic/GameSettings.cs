@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,9 @@ public class GameSettings : MonoBehaviour
     [SerializeField] private Button enterSettingsButton;
     [SerializeField] private Button exitSettingsButton;
 
+    public static event Action OnMenuOpened;
+    public static event Action OnMenuClosed;
+
     void Start()
     {
         enterSettingsButton.onClick.RemoveListener(EnterSettings);
@@ -15,6 +19,9 @@ public class GameSettings : MonoBehaviour
 
     private void EnterSettings()
     {
+        Time.timeScale = 0;     // Остановка игрового процесса
+        OnMenuOpened?.Invoke(); // Поставить фоновую музыку на паузу
+
         gameSettingsPanel.SetActive(true);
 
         exitSettingsButton.onClick.RemoveListener(ExitSettings);
@@ -25,5 +32,8 @@ public class GameSettings : MonoBehaviour
     {
         exitSettingsButton.onClick.RemoveListener(ExitSettings);
         gameSettingsPanel.SetActive(false);
+        
+        Time.timeScale = 1;     // Продолжение игрового процесса
+        OnMenuClosed?.Invoke(); // Снять с паузы музыку
     }
 }

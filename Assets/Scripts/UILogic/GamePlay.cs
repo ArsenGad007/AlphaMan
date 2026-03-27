@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GamePlay : MonoBehaviour
 {
     [SerializeField] private Button playButton;
-    [SerializeField] private string nameNextScence = "Level0";
+    [SerializeField] private string nameNextScene = "LevelSelect";
     void Start()
     {
         playButton.onClick.RemoveListener(LoadSceneByName);
@@ -14,6 +13,7 @@ public class GamePlay : MonoBehaviour
 
     public void LoadSceneByName()
     {
-        SceneManager.LoadScene(nameNextScence);
+        //SceneManager.LoadScene(nameNextScene);
+        SceneTransition.Load(nameNextScene);
     }
 }
