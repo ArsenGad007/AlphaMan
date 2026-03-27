@@ -25228,7 +25228,7 @@ MonoBehaviour:
   rayCount: 100
   updateInterval: 0.0001
   player: {fileID: 177326035}
-  detectionRadius: 1
+  detectionRadius: 0.5
 --- !u!23 &963179015
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -31301,6 +31301,10 @@ PrefabInstance:
       propertyPath: viewDistance
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: detectionRadius
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36644,13 +36648,10 @@ MonoBehaviour:
   winVolume: 0.4
   loseSound: {fileID: 8300000, guid: 3b4b3c93449e0c64686aa252646b3690, type: 3}
   loseVolume: 0.4
-  randomSteps:
-  - {fileID: 8300000, guid: 88bf02679a2ae5647a8a8c3ea48defcd, type: 3}
+  randomSteps: []
   randomStepVolume: 1
   walkSteps:
-  - {fileID: 8300000, guid: ee61721591b5260488b4edf81833fe9d, type: 3}
-  - {fileID: 8300000, guid: 23abdb92e68cdb74aa302b48c02cb95e, type: 3}
-  - {fileID: 8300000, guid: 510c17d5c4f2bf8498710805f9801fb4, type: 3}
+  - {fileID: 8300000, guid: 06ec9163460bbc7438842b52838dabf7, type: 3}
   runSteps:
   - {fileID: 8300000, guid: 28c260e682290934a80c76208327c64d, type: 3}
   - {fileID: 8300000, guid: a6755901ca7b27e4b9b611284555bd7f, type: 3}
