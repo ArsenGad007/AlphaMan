@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 smooth_movement;
     private float lastStepTime = 0f;
-    private float stepInterval = 0.4f;
-
+     private float stepInterval = 0.4f;
     private void Update()
     {
         Vector2 inputVector = gameInput.GetInputVectorNormalized();

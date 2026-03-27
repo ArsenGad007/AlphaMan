@@ -1,20 +1,10 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using NaughtyAttributes;
-
-public enum GameExitPlace
-{
-    Menu,
-    Output
-}
 
 public class GameExit : MonoBehaviour
 {
-    [ShowIf("gameExitPlace", GameExitPlace.Menu)][SerializeField] private GameInput gameInput;
-    [SerializeField] private GameExitPlace gameExitPlace;   // Куда нужно выйти;
-    [SerializeField] private GameObject gameExitPanel;      // Ссылка на панель выхода;
+    [SerializeField] private GameObject gameExitPanel;  // Ссылка на панель выхода;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button yesButton;
     [SerializeField] private Button noButton;
@@ -50,15 +40,6 @@ public class GameExit : MonoBehaviour
 
     private void YesButton()
     {
-        if(gameExitPlace == GameExitPlace.Menu)
-        {
-            Time.timeScale = 1;
-            gameInput.DisablePlayerInputActions();
-            gameExitPanel.SetActive(false);
-            SceneManager.LoadScene("LevelSelect");
-            return;
-        }
-
         Debug.Log("Выход из игры");
 
         // Для редактора Unity
