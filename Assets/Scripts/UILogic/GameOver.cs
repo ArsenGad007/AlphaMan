@@ -39,7 +39,7 @@ public class GameOver : MonoBehaviour
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        SceneTransition.Load(SceneManager.GetActiveScene().name);
+        CanvasTransition.LoadScene(SceneManager.GetActiveScene().name);
     }
     private void OnDestroy()
     {

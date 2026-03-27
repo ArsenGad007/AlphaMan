@@ -14,6 +14,6 @@ public class GamePlay : MonoBehaviour
     public void LoadSceneByName()
     {
         //SceneManager.LoadScene(nameNextScene);
-        SceneTransition.Load(nameNextScene);
+        CanvasTransition.LoadScene(nameNextScene);
     }
 }

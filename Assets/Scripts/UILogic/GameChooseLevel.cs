@@ -22,6 +22,6 @@ public class GameChooseLevel : MonoBehaviour
     public void LoadSceneByName(string name)
     {
         //SceneManager.LoadScene(name);
-        SceneTransition.Load(name);
+        CanvasTransition.LoadScene(name);
     }
 }

@@ -40,6 +40,6 @@ public class GameWin : MonoBehaviour
         gameWinPanel.SetActive(false);
         Time.timeScale = 1;
         //SceneManager.LoadScene("LevelSelect");
-        SceneTransition.Load("LevelSelect");
+        CanvasTransition.LoadScene("LevelSelect");
     }
 }

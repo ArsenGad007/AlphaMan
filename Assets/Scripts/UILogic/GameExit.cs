@@ -56,7 +56,7 @@ public class GameExit : MonoBehaviour
             gameInput.DisablePlayerInputActions();
             gameExitPanel.SetActive(false);
             //SceneManager.LoadScene("LevelSelect");
-            SceneTransition.Load("LevelSelect");
+            CanvasTransition.LoadScene("LevelSelect");
             return;
         }
 
