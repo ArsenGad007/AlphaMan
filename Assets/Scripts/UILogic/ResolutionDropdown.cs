@@ -1,10 +1,9 @@
 using System.Collections.Generic;
+using System;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
-[CustomEditor(typeof(TMP_Dropdown), true)]
+[RequireComponent(typeof(TMP_Dropdown))]
 public class ResolutionDropdown : MonoBehaviour
 {
     private TMP_Dropdown dropdown;
@@ -15,23 +14,20 @@ public class ResolutionDropdown : MonoBehaviour
         dropdown = GetComponent<TMP_Dropdown>();
         resolutions = Screen.resolutions;
 
-        dropdown.ClearOptions();
-
         List<string> options = new List<string>();
+
+        for (int i = resolutions.Length - 1; i >= 0; i--)   // Обратный порядок
+            options.Add($"{resolutions[i].width}x{resolutions[i].height} ({(int)Math.Round(resolutions[i].refreshRateRatio.value)} Hz)");
+
+        dropdown.ClearOptions();
+        dropdown.AddOptions(options);
 
         int savedIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
 
-        for (int i = resolutions.Length - 1; i >= 0; i--)   // Обратный порядок
-            options.Add(resolutions[i].width + "x" + resolutions[i].height);
-
-        dropdown.AddOptions(options);
-
-        // Устанавливаем сохранённое значение
-        dropdown.value = savedIndex;
+        dropdown.value = savedIndex;            // Устанавливаем сохранённое значение
         dropdown.RefreshShownValue();
 
-        // Применяем его сразу
-        ChangeResolution(savedIndex);
+        ChangeResolution(savedIndex);           // Применяем его сразу
 
         dropdown.onValueChanged.AddListener(ChangeResolution);
     }
@@ -39,12 +35,14 @@ public class ResolutionDropdown : MonoBehaviour
     void ChangeResolution(int index)
     {
         int real_index = resolutions.Length - 1 - index;    // Обратный порядок
-        Resolution res = resolutions[real_index];   
-        Screen.SetResolution(res.width, res.height, PlayerPrefs.GetInt("Fullscreen", 1) == 1);
+        Resolution res = resolutions[real_index];
 
-        Debug.Log($"Изменено разрешение: {res.width}x{res.height}");
-        // Сохраняем выбор
-        PlayerPrefs.SetInt("ResolutionIndex", index);
+        FullScreenMode fullscreen_mode = (PlayerPrefs.GetInt("Fullscreen", 1) == 1) ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        Screen.SetResolution(res.width, res.height, fullscreen_mode, res.refreshRateRatio);
+
+        Debug.Log($"Разрешение установлено: {res.width}x{res.height} @ {(int)Math.Round(res.refreshRateRatio.value)} Hz");
+
+        PlayerPrefs.SetInt("ResolutionIndex", index);       // Сохраняем выбор
         PlayerPrefs.Save();
     }
 }
