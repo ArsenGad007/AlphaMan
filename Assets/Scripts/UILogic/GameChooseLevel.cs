@@ -13,6 +13,7 @@ public class ButtonStringPair
 public class GameChooseLevel : MonoBehaviour
 {
     [SerializeField] private List<ButtonStringPair> buttonPairs;
+
     void Start()
     {
         foreach (var pair in buttonPairs)
@@ -22,6 +23,7 @@ public class GameChooseLevel : MonoBehaviour
 
     public void LoadSceneByName(string name)
     {
-        SceneManager.LoadScene(name);
+        //SceneManager.LoadScene(name);
+        SceneTransition.Load(name);
     }
 }

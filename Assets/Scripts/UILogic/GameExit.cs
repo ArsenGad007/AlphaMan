@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using NaughtyAttributes;
 
 public enum GameExitPlace
 {
@@ -12,7 +10,6 @@ public enum GameExitPlace
 
 public class GameExit : MonoBehaviour
 {
-    [ShowIf("gameExitPlace", GameExitPlace.Menu)][SerializeField] private GameInput gameInput;
     [SerializeField] private GameExitPlace gameExitPlace;   //  уда нужно выйти;
     [SerializeField] private GameObject gameExitPanel;      // —сылка на панель выхода;
     [SerializeField] private Button exitButton;
@@ -53,9 +50,9 @@ public class GameExit : MonoBehaviour
         if(gameExitPlace == GameExitPlace.Menu)
         {
             Time.timeScale = 1;
-            gameInput.DisablePlayerInputActions();
             gameExitPanel.SetActive(false);
-            SceneManager.LoadScene("LevelSelect");
+            //SceneManager.LoadScene("LevelSelect");
+            SceneTransition.Load("LevelSelect");
             return;
         }
 

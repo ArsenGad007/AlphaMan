@@ -13,6 +13,9 @@ public class Music : MonoBehaviour
 
         GameExit.OnMenuOpened += PauseMusic;
         GameExit.OnMenuClosed += ResumeMusic;
+
+        GameSettings.OnMenuOpened += PauseMusic;
+        GameSettings.OnMenuClosed += ResumeMusic;
     }
 
     private void PauseMusic()
