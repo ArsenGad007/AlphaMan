@@ -31,6 +31,8 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Run.canceled -= OnRunCanceled;
         playerInputActions.Player.Interact.performed -= OnInteractPerformed;
         playerInputActions.Player.Interact.canceled -= OnInteractCanceled;
+
+        playerInputActions.Player.Disable();
     }
 
     private void OnMovePerformed(InputAction.CallbackContext context)

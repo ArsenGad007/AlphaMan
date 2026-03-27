@@ -3,11 +3,10 @@ using UnityEngine.UI;
 
 public class GameSaveLoad : MonoBehaviour
 {
-
     [SerializeField] private GameObject[] levelbuttons;
     public static int LoadScore() => PlayerPrefs.GetInt("player_level", 0);
-
-    void Start()
+    void Start() => UpdateButtons();
+    public void UpdateButtons()  
     {
         int level = LoadScore();
 
