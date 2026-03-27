@@ -6,7 +6,8 @@ public class GameWin : MonoBehaviour
 {
     [SerializeField] private GameObject gameWinPanel;  // Ссылка на панель победы;
     [SerializeField] private GameInput gameInput;
-    [SerializeField] private Button restartButton;
+    [SerializeField] private Button continueButton;
+    [SerializeField] private int numLevel;
 
     void Start()
     {
@@ -24,15 +25,21 @@ public class GameWin : MonoBehaviour
         // Показать панель выйгрыша
         gameWinPanel.SetActive(true);
 
-        restartButton.onClick.RemoveListener(RestartGameWin); 
-        restartButton.onClick.AddListener(RestartGameWin);
+        continueButton.onClick.RemoveListener(ContinueGameWin);
+        continueButton.onClick.AddListener(ContinueGameWin);
     }
 
-    private void RestartGameWin()
+    private void ContinueGameWin()
     {
+        if (PlayerPrefs.GetInt("player_level") <= numLevel)
+        {
+            PlayerPrefs.SetInt("player_level", numLevel + 1);
+            PlayerPrefs.Save();     // Сохранение результата
+        }
+
         gameInput.DisablePlayerInputActions();
         gameWinPanel.SetActive(false);
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("LevelSelect");
     }
 }
