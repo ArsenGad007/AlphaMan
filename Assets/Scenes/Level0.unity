@@ -18104,7 +18104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc05b0e288ebd26478d58d1898070db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemTrigger: {fileID: 680079836}
+  requiredItems:
+  - {fileID: 680079836}
   gameWin: {fileID: 1333144992}
   playerTag: Player
 --- !u!65 &675347404
