@@ -434,7 +434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5339130301091616334, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       propertyPath: m_LocalPosition.x
@@ -526,7 +526,7 @@ MonoBehaviour:
   rayCount: 60
   updateInterval: 0.0001
   player: {fileID: 1393008117}
-  detectionRadius: 0.5
+  detectionRadius: 1.3
 --- !u!23 &16289501
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -21425,7 +21425,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: fov
@@ -21441,7 +21441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: detectionRadius
-      value: 0.5
+      value: 1.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26388,7 +26388,7 @@ MonoBehaviour:
   rayCount: 75
   updateInterval: 0.0001
   player: {fileID: 1393008117}
-  detectionRadius: 0.5
+  detectionRadius: 1.3
 --- !u!23 &860778511
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -29815,7 +29815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5339130301091616334, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38643,7 +38643,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5339130301091616334, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39773,7 +39773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faec1547f37666f4b88284ffe62c1047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimeSec: 180
+  gameTimeSec: 300
   timerText: {fileID: 250862325}
   gameOver: {fileID: 1604182756}
 --- !u!4 &1394895833
@@ -50084,7 +50084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: fov
@@ -50100,7 +50100,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: detectionRadius
-      value: 0.5
+      value: 1.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -54977,7 +54977,7 @@ MonoBehaviour:
   rayCount: 60
   updateInterval: 0.0001
   player: {fileID: 1393008117}
-  detectionRadius: 0.5
+  detectionRadius: 1.3
 --- !u!23 &1890352391
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -55839,7 +55839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: fov
@@ -55855,7 +55855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: detectionRadius
-      value: 0.5
+      value: 1.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

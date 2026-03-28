@@ -929,7 +929,7 @@ MonoBehaviour:
   rayCount: 100
   updateInterval: 0.0001
   player: {fileID: 354557013}
-  detectionRadius: 1
+  detectionRadius: 1.3
 --- !u!23 &296913723
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3413,6 +3413,10 @@ PrefabInstance:
       propertyPath: viewDistance
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: detectionRadius
+      value: 1.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3761,7 +3765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc05b0e288ebd26478d58d1898070db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemTrigger: {fileID: 1033000519}
+  requiredItems: []
   gameWin: {fileID: 929933425}
   playerTag: Player
 --- !u!65 &2092042997
