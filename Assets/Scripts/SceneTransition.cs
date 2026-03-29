@@ -5,22 +5,35 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    [SerializeField] private GameObject RawImage;
     [SerializeField] private float speed = 5f;
 
-    Material mat;
-    RawImage overlay;
+    private static SceneTransition instance;
+    private Material mat;
+    private RawImage overlay;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
-    {
-        RawImage.SetActive(true);
-        overlay = RawImage.GetComponent<RawImage>();
-        mat = overlay.material;
+    {       
+        overlay = GetComponentInChildren<RawImage>(true);   // true — находит неактивные
+        overlay.gameObject.SetActive(true);
+
+        mat = Instantiate(overlay.material);                // создаём копию
+        overlay.material = mat;
+
         mat.SetFloat("_Aspect", (float)Screen.width / Screen.height);
         StartCoroutine(Open());
     }
 
-    public static void Load(string sceneName) => FindFirstObjectByType<SceneTransition>().GoTo(sceneName);
+    /// <summary>
+    /// Загрузка новой сцены с переходом
+    /// </summary>
+    /// <param name="sceneName"></param>
+    public static void Load(string sceneName) => instance.GoTo(sceneName);
+
     private void GoTo(string sceneName) => StartCoroutine(Go(sceneName));
 
     IEnumerator Open()

@@ -4,11 +4,12 @@ using UnityEngine.UI;
 public class Fullscreen : MonoBehaviour
 {
     private Toggle fullscreenToggle;
+    private string fullscreenStatusKey = "fullscreen";
 
     void Start()
     {
         fullscreenToggle = GetComponent<Toggle>();
-        bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+        bool isFullscreen = SavesLogic.Get(fullscreenStatusKey, 1) == 1;
         Screen.fullScreen = isFullscreen;
 
         // Синхронизируем Toggle с текущим состоянием
@@ -21,14 +22,8 @@ public class Fullscreen : MonoBehaviour
     public void SetFullscreen(bool value)
     {
         Screen.fullScreen = value;
-        PlayerPrefs.SetInt("Fullscreen", value ? 1 : 0);
-        PlayerPrefs.Save();
+        SavesLogic.Set(fullscreenStatusKey, value ? 1 : 0);
 
-        Debug.Log($"Fullscreen: {value} | Сохранено: {PlayerPrefs.GetInt("Fullscreen")}");
-    }
-
-    void OnDestroy()
-    {
-        fullscreenToggle.onValueChanged.RemoveListener(SetFullscreen);
+        Debug.Log($"Fullscreen: {value} | Сохранено: {PlayerPrefs.GetInt(fullscreenStatusKey)}");
     }
 }
