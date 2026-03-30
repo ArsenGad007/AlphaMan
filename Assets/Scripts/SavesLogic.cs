@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class SavesLogic : MonoBehaviour
 {
 
-    private static string[] settingKeys = { "fullscreen", "resolution" };
+    private static string playerLevelKey = "player_level";
 
     /// <summary>
     /// Сохранение ключа - значения
@@ -25,11 +25,11 @@ public class SavesLogic : MonoBehaviour
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public static int Get(string key, int default_value = int.MinValue)
+    public static int Get(string key, int? default_value = null)
     {
-        if(default_value == int.MinValue)
+        if(default_value == null)
             return PlayerPrefs.GetInt(key);
-        return PlayerPrefs.GetInt(key, default_value);
+        return PlayerPrefs.GetInt(key, default_value.Value);
     }
 
     /// <summary>
@@ -37,21 +37,6 @@ public class SavesLogic : MonoBehaviour
     /// </summary>
     public static void DeleteLevelSaves()
     {
-        List<int> settings_values = new();
-
-        foreach (string key in settingKeys)
-            settings_values.Add(Get(key));
-        DeleteAllSaves();
-
-        for (int i = 0; i < settings_values.Count; i++)
-            Set(settingKeys[i], settings_values[i]);
-    }
-
-    /// <summary>
-    /// Удаление всех сохранений
-    /// </summary>
-    public static void DeleteAllSaves()
-    {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey(playerLevelKey);
     }
 }
