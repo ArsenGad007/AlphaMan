@@ -19,6 +19,8 @@ public class GameExit : MonoBehaviour
     public static event Action OnMenuOpened;
     public static event Action OnMenuClosed;
 
+    private string exitLevel = "LevelSelect";
+
     void Start()
     {
         gameExitPanel.SetActive(false);
@@ -29,13 +31,8 @@ public class GameExit : MonoBehaviour
 
     private void ExitPanel()
     {
-        // Остановка игрового процесса
-        Time.timeScale = 0;
-
-        // Поставить фоновую музыку на паузу
-        OnMenuOpened?.Invoke();
-
-        // Показать панель выхода
+        Time.timeScale = 0;      
+        OnMenuOpened?.Invoke();     // Поставить фоновую музыку на паузу
         gameExitPanel.SetActive(true);
 
         yesButton.onClick.RemoveListener(YesButton);
@@ -51,8 +48,7 @@ public class GameExit : MonoBehaviour
         {
             Time.timeScale = 1;
             gameExitPanel.SetActive(false);
-            //SceneManager.LoadScene("LevelSelect");
-            SceneTransition.Load("LevelSelect");
+            SceneTransition.Load(exitLevel);
             return;
         }
 
@@ -69,12 +65,8 @@ public class GameExit : MonoBehaviour
 
     private void NoButton()
     {
-        // Продолжение игрового процесса
         Time.timeScale = 1;
-
-        // Убрать панель выхода
         gameExitPanel.SetActive(false);
-
-        OnMenuClosed?.Invoke(); // Снять с паузы музыку
+        OnMenuClosed?.Invoke();         // Снять с паузы музыку
     }
 }

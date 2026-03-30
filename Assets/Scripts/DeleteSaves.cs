@@ -6,6 +6,9 @@ public class GameDeleteSaves : MonoBehaviour
 {
     private Button button;
 
+    private string startMenu = "StartMenu";
+    private string exitLevel = "LevelSelect";
+
     void Start()
     {
         button = GetComponent<Button>();
@@ -14,16 +17,16 @@ public class GameDeleteSaves : MonoBehaviour
 
     private void OnClick()
     {
-        PlayerPrefs.DeleteAll();
-        if (SceneManager.GetActiveScene().name == "LevelSelect")
+        SavesLogic.DeleteLevelSaves();
+        if (SceneManager.GetActiveScene().name == exitLevel)
         {        
-            var chooseLevel = FindFirstObjectByType<GameSaveLoad>();
-            chooseLevel.UpdateButtons();
+            var chooseLevel = FindFirstObjectByType<LevelsButtonsDisplay>();
+            chooseLevel.UpdateLevelButtons();
         }
-        else if (SceneManager.GetActiveScene().name != "StartMenu")
+        else if (SceneManager.GetActiveScene().name != startMenu)
         {
             Time.timeScale = 1;
-            SceneTransition.Load("LevelSelect");
+            SceneTransition.Load(exitLevel);
         }         
     }   
 }
