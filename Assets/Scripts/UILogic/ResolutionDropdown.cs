@@ -9,6 +9,9 @@ public class ResolutionDropdown : MonoBehaviour
     private TMP_Dropdown dropdown;
     private Resolution[] resolutions;
 
+    private string resolutionKey = "resolution";
+    private string fullscreenStatusKey = "fullscreen";
+
     void Start()
     {
         dropdown = GetComponent<TMP_Dropdown>();
@@ -22,7 +25,7 @@ public class ResolutionDropdown : MonoBehaviour
         dropdown.ClearOptions();
         dropdown.AddOptions(options);
 
-        int savedIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
+        int savedIndex = SavesLogic.Get(resolutionKey, 0);
 
         dropdown.value = savedIndex;            // Устанавливаем сохранённое значение
         dropdown.RefreshShownValue();
@@ -36,13 +39,12 @@ public class ResolutionDropdown : MonoBehaviour
     {
         int real_index = resolutions.Length - 1 - index;    // Обратный порядок
         Resolution res = resolutions[real_index];
-
-        FullScreenMode fullscreen_mode = (PlayerPrefs.GetInt("Fullscreen", 1) == 1) ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        
+        FullScreenMode fullscreen_mode = (SavesLogic.Get(fullscreenStatusKey, 1) == 1) ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
         Screen.SetResolution(res.width, res.height, fullscreen_mode, res.refreshRateRatio);
 
         Debug.Log($"Разрешение установлено: {res.width}x{res.height} @ {(int)Math.Round(res.refreshRateRatio.value)} Hz");
 
-        PlayerPrefs.SetInt("ResolutionIndex", index);       // Сохраняем выбор
-        PlayerPrefs.Save();
+        SavesLogic.Set(resolutionKey, index);     
     }
 }
