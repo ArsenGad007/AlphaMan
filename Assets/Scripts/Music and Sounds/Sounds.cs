@@ -39,24 +39,42 @@ public class Sounds : MonoBehaviour
     [Range(0f, 1f)] public float randomStepVolume = 1f;
 
     // --- Важные звуки победы/поражения ---
+
+    /// <summary>
+    /// Воспроизведение звука победы
+    /// </summary>
     public void PlayWin() => PlayImportant(winSound, winVolume);
+
+    /// <summary>
+    /// Воспроизведение звука проигрыша
+    /// </summary>
     public void PlayLose() => PlayImportant(loseSound, loseVolume);
 
 
     // --- Обычные ---
-    [SerializeField] public AudioClip[] walkSteps;
+    [SerializeField] private AudioClip[] walkSteps;
 
-    [SerializeField] public AudioClip[] runSteps;
+    [SerializeField] private AudioClip[] runSteps;
 
+    /// <summary>
+    /// Воспроизведение звуков шагов
+    /// </summary>
     public void PlayWalk() => PlayRandomStep(walkSteps);
 
+    /// <summary>
+    /// Воспроизведение звука бега
+    /// </summary>
     public void PlayRun() => PlayRandomStep(runSteps);
+    
+    /// <summary>
+    /// Воспроизведение звука взятия предмета
+    /// </summary>
     public void PlayPickup() => PlayOne(pickupSound, pickupVolume);
 
     /// <summary>
     /// Рандомные звуки шагов
     /// </summary>
-    public void PlayRandomStep(AudioClip[] clips) =>
+    private void PlayRandomStep(AudioClip[] clips) =>
         PlayOne(clips[Random.Range(0, clips.Length)], randomStepVolume);
 
     private void PlayImportant(AudioClip clip, float volume)

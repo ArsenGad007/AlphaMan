@@ -7,6 +7,9 @@ public class GameWin : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private int numLevel;
 
+    private string playerLevelKey = "player_level";
+    private string winExitLevel = "LevelSelect";
+
     void Start()
     {
         gameWinPanel.SetActive(false);
@@ -14,13 +17,8 @@ public class GameWin : MonoBehaviour
 
     public void GameWinPanel()
     {
-        // Остановка игрового процесса
         Time.timeScale = 0;
-
-        // Воспроизведение звука выигрыша
         Sounds.Instance.PlayWin();
-
-        // Показать панель выйгрыша
         gameWinPanel.SetActive(true);
 
         continueButton.onClick.RemoveListener(ContinueGameWin);
@@ -29,15 +27,12 @@ public class GameWin : MonoBehaviour
 
     private void ContinueGameWin()
     {
-        if (PlayerPrefs.GetInt("player_level") <= numLevel)
-        {
-            PlayerPrefs.SetInt("player_level", numLevel + 1);
-            PlayerPrefs.Save();     // Сохранение результата
-        }
+        if (SavesLogic.Get(playerLevelKey, 0) <= numLevel)
+            SavesLogic.Set(playerLevelKey, numLevel + 1);
 
         Time.timeScale = 1;
         gameWinPanel.SetActive(false);
-        //SceneManager.LoadScene("LevelSelect");
-        SceneTransition.Load("LevelSelect");
+
+        SceneTransition.Load(winExitLevel); 
     }
 }
