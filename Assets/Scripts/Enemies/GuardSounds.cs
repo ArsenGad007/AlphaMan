@@ -26,7 +26,7 @@ public class GuardSounds : MonoBehaviour
     {
         if (gruntSounds == null) return;
         var clip = gruntSounds[Random.Range(0, gruntSounds.Length)];
-        Sounds.Instance.PlayOneShotAt(clip, transform.position, groanVolume);
+        SoundManager.PlayOneShotAt(clip, transform.position, groanVolume);
     }
 
     private void NextGroan()
