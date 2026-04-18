@@ -23,8 +23,8 @@ public class GameOver : MonoBehaviour
         if (isGameOver) return; 
         isGameOver = true;
 
-        Time.timeScale = 0;     
-        Sounds.Instance.PlayLose();        
+        Time.timeScale = 0;
+        SoundManager.PlayLose();        
         gameOverPanel.SetActive(true);  // Показать панель проигрыша
 
         restartButton.onClick.RemoveListener(RestartGameOver); 
