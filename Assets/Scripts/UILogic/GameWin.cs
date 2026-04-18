@@ -18,7 +18,7 @@ public class GameWin : MonoBehaviour
     public void GameWinPanel()
     {
         Time.timeScale = 0;
-        Sounds.Instance.PlayWin();
+        SoundManager.PlayWin();
         gameWinPanel.SetActive(true);
 
         continueButton.onClick.RemoveListener(ContinueGameWin);
