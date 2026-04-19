@@ -17,6 +17,9 @@ public class LevelsButtonsDisplay : MonoBehaviour
 
     void Start()
     {
+        if(!MenuMusic.IsPlay())
+            MenuMusic.Play();
+
         foreach (var pair in buttonPairs)
             if (pair.button != null)
                 pair.button.onClick.AddListener(() => LoadSceneByName(pair.sceneName));
@@ -37,6 +40,7 @@ public class LevelsButtonsDisplay : MonoBehaviour
 
     public void LoadSceneByName(string name)
     {
+        MenuMusic.Stop();
         SceneTransition.Load(name);
     }
 }
