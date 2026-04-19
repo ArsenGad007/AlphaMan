@@ -17,9 +17,10 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip[] runSteps;
     [Range(0f, 1f)][SerializeField] private float stepVolume = 1f;
 
-    [Tooltip("Фиксированный интервал между шагами в секундах")]
-    [SerializeField] private float walkStepInterval = 0.4f;
-    [SerializeField] private float runStepInterval = 0.25f;
+    [Tooltip("Фиксированный интервал между шагами ходьбы в секундах")]
+    [Min(0f)][SerializeField] private float walkStepInterval = 0.4f;
+    [Tooltip("Фиксированный интервал между шагами бега в секундах")]
+    [Min(0f)][SerializeField] private float runStepInterval = 0.25f;
 
     [Header("Подбор предметов")]
     [SerializeField] private AudioClip pickupSound;
@@ -28,7 +29,7 @@ public class SoundManager : MonoBehaviour
     [Header("Победа / Поражение")]
     [SerializeField] private AudioClip winSound;
     [SerializeField] private AudioClip loseSound;
-    [Range(0f, 1f)][SerializeField] private float importantVolume = 1f;
+    [Range(0f, 1f)][SerializeField] private float loseWinVolume = 1f;
 
     private AudioSource sfxSource;
     private float lastStepTime = 0f;
@@ -86,7 +87,7 @@ public class SoundManager : MonoBehaviour
 
         PauseMusic();
         sfxSource.pitch = 1f;
-        sfxSource.PlayOneShot(clip, importantVolume);
+        sfxSource.PlayOneShot(clip, loseWinVolume);
 
         yield return new WaitForSeconds(clip.length);
         ResumeMusic();
