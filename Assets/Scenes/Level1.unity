@@ -525,7 +525,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   rayCount: 60
   updateInterval: 0.0001
-  player: {fileID: 2936329222958355355, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+  player: {fileID: 1146775665}
   detectionRadius: 1.3
 --- !u!23 &16289501
 MeshRenderer:
@@ -21281,7 +21281,7 @@ PrefabInstance:
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 2936329222958355355, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      objectReference: {fileID: 1146775665}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: rayCount
       value: 60
@@ -24392,7 +24392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraDistance: 9
+  CameraDistance: 8
   DeadZoneDepth: 0
   Composition:
     ScreenPosition: {x: 0, y: -0.08}
@@ -24463,7 +24463,7 @@ Transform:
   m_GameObject: {fileID: 774638058}
   serializedVersion: 2
   m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: -2, y: 7.359997, z: -1.4219649}
+  m_LocalPosition: {x: -2, y: 6.653331, z: -0.70841336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -49351,7 +49351,7 @@ PrefabInstance:
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 2936329222958355355, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      objectReference: {fileID: 1146775665}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: rayCount
       value: 60
@@ -54234,7 +54234,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   rayCount: 60
   updateInterval: 0.0001
-  player: {fileID: 2936329222958355355, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+  player: {fileID: 1146775665}
   detectionRadius: 1.3
 --- !u!23 &1890352391
 MeshRenderer:
@@ -55106,7 +55106,7 @@ PrefabInstance:
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 2936329222958355355, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      objectReference: {fileID: 1146775665}
     - target: {fileID: 4499619770968366170, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: rayCount
       value: 60
@@ -57105,7 +57105,7 @@ Transform:
   m_GameObject: {fileID: 2051768751}
   serializedVersion: 2
   m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: -2, y: 7.359997, z: -1.4219649}
+  m_LocalPosition: {x: -2, y: 6.653331, z: -0.70841336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
