@@ -12,23 +12,26 @@ public class SoundManager : MonoBehaviour
     [Header("Фоновая музыка")]
     [SerializeField] private AudioSource musicSource; 
 
-    [Header("Шаги")]
+    [Header("Ходьба")]
     [SerializeField] private AudioClip[] walkSteps;
-    [SerializeField] private AudioClip[] runSteps;
-    [Range(0f, 1f)][SerializeField] private float stepVolume = 1f;
+    [Range(0f, 2f)][SerializeField] private float walkStepVolume = 1f;
+    [Tooltip("Фиксированный интервал между шагами ходьбы в секундах")]
+    [Min(0f)][SerializeField] private float walkStepInterval = 0.4f;
 
-    [Tooltip("Фиксированный интервал между шагами в секундах")]
-    [SerializeField] private float walkStepInterval = 0.4f;
-    [SerializeField] private float runStepInterval = 0.25f;
+    [Header("Бег")]
+    [SerializeField] private AudioClip[] runSteps;
+    [Range(0f, 2f)][SerializeField] private float runStepVolume = 1f;
+    [Tooltip("Фиксированный интервал между шагами бега в секундах")]
+    [Min(0f)][SerializeField] private float runStepInterval = 0.25f;
 
     [Header("Подбор предметов")]
     [SerializeField] private AudioClip pickupSound;
-    [Range(0f, 1f)][SerializeField] private float pickupVolume = 1f;
+    [Range(0f, 2f)][SerializeField] private float pickupVolume = 1f;
 
     [Header("Победа / Поражение")]
     [SerializeField] private AudioClip winSound;
     [SerializeField] private AudioClip loseSound;
-    [Range(0f, 1f)][SerializeField] private float importantVolume = 1f;
+    [Range(0f, 2f)][SerializeField] private float loseWinVolume = 1f;
 
     private AudioSource sfxSource;
     private float lastStepTime = 0f;
@@ -62,14 +65,14 @@ public class SoundManager : MonoBehaviour
     /// Воспроизводит случайный шаг из массива.
     /// Новый шаг разрешён только через интервал
     /// </summary>
-    private void PlayRandomStep(AudioClip[] clips, float interval)
+    private void PlayRandomStep(AudioClip[] clips, float interval, float volume)
     {
         if (clips == null || clips.Length == 0) return;
         if (Time.time - lastStepTime < interval) return;
 
         lastStepTime = Time.time;
         AudioClip clip = clips[Random.Range(0, clips.Length)];
-        PlaySFX(clip, stepVolume);
+        PlaySFX(clip, volume);
     }
 
     private void PlaySFX(AudioClip clip, float volume)
@@ -86,7 +89,7 @@ public class SoundManager : MonoBehaviour
 
         PauseMusic();
         sfxSource.pitch = 1f;
-        sfxSource.PlayOneShot(clip, importantVolume);
+        sfxSource.PlayOneShot(clip, loseWinVolume);
 
         yield return new WaitForSeconds(clip.length);
         ResumeMusic();
@@ -106,12 +109,12 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Воспроизводит звук ходьбы
     /// </summary>
-    public static void PlayWalk() => instance.PlayRandomStep(instance.walkSteps, instance.walkStepInterval);
+    public static void PlayWalk() => instance.PlayRandomStep(instance.walkSteps, instance.walkStepInterval, instance.walkStepVolume);
 
     /// <summary>
     /// Воспроизводит звук бега
     /// </summary>
-    public static void PlayRun() => instance.PlayRandomStep(instance.runSteps, instance.runStepInterval);
+    public static void PlayRun() => instance.PlayRandomStep(instance.runSteps, instance.runStepInterval, instance.runStepVolume);
 
     /// <summary>
     /// Воспроизводит звук взятия предмета
