@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
+    public static bool dontOpenNextScene = false;
     [SerializeField] private float speed = 5f;
 
     private static SceneTransition instance;
@@ -25,7 +26,18 @@ public class SceneTransition : MonoBehaviour
         overlay.material = mat;
 
         mat.SetFloat("_Aspect", (float)Screen.width / Screen.height);
-        StartCoroutine(Open());
+
+        if (!dontOpenNextScene)
+        {
+            mat.SetFloat("_Radius", 0f);
+            StartCoroutine(Open());
+        }
+        else
+        {
+            dontOpenNextScene = false;
+            mat.SetFloat("_Radius", 0.8f);
+            overlay.gameObject.SetActive(false);         
+        }
     }
 
     /// <summary>
@@ -54,6 +66,7 @@ public class SceneTransition : MonoBehaviour
             mat.SetFloat("_Radius", (1 - t) * 0.8f - 0.1f);
             yield return null;
         }
+
         SceneManager.LoadScene(sceneName);
     }
 }
