@@ -2025,8 +2025,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7197101512323614544}
   - component: {fileID: 6458779169383311252}
-  - component: {fileID: 5993826738930272219}
   - component: {fileID: 6578692085414010146}
+  - component: {fileID: 5993826738930272219}
+  - component: {fileID: 4455621921879591730}
+  - component: {fileID: 1012911755534823032}
+  - component: {fileID: 1150588708454650134}
   m_Layer: 5
   m_Name: ButtonExitSettings
   m_TagString: Untagged
@@ -2061,6 +2064,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8544510588124010264}
   m_CullTransparentMesh: 1
+--- !u!114 &6578692085414010146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8544510588124010264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 2a65573bc0c512f498584e511c5abb1d, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!114 &5993826738930272219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2104,8 +2134,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6578692085414010146}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &6578692085414010146
+      m_Calls:
+      - m_Target: {fileID: 1012911755534823032}
+        m_TargetAssemblyTypeName: ButtonSound, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4455621921879591730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2114,24 +2156,51 @@ MonoBehaviour:
   m_GameObject: {fileID: 8544510588124010264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 2a65573bc0c512f498584e511c5abb1d, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1012911755534823032}
+          m_TargetAssemblyTypeName: ButtonSound, Assembly-CSharp
+          m_MethodName: OnAria
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1012911755534823032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8544510588124010264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d60453d58c1fd4a8db8149c2bd695e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1150588708454650134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8544510588124010264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d48d182c3884f74f82c58abc22ee0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 50
 --- !u!1 &8920141919823254937
 GameObject:
   m_ObjectHideFlags: 0
@@ -2142,9 +2211,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1999306208209311898}
   - component: {fileID: 9207261231284707122}
-  - component: {fileID: 6123467799029228263}
   - component: {fileID: 2436901307948434071}
+  - component: {fileID: 6123467799029228263}
+  - component: {fileID: 2165847618976855447}
+  - component: {fileID: 3371054522695106124}
   - component: {fileID: 5652361245707668256}
+  - component: {fileID: 7860214366015617864}
   m_Layer: 5
   m_Name: ButtonDeleteSaves
   m_TagString: Untagged
@@ -2180,6 +2252,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8920141919823254937}
   m_CullTransparentMesh: 1
+--- !u!114 &2436901307948434071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920141919823254937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 88d2bbd38de9e7f4eaac3fad5d81a0df, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!114 &6123467799029228263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2223,8 +2322,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2436901307948434071}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &2436901307948434071
+      m_Calls:
+      - m_Target: {fileID: 3371054522695106124}
+        m_TargetAssemblyTypeName: ButtonSound, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2165847618976855447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2233,24 +2344,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 8920141919823254937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 88d2bbd38de9e7f4eaac3fad5d81a0df, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3371054522695106124}
+          m_TargetAssemblyTypeName: ButtonSound, Assembly-CSharp
+          m_MethodName: OnAria
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &3371054522695106124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920141919823254937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d60453d58c1fd4a8db8149c2bd695e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5652361245707668256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2263,3 +2388,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a08917de51b2a48acdbd348411e56d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7860214366015617864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920141919823254937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d48d182c3884f74f82c58abc22ee0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 80

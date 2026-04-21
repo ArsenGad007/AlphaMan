@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GamePlay : MonoBehaviour
@@ -13,7 +14,8 @@ public class GamePlay : MonoBehaviour
 
     public void LoadSceneByName()
     {
-        //SceneManager.LoadScene(nameNextScene);
-        SceneTransition.Load(nameNextScene);
+        //SceneTransition.Load(nameNextScene);
+        SceneTransition.dontOpenNextScene = true;
+        SceneManager.LoadScene(nameNextScene);
     }
 }
