@@ -30,24 +30,38 @@ public class SecurityCameraFOV : MonoBehaviour
     public bool IsPlayerVisible()
     {
         if (player == null) return false;
+
+        float playerHeight = 2f;
+
+        Vector3[] checkPoints = new Vector3[3];
+        checkPoints[0] = player.transform.position + Vector3.up * (playerHeight * 0.9f); 
+        checkPoints[1] = player.transform.position + Vector3.up * (playerHeight * 0.3f); 
+        checkPoints[2] = player.transform.position;                                   
+
         Vector3 rayStart = GetRayStartPoint();
-        Vector3 dir = (player.transform.position - rayStart);
-        float dist = dir.magnitude;
 
-        if (dist > viewDistance) return false;
+        // Проверка всех точек
+        foreach (Vector3 checkPoint in checkPoints)
+        {
+            Vector3 dir = (checkPoint - rayStart);
+            float dist = dir.magnitude;
+            if (dist > viewDistance) continue;
+            if (Vector3.Angle(transform.forward, dir.normalized) > fovAngle * 0.5f) continue;
+            if (!Physics.Raycast(rayStart, dir.normalized, dist, obstacleMask))
+            {  
+                return true;
+            }
+        }
 
-        if (Vector3.Angle(transform.forward, dir.normalized) > fovAngle * 0.5f) return false;
-
-        return !Physics.Raycast(rayStart, dir.normalized, dist, obstacleMask);
+        return false;
     }
+  private Vector3 GetRayStartPoint()
+{
+    Vector3 forwardShift = transform.TransformDirection(Vector3.forward) * lensOffset;
+    Vector3 downShift = Vector3.down * lensDrop; 
 
-    private Vector3 GetRayStartPoint()
-    {
-        Vector3 forwardShift = transform.TransformDirection(Vector3.forward) * lensOffset;
-        Vector3 downShift = Vector3.down * lensDrop;
-
-        return transform.position + forwardShift + downShift;
-    }
+    return transform.position + forwardShift + downShift;
+}
 
     private void UpdateFOV(Vector3 origin, Vector3 forward)
     {
