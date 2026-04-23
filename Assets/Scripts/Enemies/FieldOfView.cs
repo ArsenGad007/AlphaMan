@@ -52,14 +52,14 @@ public class FieldOfView : MonoBehaviour
     {
         float halfFov = fov * 0.5f;
         float angleStep = fov / rayCount;
-        const int circleSegments = 32;
+        //  const int circleSegments = 32;
 
-        int coneVerticesCount = rayCount + 2; 
-        int circleVerticesCount = circleSegments + 1; 
+        int coneVerticesCount = rayCount + 2;
+        //  int circleVerticesCount = circleSegments + 1; 
 
-        Vector3[] vertices = new Vector3[coneVerticesCount + circleVerticesCount];
+        Vector3[] vertices = new Vector3[coneVerticesCount];
         Vector2[] uvs = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3 + circleSegments * 3];
+        int[] triangles = new int[rayCount * 3];
 
         int vertexIndex = 0;
         int triangleIndex = 0;
@@ -135,7 +135,7 @@ public class FieldOfView : MonoBehaviour
         }
 
         //круг
-        int circleCenterIndex = vertexIndex;
+        /*int circleCenterIndex = vertexIndex;
         vertices[vertexIndex] = transform.InverseTransformPoint(originPosition); 
         vertexIndex++;
 
@@ -165,7 +165,7 @@ public class FieldOfView : MonoBehaviour
             triangles[triangleIndex + 1] = currentVertex; 
             triangles[triangleIndex + 2] = nextVertex;    
             triangleIndex += 3;
-        }
+        }*/
 
         mesh.Clear();
         mesh.vertices = vertices;
@@ -240,5 +240,38 @@ public class FieldOfView : MonoBehaviour
         if (Physics.Raycast(transform.position, dir.normalized, out hit, dist, obstacleMask))
             return hit.collider.gameObject == player;
         return true;
+    }
+    //чтобы определить какой дб задержка
+    public DetectionType CheckForDetection()
+    {
+        if (player == null) return DetectionType.None;
+
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+
+        if (distance <= detectionRadius)
+        {
+            return DetectionType.InstantDeath;
+        }
+
+        if (distance > viewDistance)
+            return DetectionType.None;
+
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        directionToPlayer.y = 0f;
+
+        if (Vector3.Angle(transform.forward, directionToPlayer.normalized) > fov * 0.5f)
+            return DetectionType.None;
+
+        if (Physics.Raycast(transform.position, directionToPlayer.normalized, out _, distance, obstacleMask))
+            return DetectionType.None;
+
+        return DetectionType.AlertDelay;
+    }
+    //от состояния зависит задержка
+    public enum DetectionType
+    {
+        None,       
+        AlertDelay, 
+        InstantDeath 
     }
 }

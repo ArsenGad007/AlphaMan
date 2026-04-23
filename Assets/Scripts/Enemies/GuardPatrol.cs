@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Splines;
+using System.Collections;
 
 public class GuardPatrol : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class GuardPatrol : MonoBehaviour
 
     //для обнаружения
     private bool isHiding = false;
+    private Quaternion targetRotationToPlayer;
+    private float turnToPlayerTimer;
+    private bool isTurningToPlayer;
 
     void Update()
     {
@@ -39,6 +43,16 @@ public class GuardPatrol : MonoBehaviour
         if (fieldOfView != null)
         {
             fieldOfView.UpdateFOV(transform.position, transform.forward);
+        }
+        if (isTurningToPlayer)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
+            turnToPlayerTimer += Time.deltaTime;
+
+            if (turnToPlayerTimer >= 0.3f)
+            {
+                isTurningToPlayer = false;
+            }
         }
     }
 
@@ -104,11 +118,32 @@ public class GuardPatrol : MonoBehaviour
 
     private void PlayerCheck()
     {
-        if (!fieldOfView.IsPlayerVisible())
+        FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
+        if (detection == FieldOfView.DetectionType.InstantDeath)
+        {
+                lastSeenPlayerPosition = fieldOfView.PlayerTransform.position;
+                Vector3 dirToPlayer = lastSeenPlayerPosition - transform.position;
+                dirToPlayer.y = 0f;
+
+                if (dirToPlayer.magnitude > 0)
+                {
+                    // Quaternion targetRot = Quaternion.LookRotation(dirToPlayer.normalized, Vector3.up);
+                    // transform.rotation = targetRot; 
+                    targetRotationToPlayer = Quaternion.LookRotation(dirToPlayer.normalized, Vector3.up);
+                    turnToPlayerTimer = 0f;
+                    isTurningToPlayer = true;
+                    StartCoroutine(TriggerGameOverWithDelay());
+                }
+               // StartCoroutine(TriggerGameOverWithDelay());
+               // return;
+        }
+
+        if (detection == FieldOfView.DetectionType.None)
         {
             isHiding = false;
             return;
         }
+
         if (currentState == State.Searching)
         {
             TriggerGameOver();
@@ -120,6 +155,12 @@ public class GuardPatrol : MonoBehaviour
         OnPlayerDetected(fieldOfView.PlayerTransform.position);
     }
 
+    private IEnumerator TriggerGameOverWithDelay()
+    {
+        yield return new WaitForSeconds(0.1f); 
+        TriggerGameOver();
+    }
+
     private void OnPlayerDetected(Vector3 playerPosition)
     {
         if (currentState == State.Walking)
@@ -128,6 +169,7 @@ public class GuardPatrol : MonoBehaviour
         }
         else if (currentState == State.Alerted || currentState == State.Searching)
         {
+            isTurningToPlayer = true;
             TriggerGameOver();
         }
     }
