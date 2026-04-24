@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameDeleteSaves : MonoBehaviour
+public class ButtonDeleteSaves : MonoBehaviour
 {
     private Button button;
 
