@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FieldOfView">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAgACAFAQAGAAAAAAgAAAAAAAJAEEBAIAAAIgAAEA=</HashCode>
+      <FileName>Assets\Scripts\Enemies\FieldOfView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GuardAnimator">
+    <Position X="2.25" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAAACBAAAAABAAAAAAAAAAAAAAAAAQAMAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemies\GuardAnimator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GuardPatrol">
+    <Position X="4.75" Y="0.75" Width="2.25" />
+    <NestedTypes>
+      <Enum Name="GuardPatrol.State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Enemies\GuardPatrol.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQQQAACEIAAAwAAIAQEAABAQAAAAAEAAADCQ4AAAIA=</HashCode>
+      <FileName>Assets\Scripts\Enemies\GuardPatrol.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GuardSounds">
+    <Position X="7.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AASAIACAACAAAAAAAAAAAAAAAAABAAAAAEAAAACQAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemies\GuardSounds.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SecurityCameraFOV">
+    <Position X="2.25" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAAAAAGBAAAAAAAIAAAAAJAAkBAAAAAAgAAEA=</HashCode>
+      <FileName>Assets\Scripts\Enemies\SCFOV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SecurityCamera">
+    <Position X="7.25" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAoAAAIA=</HashCode>
+      <FileName>Assets\Scripts\Enemies\SecurityCamera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

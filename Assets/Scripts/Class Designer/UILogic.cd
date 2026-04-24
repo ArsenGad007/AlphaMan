@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Игровая логика (классы управляют невидимыми объектами)&#xD;&#xA;&#xD;&#xA;">
+    <Position X="2.007" Y="1.06" Height="0.346" Width="6.962" />
+  </Comment>
+  <Comment CommentText="Панель настроек">
+    <Position X="2.009" Y="7.286" Height="0.346" Width="5.485" />
+  </Comment>
+  <Comment CommentText="Стартовая сцена">
+    <Position X="8.5" Y="7.25" Height="0.346" Width="3.215" />
+  </Comment>
+  <Class Name="ButtonStringPair">
+    <Position X="10.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\LevelsButtonsDisplay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LevelsButtonsDisplay">
+    <Position X="9.75" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAQAAAAAAAAAAAAAAAABAAAABA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\LevelsButtonsDisplay.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="buttonPairs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="ButtonDeleteSaves">
+    <Position X="2" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAACAAAAAAAAAAAAACAAEAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\ButtonDeleteSaves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameExit">
+    <Position X="2" Y="1.5" Width="1.5" />
+    <AssociationLine Name="gameExitPlace" Type="GameExitPlace">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.089" Y="0.081" Height="0.182" Width="1.15" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEACAAAAAAIBAAAAAQAEAAAAAARAAAgCAAIIA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GameExit.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="gameExitPlace" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GamePlay">
+    <Position X="8.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAIIAAAAABAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GamePlay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameSettings">
+    <Position X="3.75" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAgAAAAAMAgAAAAAACAACAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GameSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameOver">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAABQAAAASAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GameOver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameWin">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAACwAAIAAAgAQCAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GameWin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ResolutionDropdown">
+    <Position X="4" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACACAACAAAQBAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\ResolutionDropdown.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RoundedRectFilter">
+    <Position X="12.75" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAACAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\RoundedRectFilter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TimerLogic">
+    <Position X="12.75" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAEgAAACAAAAACAAAAAAAAAAAAIAAAAAIA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\TimerLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToggleFullscreen">
+    <Position X="6" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAQABAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\ToggleFullscreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VersionText">
+    <Position X="10.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\VersionText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SavesLogic">
+    <Position X="15" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Assets\Scripts\SavesLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneTransition">
+    <Position X="15" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAkAAAACAAIAAAAAAAABAAEABAAQAAAAACAAAAAMA=</HashCode>
+      <FileName>Assets\Scripts\SceneTransition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="GameExitPlace">
+    <Position X="2" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GameExit.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
