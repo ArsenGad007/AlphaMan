@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 public class SceneTransition : MonoBehaviour
 {
     public static bool dontOpenNextScene = false;
-    [SerializeField] private float speed = 5f;
+    public static string TargetScene { private set; get; }
 
+    [SerializeField] private float speed = 5f;
+   
     private static SceneTransition instance;
+    private bool showLoadingScene = false;
     private Material mat;
     private RawImage overlay;
 
@@ -44,7 +47,11 @@ public class SceneTransition : MonoBehaviour
     /// Загрузка новой сцены с переходом
     /// </summary>
     /// <param name="sceneName"></param>
-    public static void Load(string sceneName) => instance.GoTo(sceneName);
+    public static void Load(string sceneName, bool showLoadingScene = false)
+    {
+        instance.showLoadingScene = showLoadingScene;
+        instance.GoTo(sceneName);
+    }
 
     private void GoTo(string sceneName) => StartCoroutine(Go(sceneName));
 
@@ -67,6 +74,12 @@ public class SceneTransition : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene(sceneName);
+        if (!showLoadingScene)
+            SceneManager.LoadScene(sceneName);
+        else
+        {
+            TargetScene = sceneName;
+            SceneManager.LoadScene("Loading");
+        }
     }
 }

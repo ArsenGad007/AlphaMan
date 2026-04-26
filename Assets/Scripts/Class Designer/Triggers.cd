@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ItemTrigger">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAABAAAAAAAAAAAhAAAIAQAAACAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Triggers\ItemTrigger.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="gameInput" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="RoofTriggerOpacity">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAIAAACAAAAAAAAAAACgAAAAAAIAAQAAgAAgAEAA=</HashCode>
+      <FileName>Assets\Scripts\Triggers\RoofTriggerOpacity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WinTrigger">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAQAAQAAAAAABAAA=</HashCode>
+      <FileName>Assets\Scripts\Triggers\WinTrigger.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="gameWin" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GameWin" Collapsed="true">
+    <Position X="9" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAACwAAIAAAgAQCAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UILogic\GameWin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameInput" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAABAAAgASEAIABAAAAAQgAAAgAAAAABAAEAgAAJAAI=</HashCode>
+      <FileName>Assets\Scripts\Player\GameInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
