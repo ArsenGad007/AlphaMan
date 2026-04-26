@@ -13,7 +13,8 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] private GameObject player;
     //[SerializeField] private GameOver gameOver;
 
-    [SerializeField] private float detectionRadius = 1.7f;
+    [SerializeField] private float detectionRadius = 3f;
+     public float alertDelay = 1f;
 
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
