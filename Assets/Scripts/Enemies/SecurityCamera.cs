@@ -6,8 +6,17 @@ public class SecurityCamera : MonoBehaviour
     [SerializeField] private SecurityCameraFOV fieldOfView;
     [SerializeField] private GameOver gameOver;
     private bool isTriggered = false;
-
-
+    private Material Green;
+    private Material Red;
+    private void Awake()
+    {
+        Green = Resources.Load<Material>("FOV_mat/FOV_Walking");
+        Red = Resources.Load<Material>("FOV_mat/FOV_Danger");
+    }
+    private void Start()
+    {
+        fieldOfView.SetMaterial(Green);
+    }
     void Update()
     {
         if (fieldOfView != null && !isTriggered)
@@ -26,11 +35,12 @@ public class SecurityCamera : MonoBehaviour
     {
         if (isTriggered) return;
         isTriggered = true;
-        Debug.Log("камера");
 
-        if (gameOver != null)
+
+        fieldOfView.SetMaterial(Red);
             gameOver.GameOverPanel();
 
         Time.timeScale = 0f;
     }
+
 }

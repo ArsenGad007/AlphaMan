@@ -12,6 +12,7 @@ public class FieldOfView : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float updateInterval = 0.001f;
     [SerializeField] private GameObject player;
     //[SerializeField] private GameOver gameOver;
+    private Renderer fieldOfViewRenderer;
 
     [SerializeField] private float detectionRadius = 3f;
      public float alertDelay = 1f;
@@ -25,6 +26,13 @@ public class FieldOfView : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        fieldOfViewRenderer = GetComponent<Renderer>();
+       
+    }
+
+    public void SetMaterial(Material mat)
+    {
+            fieldOfViewRenderer.sharedMaterial = mat;
     }
 
     public void UpdateFOV(Vector3 originPosition, Vector3 forwardDirection)
