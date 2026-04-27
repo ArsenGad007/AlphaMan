@@ -13,13 +13,20 @@ public class SecurityCameraFOV : MonoBehaviour
     [SerializeField] private float lensDrop = 1f;
 
     private Mesh mesh;
+    private Renderer cameraRenderer;
 
     void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        cameraRenderer = GetComponent<Renderer>();
     }
-
+    public bool SetMaterial(Material mat)
+    {
+            cameraRenderer.sharedMaterial = mat;
+            return true;
+        return false;
+    }
     void Update()
     {
         Vector3 actualOrigin = transform.TransformDirection(Vector3.forward) * lensOffset + transform.position;

@@ -86,7 +86,19 @@ public class GuardPatrol : MonoBehaviour
     /// // Кэшированное направление к цели для опт-ции
     /// </summary>
     private Vector3 cachedDirectionToTarget;
+    /// <summary>
+    /// цвета сетки
+    /// </summary>
+    private Material Green;
+    private Material Yellow; 
+    private Material Red;
 
+    void Awake()
+    {
+        Green = Resources.Load<Material>("FOV_mat/FOV_Walking");
+        Yellow = Resources.Load<Material>("FOV_mat/FOV_Alert");
+        Red = Resources.Load<Material>("FOV_mat/FOV_Danger");
+    }
     private void Start()
     {
         gameOver = FindAnyObjectByType<GameOver>();
@@ -99,10 +111,12 @@ public class GuardPatrol : MonoBehaviour
         if (currentState != State.Alerted && currentState != State.Searching)
         {
             Patrol();
+            fieldOfView?.SetMaterial(Green);
         }
         else
         {
             HandleAlertedOrSearching();
+            fieldOfView?.SetMaterial(Yellow);
 
 
         }
@@ -115,11 +129,13 @@ public class GuardPatrol : MonoBehaviour
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
             float timeSinceStarted = Time.time - turnStartTime;
+            fieldOfView?.SetMaterial(Red);
 
             if (timeSinceStarted >= 0.3f)
             {
                 isTurningToPlayer = false;
             }
+
         }
     }
 
