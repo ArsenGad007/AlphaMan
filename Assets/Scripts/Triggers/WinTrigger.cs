@@ -6,6 +6,11 @@ public class WinTrigger : MonoBehaviour
     [SerializeField] private GameWin gameWin;
     [SerializeField] private string playerTag = "Player";
 
+    private void Start()
+    {
+        CountItems.UpdateItemCountPanel(requiredItems.Length);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag) && AllItemsCollected())
@@ -15,10 +20,9 @@ public class WinTrigger : MonoBehaviour
     private bool AllItemsCollected()
     {
         foreach (ItemTrigger item in requiredItems)
-        {
-            if (item != null && !item.ItemCollected())
+            if (item != null && !item.ItemCollected())          
                 return false;
-        }
+
         return true;
     }
 }
