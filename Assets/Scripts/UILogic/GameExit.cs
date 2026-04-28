@@ -8,8 +8,12 @@ public enum GameExitPlace
     Output
 }
 
+/// <summary>
+/// ќтвечает за отображение выхода из игры
+/// </summary>
 public class GameExit : MonoBehaviour
 {
+    [SerializeField] private GameInput gameInput;
     [SerializeField] private GameExitPlace gameExitPlace;   //  уда нужно выйти;
     [SerializeField] private GameObject gameExitPanel;      // —сылка на панель выхода;
     [SerializeField] private Button exitButton;
@@ -27,6 +31,9 @@ public class GameExit : MonoBehaviour
 
         exitButton.onClick.RemoveListener(ExitPanel);
         exitButton.onClick.AddListener(ExitPanel);
+
+        GameInput.IsExit -= ExitPanel;
+        GameInput.IsExit += ExitPanel;
     }
 
     private void ExitPanel()
