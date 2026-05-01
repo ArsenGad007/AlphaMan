@@ -65,11 +65,11 @@ namespace Eldvmo.Ripples
                 _oldInputCentre = uv;
 
                 ripplePlane.material.SetVectorArray("_InputCentre", ripplePoints);
-                Debug.Log($"Ripple at {uv} | direction={direction}");
+               // Debug.Log($"Ripple at {uv} | direction={direction}");
             }
             else
             {
-                Debug.Log($"Missed | direction={direction} origin={origin} waterY={waterY} myY={transform.position.y}");
+               // Debug.Log($"Missed | direction={direction} origin={origin} waterY={waterY} myY={transform.position.y}");
             }
         }
 
