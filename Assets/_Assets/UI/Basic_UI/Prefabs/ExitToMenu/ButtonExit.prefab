@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8649700530290760380}
   - component: {fileID: 4400349904451294586}
-  - component: {fileID: 339441371332800585}
+  - component: {fileID: 3624996553035362312}
   - component: {fileID: 4163168769271127694}
   - component: {fileID: 5183521000678333615}
   - component: {fileID: 4261412393205076847}
@@ -50,7 +50,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7041273458052448468}
   m_CullTransparentMesh: 1
---- !u!114 &339441371332800585
+--- !u!114 &3624996553035362312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7041273458052448468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -70,13 +70,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 24702301e1a11ce44a9ea8a2b8a577db, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 1382871404, guid: 24702301e1a11ce44a9ea8a2b8a577db, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &4163168769271127694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +120,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 339441371332800585}
+  m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -197,7 +200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5785583571264338274}
   - component: {fileID: 8725848106919101890}
-  - component: {fileID: 3174953144641589018}
+  - component: {fileID: 1273046232742839593}
   m_Layer: 5
   m_Name: ImageExit
   m_TagString: Untagged
@@ -232,7 +235,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8487171735518797344}
   m_CullTransparentMesh: 1
---- !u!114 &3174953144641589018
+--- !u!114 &1273046232742839593
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,7 +244,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8487171735518797344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -252,10 +255,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 6b0ab2bf2e5f88c468396f53f32bcf3e, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 1973775408, guid: 6b0ab2bf2e5f88c468396f53f32bcf3e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1

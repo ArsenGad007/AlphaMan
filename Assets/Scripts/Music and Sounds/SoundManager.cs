@@ -25,8 +25,12 @@ public class SoundManager : MonoBehaviour
     [Min(0f)][SerializeField] private float runStepInterval = 0.25f;
 
     [Header("Подбор предметов")]
-    [SerializeField] private AudioClip pickupSound;
-    [Range(0f, 2f)][SerializeField] private float pickupVolume = 1f;
+    [SerializeField] private AudioClip itemPickupSound;
+    [Range(0f, 2f)][SerializeField] private float itemPickupVolume = 1f;
+
+    [Header("Подбор монет")]
+    [SerializeField] private AudioClip coinPickupSound;
+    [Range(0f, 2f)][SerializeField] private float coinPickupVolume = 1f;
 
     [Header("Победа / Поражение")]
     [SerializeField] private AudioClip winSound;
@@ -117,9 +121,14 @@ public class SoundManager : MonoBehaviour
     public static void PlayRun() => instance.PlayRandomStep(instance.runSteps, instance.runStepInterval, instance.runStepVolume);
 
     /// <summary>
+    /// Воспроизводит звук вз ятия предмета
+    /// </summary>    
+    public static void PlayItemPickup() => instance.PlaySFX(instance.itemPickupSound, instance.itemPickupVolume);
+
+    /// <summary>
     /// Воспроизводит звук взятия предмета
     /// </summary>    
-    public static void PlayPickup() => instance.PlaySFX(instance.pickupSound, instance.pickupVolume);
+    public static void PlayCoinPickup() => instance.PlaySFX(instance.coinPickupSound, instance.coinPickupVolume);
 
     /// <summary>
     /// Воспроизводит звук победы

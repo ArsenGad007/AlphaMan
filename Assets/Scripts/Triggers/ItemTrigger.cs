@@ -15,7 +15,7 @@ public class ItemTrigger : MonoBehaviour
         {
             if (gameInput.IsInteract() && flagInteract && !itemCollected)
             {
-                SoundManager.PlayPickup();// звук взятия предмета
+                SoundManager.PlayItemPickup();// звук взятия предмета
                 Invoke(nameof(HideObject), 0.05f);
 
                 CountItems.UpdateItemCountPanel(CountItems.itemCount - 1);
