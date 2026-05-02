@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Custom_ContinuousRipple
+  m_Shader: {fileID: 4800000, guid: 84d0cdabf002cb641a0c615ff823e2ff, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 64245e28b38ea65499103ee71cf3737d, type: 3}
+        m_Scale: {x: 5, y: 5}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTexture1:
+        m_Texture: {fileID: 2800000, guid: 40633895f87a96343ab2e3385d9f4fd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTexture2:
+        m_Texture: {fileID: 2800000, guid: 40633895f87a96343ab2e3385d9f4fd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Decay: 3
+    - _RippleDecay: 2
+    - _RippleFrequency: 40.01
+    - _RippleSpeed: 1
+    - _StencilRef: 0
+    - _WaveAmplitude: 0.5
+    - _WaveFrequency: 50
+    - _WaveLiftTime: 10
+    - _WaveSpeed: 1.5
+    - _WaveStrength: 0.5
+    - _maxRipple: 30
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _InputCentre: {r: 0.5, g: 0.5, b: 0, a: 0}
+  m_BuildTextureStacks: []
