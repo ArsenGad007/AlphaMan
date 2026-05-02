@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Fullscreen : MonoBehaviour
+public class ToggleFullscreen : MonoBehaviour
 {
     private Toggle fullscreenToggle;
     private string fullscreenStatusKey = "fullscreen";

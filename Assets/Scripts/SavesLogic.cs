@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class SavesLogic : MonoBehaviour
 {
 
-    private static string playerLevelKey = "player_level";
+    private readonly static string PlayerLevelKey = "player_level";
 
     /// <summary>
     /// Сохранение ключа - значения
@@ -37,6 +37,6 @@ public class SavesLogic : MonoBehaviour
     /// </summary>
     public static void DeleteLevelSaves()
     {
-        PlayerPrefs.DeleteKey(playerLevelKey);
+        PlayerPrefs.DeleteKey(PlayerLevelKey);
     }
 }

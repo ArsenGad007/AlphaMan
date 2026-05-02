@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -41,6 +42,6 @@ public class LevelsButtonsDisplay : MonoBehaviour
     public void LoadSceneByName(string name)
     {
         MenuMusic.Stop();
-        SceneTransition.Load(name);
+        SceneTransition.Load(name, true);
     }
 }

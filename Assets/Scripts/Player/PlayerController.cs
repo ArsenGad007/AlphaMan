@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// ”правление игроком
+/// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
