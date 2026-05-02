@@ -7,7 +7,7 @@ public class CountItems : MonoBehaviour
 
     private static TextMeshProUGUI itemCountText;
 
-    void Start()
+    private void Awake()
     {
         itemCountText = GetComponent<TextMeshProUGUI>();
     }
