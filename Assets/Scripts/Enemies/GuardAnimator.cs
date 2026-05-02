@@ -36,7 +36,7 @@ public class GuardAnimator : MonoBehaviour
         animator.ResetTrigger(currentAnimation);
         animator.SetTrigger(tag);
         currentAnimation = tag;
-        Debug.Log("Guard animation: " + tag);
+        //Debug.Log("Guard animation: " + tag);
 
         yield return new WaitForSeconds(tag == "idle" ? 0f : animationChangeDelay);
         isChangingAnimation = false;
