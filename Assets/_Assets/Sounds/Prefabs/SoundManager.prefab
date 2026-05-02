@@ -282,8 +282,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a6755901ca7b27e4b9b611284555bd7f, type: 3}
   runStepVolume: 1
   runStepInterval: 0.43
-  pickupSound: {fileID: 8300000, guid: 7cc4c6e4516c4464eac2492e16d18e54, type: 3}
-  pickupVolume: 1
+  itemPickupSound: {fileID: 8300000, guid: b00717ced804e0c498e173aad7610011, type: 3}
+  itemPickupVolume: 1.4
+  coinPickupSound: {fileID: 8300000, guid: 4df134a970e33094e808ecb18552be8e, type: 3}
+  coinPickupVolume: 0.15
   winSound: {fileID: 8300000, guid: 64e9635aca33e844b93007cdbe9a290c, type: 3}
   loseSound: {fileID: 8300000, guid: 3b4b3c93449e0c64686aa252646b3690, type: 3}
   loseWinVolume: 0.1

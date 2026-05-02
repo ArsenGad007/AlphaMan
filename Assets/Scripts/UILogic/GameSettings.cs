@@ -13,6 +13,8 @@ public class GameSettings : MonoBehaviour
 
     void Start()
     {
+        gameSettingsPanel.SetActive(false);
+
         enterSettingsButton.onClick.RemoveListener(EnterSettings);
         enterSettingsButton.onClick.AddListener(EnterSettings);
     }
