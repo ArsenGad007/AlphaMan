@@ -4,8 +4,8 @@ public class ButtonSoundManager : MonoBehaviour
 {
     public static ButtonSoundManager Instance { get; private set; }
 
-    [SerializeField] private AudioSource clickAudioSource;
-    [SerializeField] private AudioSource enterAriaAudioSource;
+    [SerializeField] private AudioSource clickButtonSource;
+    [SerializeField] private AudioSource enterAriaButtonSource;
     [SerializeField] private AudioClip clickSound;
     [SerializeField] private AudioClip enterAriaSound;
 
@@ -21,6 +21,6 @@ public class ButtonSoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void PlayClickSound() => clickAudioSource.PlayOneShot(clickSound);
-    public void PlayEnterAriaSound() => enterAriaAudioSource.PlayOneShot(enterAriaSound);
+    public void PlayClickSound() => clickButtonSource.PlayOneShot(clickSound);
+    public void PlayEnterAriaSound() => enterAriaButtonSource.PlayOneShot(enterAriaSound);
 }
