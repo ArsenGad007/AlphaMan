@@ -250,6 +250,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Bench 1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8526256363525828327, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 9014104537961509981, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -775,6 +779,10 @@ PrefabInstance:
     - target: {fileID: 8695414220728562680, guid: 46d03db63e0389d40957296e65abacc9, type: 3}
       propertyPath: m_Name
       value: Public Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 8695414220728562680, guid: 46d03db63e0389d40957296e65abacc9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8021361592167668827, guid: 46d03db63e0389d40957296e65abacc9, type: 3}
@@ -1620,7 +1628,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &74014670
 Transform:
@@ -1810,9 +1818,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 57982468}
     m_Modifications:
+    - target: {fileID: 4913147818869032645, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_Name
       value: Flowers_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_LocalScale.x
@@ -1869,6 +1885,10 @@ PrefabInstance:
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440194995934546347, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2051,6 +2071,10 @@ PrefabInstance:
     - target: {fileID: 8526256363525828327, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
       propertyPath: m_Name
       value: Wooden Bench 1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8526256363525828327, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9014104537961509981, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2435,7 +2459,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -3322,7 +3346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3711,9 +3735,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1153211386}
     m_Modifications:
+    - target: {fileID: 98197885758640017, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613823603607062675, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847818049979679726, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_Name
       value: Street Lamp 3 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8053541124197933576, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4753,7 +4793,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -8003,7 +8043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8150,9 +8190,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 57982468}
     m_Modifications:
+    - target: {fileID: 4913147818869032645, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_Name
       value: Flowers_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8193,6 +8241,10 @@ PrefabInstance:
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440194995934546347, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8268,7 +8320,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -9015,7 +9067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9930,6 +9982,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Bench 2 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5592398270452724783, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.2999998
@@ -10476,7 +10532,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -11021,7 +11077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11221,6 +11277,10 @@ PrefabInstance:
     - target: {fileID: 8526256363525828327, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
       propertyPath: m_Name
       value: Wooden Bench 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8526256363525828327, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9014104537961509981, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11919,6 +11979,10 @@ PrefabInstance:
     - target: {fileID: 8695414220728562680, guid: 46d03db63e0389d40957296e65abacc9, type: 3}
       propertyPath: m_Name
       value: Public Table (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8695414220728562680, guid: 46d03db63e0389d40957296e65abacc9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8021361592167668827, guid: 46d03db63e0389d40957296e65abacc9, type: 3}
@@ -14603,7 +14667,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -21044,7 +21108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21183,9 +21247,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 57982468}
     m_Modifications:
+    - target: {fileID: 3474586469933685846, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3899520030806763256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
       propertyPath: m_Name
       value: Flowers_02 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3899520030806763256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3899520030807063256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21226,6 +21298,10 @@ PrefabInstance:
     - target: {fileID: 3899520030807063256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7237717045736339869, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23073,6 +23149,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1153211386}
     m_Modifications:
+    - target: {fileID: 98197885758640017, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613823603607062675, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847818049979679726, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4333005255255272106, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_IsTrigger
       value: 0
@@ -23084,6 +23172,10 @@ PrefabInstance:
     - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_Name
       value: Street Lamp 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8053541124197933576, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23514,9 +23606,17 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1546310594928298914, guid: 4a01b15b3c6127b48ae207063f1f0155, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4a01b15b3c6127b48ae207063f1f0155, type: 3}
       propertyPath: m_Name
       value: Washing Machine
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4a01b15b3c6127b48ae207063f1f0155, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4198507141730997952, guid: 4a01b15b3c6127b48ae207063f1f0155, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -23526,6 +23626,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 4d2424f0e92f7544e84cf9fd6e759824, type: 2}
+    - target: {fileID: 7837965222332487955, guid: 4a01b15b3c6127b48ae207063f1f0155, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7983613141376667043, guid: 4a01b15b3c6127b48ae207063f1f0155, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -25142,6 +25246,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Bench 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8526256363525828327, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 9014104537961509981, guid: 860765ebca85feb49ae4eb353227544c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -25717,7 +25825,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -27151,7 +27259,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -28046,6 +28154,10 @@ PrefabInstance:
     - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_Name
       value: Wooden Bench 2 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5592398270452724783, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_LocalScale.x
@@ -29049,6 +29161,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: bd1588d2560adcd40a553ee1c463c87d, type: 3}
       propertyPath: m_Name
       value: Knife Block
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bd1588d2560adcd40a553ee1c463c87d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30694,6 +30810,10 @@ PrefabInstance:
     - target: {fileID: 3944007840901440701, guid: 6c693d50f00a83d4b9d8e12ead783a93, type: 3}
       propertyPath: m_Name
       value: Mailbox 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944007840901440701, guid: 6c693d50f00a83d4b9d8e12ead783a93, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4463136021990178311, guid: 6c693d50f00a83d4b9d8e12ead783a93, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32399,7 +32519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -33106,9 +33226,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 57982468}
     m_Modifications:
+    - target: {fileID: 4913147818869032645, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_Name
       value: Flowers_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_LocalPosition.x
@@ -33149,6 +33277,10 @@ PrefabInstance:
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440194995934546347, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34611,6 +34743,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Bench 2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5592398270452724783, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.2999998
@@ -35006,9 +35142,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 57982468}
     m_Modifications:
+    - target: {fileID: 3474586469933685846, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3899520030806763256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
       propertyPath: m_Name
       value: Flowers_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3899520030806763256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3899520030807063256, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35053,6 +35197,10 @@ PrefabInstance:
     - target: {fileID: 4496930816834818447, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
       propertyPath: m_LODs.Array.data[0].screenRelativeHeight
       value: 0.049164698
+      objectReference: {fileID: 0}
+    - target: {fileID: 7237717045736339869, guid: 299e7a1cb6456cf4fa6079cf5978df9b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35553,6 +35701,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 62dd2a0b5c3c96640b9d2e0d017b257d, type: 3}
       propertyPath: m_Name
       value: Mug
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 62dd2a0b5c3c96640b9d2e0d017b257d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36057,6 +36209,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wooden Bench 2 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5592398270452724783, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.2999998
@@ -36145,9 +36301,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1153211386}
     m_Modifications:
+    - target: {fileID: 98197885758640017, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613823603607062675, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847818049979679726, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_Name
       value: Street Lamp 3 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8053541124197933576, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36321,6 +36493,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 36430a38ea21e0b4886dd31b8a6911cd, type: 3}
       propertyPath: m_Name
       value: Plant B
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 36430a38ea21e0b4886dd31b8a6911cd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -38598,6 +38774,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pan
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f7d87eb70e61ed942be4166c8e4a1b0f, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -39413,7 +39593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d71bdfaee31a0047a72b8a176c551cf, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -39797,6 +39977,10 @@ PrefabInstance:
     - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_Name
       value: Wooden Bench 2 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5592398270452724783, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_LocalScale.x
@@ -41851,6 +42035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Toaster
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 06a0adb67b57565468e0e6994cadba93, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -42485,6 +42673,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8e96d92a8669fe545823f3aa5992ccac, type: 3}
       propertyPath: m_Name
       value: Console D
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8e96d92a8669fe545823f3aa5992ccac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -43413,7 +43605,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1510441207
 Transform:
@@ -43733,7 +43925,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -45837,6 +46029,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TV 2 (Curved - Wall)
       objectReference: {fileID: 0}
+    - target: {fileID: 1599956628680090502, guid: 9ddd3d23cc54a554e93f1265df2038c1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2913262408197930222, guid: 9ddd3d23cc54a554e93f1265df2038c1, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -47184,7 +47380,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1590692880
 Transform:
@@ -47796,6 +47992,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1153211386}
     m_Modifications:
+    - target: {fileID: 98197885758640017, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613823603607062675, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847818049979679726, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4333005255255272106, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_IsTrigger
       value: 0
@@ -47807,6 +48015,10 @@ PrefabInstance:
     - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_Name
       value: Street Lamp 3 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8053541124197933576, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -48278,7 +48490,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -50345,6 +50557,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blender
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9348d97e344f7a84489ddd02bfed76f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51019,7 +51235,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -52505,7 +52721,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1792004024
 Transform:
@@ -52626,7 +52842,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1801254371
 Transform:
@@ -53017,6 +53233,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1fcf02109e59c1c4c8d1f3cf13708991, type: 3}
       propertyPath: m_Name
       value: Carpet B
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1fcf02109e59c1c4c8d1f3cf13708991, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -54009,7 +54229,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -54681,7 +54901,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -56002,9 +56222,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1153211386}
     m_Modifications:
+    - target: {fileID: 98197885758640017, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613823603607062675, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3847818049979679726, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_Name
       value: Street Lamp 3 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244106345947936946, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8053541124197933576, guid: 38c243bf8e6225d468537b0cfbc6124a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -56194,6 +56430,10 @@ PrefabInstance:
     - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_Name
       value: Wooden Bench 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104795218644283029, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5592398270452724783, guid: b38f5b590b91d4e48a126d722896fd60, type: 3}
       propertyPath: m_LocalScale.x
@@ -56644,7 +56884,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1920892316
 Transform:
@@ -57834,6 +58074,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Books A
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7e7c0918be27c044c9c9f75502673549, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -58218,7 +58462,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2032740899
 Transform:
@@ -58331,9 +58575,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 57982468}
     m_Modifications:
+    - target: {fileID: 4913147818869032645, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_Name
       value: Flowers_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186735023776687486, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_LocalScale.x
@@ -58390,6 +58642,10 @@ PrefabInstance:
     - target: {fileID: 5186735023777053022, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440194995934546347, guid: ac8efb728f1fb9b4092c4df591c827ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
