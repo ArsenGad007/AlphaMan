@@ -8,9 +8,9 @@ using System.Collections;
 public class GuardPatrol : MonoBehaviour
 {
     /// <summary>Перечисление состояний поведения охранника</summary>
-    public enum State { Walking, Alerted, Searching }
+    public enum State { Walking, Alerted, Searching, Pursuing }
 
-
+    [SerializeField] private Animator animator;
     // Настройки движения
     /// <summary>
     /// точки маршрута патруля
@@ -39,6 +39,7 @@ public class GuardPatrol : MonoBehaviour
     /// длительность поиска
     /// </summary>
     private float searchDuration = 3f;
+    [SerializeField] private float pursueDuration = 5f;
     /// задержка перед поиском
     private float alertTime = 0.5f;
     /// угол обзора
@@ -92,6 +93,10 @@ public class GuardPatrol : MonoBehaviour
     private Material Green;
     private Material Yellow; 
     private Material Red;
+    /// <summary>
+    [SerializeField] private Transform playerTransform;
+    private Vector3 lastPosition;
+    private float chaseBreakRadius = 15f;
 
     void Awake()
     {
@@ -102,44 +107,49 @@ public class GuardPatrol : MonoBehaviour
     private void Start()
     {
         gameOver = FindAnyObjectByType<GameOver>();
+        lastPosition = transform.position;
 
     }
 
     void Update()
     {
-        PlayerCheck();
-        if (currentState != State.Alerted && currentState != State.Searching)
-        {
-            Patrol();
-            fieldOfView?.SetMaterial(Green);
-        }
-        else
-        {
-            HandleAlertedOrSearching();
-            fieldOfView?.SetMaterial(Yellow);
-
-
-        }
-
-        if (fieldOfView != null)
-        {
-            fieldOfView.UpdateFOV(transform.position, transform.forward);
-        }
-        if (isTurningToPlayer)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
-            float timeSinceStarted = Time.time - turnStartTime;
-            fieldOfView?.SetMaterial(Red);
-
-            if (timeSinceStarted >= 0.3f)
+            PlayerCheck();
+            switch (currentState)
             {
-                isTurningToPlayer = false;
+                case State.Walking:
+                    HandleWalking();
+                    fieldOfView?.SetMaterial(Green);
+                    break;
+                case State.Pursuing:
+                    HandlePursuing();
+                    fieldOfView?.SetMaterial(Yellow);
+                    break;
+                case State.Alerted:
+                case State.Searching:
+                    HandleAlertedOrSearching();
+                    fieldOfView?.SetMaterial(Yellow);
+                    break;
             }
 
-        }
+
+            if (fieldOfView != null)
+            {
+                fieldOfView.UpdateFOV(transform.position, transform.forward);
+            }
+            if (isTurningToPlayer)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
+                float timeSinceStarted = Time.time - turnStartTime;
+                fieldOfView?.SetMaterial(Red);
+
+                if (timeSinceStarted >= 0.3f)
+                {
+                    isTurningToPlayer = false;
+                }
+
+            }
     }
-
-
+   
     /// <summary>
     /// Основная функция патрулирования, смена состояний
     /// </summary>
@@ -150,9 +160,10 @@ public class GuardPatrol : MonoBehaviour
             case State.Walking:
                 HandleWalking();
                 break;
-                /*case State.LookingAround:
-                    HandleLookingAround();
-                    break;*/
+            /*case State.LookingAround:
+                HandleLookingAround();
+                break;*/
+            case State.Pursuing: HandlePursuing(); break; 
         }
     }
 
@@ -323,39 +334,32 @@ public class GuardPatrol : MonoBehaviour
     /// <summary>
     /// Обрабатывает состояния Alerted и Searching.
     /// </summary>
-
     private void HandleAlertedOrSearching()
     {
-        if (currentState == State.Searching)
-        {
-            FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
-
-            if (detection != FieldOfView.DetectionType.None)
-            {
-                StartTurnAndDie(lastSeenPlayerPosition);
-                return; 
-            }
-        }
-
         stateTimer += Time.deltaTime;
 
         if (currentState == State.Alerted)
         {
             Vector3 dirToPlayer = lastSeenPlayerPosition - transform.position;
             dirToPlayer.y = 0f;
-            if (dirToPlayer != Vector3.zero)
+            if (dirToPlayer.sqrMagnitude > 0.01f)
             {
                 Quaternion targetRot = Quaternion.LookRotation(dirToPlayer.normalized, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
             }
             if (stateTimer >= alertTime)
             {
-                currentState = State.Searching;
+                currentState = State.Pursuing;
                 stateTimer = 0f;
             }
         }
         else if (currentState == State.Searching)
         {
+            if (fieldOfView.CheckForDetection() != FieldOfView.DetectionType.None)
+            {
+                StartTurnAndDie(lastSeenPlayerPosition);
+                return;
+            }
             Vector3 baseDir = lastSeenPlayerPosition - transform.position;
             baseDir.y = 0f;
             if (baseDir.magnitude < 0.01f) baseDir = transform.forward;
@@ -367,10 +371,76 @@ public class GuardPatrol : MonoBehaviour
             if (stateTimer >= searchDuration)
             {
                 currentState = State.Walking;
+                stateTimer = 0f;
                 isHiding = false;
             }
         }
     }
+
+
+    ///Преследование, идёт за игроком, пока тот не уйдёт за радиус разрыва</summary>
+    private void HandlePursuing()
+    {
+        if (playerTransform == null) return;
+
+        float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        if (distToPlayer > chaseBreakRadius)
+        {
+            currentState = State.Searching;
+            stateTimer = 0f;
+            return;
+        }
+        lastSeenPlayerPosition = playerTransform.position;
+        MoveWithSteering(lastSeenPlayerPosition);
+    }
+
+    /// <summary>
+    /// Движение к цели с плавным обходом стен
+    /// </summary>
+    /// <param name="target"></param>
+    private void MoveWithSteering(Vector3 target)
+    {
+        Vector3 dirToTarget = target - transform.position;
+        dirToTarget.y = 0f;
+        if (dirToTarget.magnitude < 0.3f)
+        {
+            cachedDirectionToTarget = dirToTarget.normalized;
+            return;
+        }
+
+        Vector3 forwardDir = dirToTarget.normalized;
+        float checkDist = 1.5f;
+        Vector3 rayOrigin = transform.position + Vector3.up * 1.0f + forwardDir * 0.2f;
+        bool blockedFront = IsPathBlocked(rayOrigin, forwardDir, checkDist);
+        bool blockedLeft = IsPathBlocked(rayOrigin, Quaternion.Euler(0, -45, 0) * forwardDir, checkDist);
+        bool blockedRight = IsPathBlocked(rayOrigin, Quaternion.Euler(0, 45, 0) * forwardDir, checkDist);
+        Vector3 moveDir = forwardDir;
+        if (blockedFront)
+        {
+            if (!blockedLeft) moveDir = Quaternion.Euler(0, -50, 0) * forwardDir;
+            else if (!blockedRight) moveDir = Quaternion.Euler(0, 50, 0) * forwardDir;
+           
+        }
+        else if (blockedLeft) moveDir = Quaternion.Euler(0, 25, 0) * forwardDir;
+        else if (blockedRight) moveDir = Quaternion.Euler(0, -25, 0) * forwardDir;
+
+        if (moveDir.magnitude > 0.1f)
+        {
+            transform.position += moveDir * speedMove * Time.deltaTime;
+            cachedDirectionToTarget = moveDir.normalized;
+
+            Quaternion targetRot = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
+        }
+    }
+
+    private bool IsPathBlocked(Vector3 origin, Vector3 dir, float dist)
+    {
+        int obstacleMask = LayerMask.GetMask("Obstacles");
+        if (obstacleMask == 0) obstacleMask = ~0;
+        return Physics.Raycast(origin, dir, out RaycastHit hit, dist, obstacleMask) && !hit.collider.CompareTag("Door");
+    }
+
     /// <summary>
     ///  Вызывает экран проигрыша
     /// </summary>
