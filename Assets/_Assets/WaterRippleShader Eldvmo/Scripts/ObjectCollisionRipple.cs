@@ -14,8 +14,6 @@ namespace Eldvmo.Ripples
         private Vector2 _oldInputCentre;
         private int waterLayerMask;
         [SerializeField] private Collider waterTrigger;
-        [SerializeField] bool isFloatingWithWater = true;
-        [SerializeField] float moveUpHeight = 2f;
         private Rigidbody rb;
 
         void Start()
