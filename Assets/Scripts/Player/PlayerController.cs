@@ -4,12 +4,16 @@ using UnityEngine;
 /// Управление игроком
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ISpeedUpgradable
 {
-    [SerializeField] private float speedWalkMove = 2.0f;
-    [SerializeField] private float speedRunMove = 5.0f;
-    [SerializeField] private float speedRotate = 15.0f;
-    [SerializeField] private float acceleration = 25.0f;
+    public static PlayerController Instance;
+
+    [SerializeField] [Min(0)] private float speedWalkMove = 2.0f;
+    [SerializeField] [Min(0)] private float minSpeedRunMove = 5.0f;
+    [SerializeField] [Min(0)] private float maxSpeedRunMove = 6.5f;
+    [SerializeField] [Min(0)] private float speedRotate = 15.0f;
+    [SerializeField] [Min(0)] private float minAcceleration = 20.0f;
+    [SerializeField] [Min(0)] private float maxAcceleration = 30.0f;
     [SerializeField] private float gravity = -9.81f;
 
     [SerializeField] private GameInput gameInput;
@@ -20,6 +24,7 @@ public class PlayerController : MonoBehaviour
     
     private void Awake()
     {
+        Instance = this;
         characterController = GetComponent<CharacterController>();
     }
 
@@ -28,8 +33,8 @@ public class PlayerController : MonoBehaviour
         Vector2 inputVector = gameInput.GetInputVectorNormalized();
         Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
 
-        float speed_move = gameInput.IsRunning() ? speedRunMove : speedWalkMove;
-        smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, acceleration * Time.deltaTime);
+        float speed_move = gameInput.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
+        smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, SavesLogic.Get("acceleration", minAcceleration) * Time.deltaTime);
 
         // Гравитация
         if (characterController.isGrounded)
@@ -50,5 +55,16 @@ public class PlayerController : MonoBehaviour
             else
                 SoundManager.PlayWalk();
         }
+    }
+
+    public void SpeedProgressUpdate()
+    {
+        float step_move = (maxSpeedRunMove - minSpeedRunMove) / SavesLogic.Get("progress_bar_size", 4);
+        SavesLogic.Set("speed_run_move", SavesLogic.Get("speed_run_move", minSpeedRunMove) + step_move);
+        Debug.Log($"speed_run_move: {SavesLogic.Get("speed_run_move", minSpeedRunMove)}");
+
+        float step_acceleration = (maxAcceleration - minAcceleration) / SavesLogic.Get("progress_bar_size", 4);
+        SavesLogic.Set("acceleration", SavesLogic.Get("acceleration", minAcceleration) + step_acceleration);
+        Debug.Log($"acceleration: {SavesLogic.Get("acceleration", minAcceleration)}");
     }
 }
