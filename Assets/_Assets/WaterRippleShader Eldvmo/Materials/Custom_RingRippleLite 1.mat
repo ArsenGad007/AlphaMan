@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_RingRippleLite
+  m_Name: Custom_RingRippleLite 1
   m_Shader: {fileID: 4800000, guid: 7e0baa2417f1b9d45a9d3235098b9ac9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -15,7 +15,7 @@ Material:
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
+  m_DoubleSidedGI: 1
   m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
@@ -25,13 +25,13 @@ Material:
     m_TexEnvs:
     - _Texture:
         m_Texture: {fileID: 2800000, guid: 64245e28b38ea65499103ee71cf3737d, type: 3}
-        m_Scale: {x: 9.68, y: 4}
+        m_Scale: {x: 8.57, y: 4}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Decay: 2
     - _StencilRef: 0
-    - _WaveFrequency: 25
+    - _WaveFrequency: 38.07
     - _WaveLiftTime: 2.4
     - _WaveSpeed: 0.1
     - _WaveStrength: 0.68
