@@ -21357,7 +21357,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: e8f569e9b4f73cb4da85ad4ead915966, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 3b79047eb18c27c40a2099887de28d88, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -56867,10 +56867,30 @@ PrefabInstance:
       propertyPath: gameInput
       value: 
       objectReference: {fileID: 1119582196}
+    - target: {fileID: 3016155261638019383, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      propertyPath: maxSpeedRunMove
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3016155261638019383, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      propertyPath: minSpeedRunMove
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8086004046917666642, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
       propertyPath: gameInput
       value: 
       objectReference: {fileID: 1119582196}
+    - target: {fileID: 8086004046917666642, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      propertyPath: minSpeedRun
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086004046917666642, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      propertyPath: maxSpeedRunMultiplier
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086004046917666642, guid: 6f112f85d54e64344859c7481b561eb9, type: 3}
+      propertyPath: minSpeedRunMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
