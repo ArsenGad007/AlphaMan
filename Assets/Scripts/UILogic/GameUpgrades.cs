@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GameUpgrades : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class GameUpgrades : MonoBehaviour
 
     private void Start()
     {
+        SavesLogic.Set("progress_bar_size", progressBar.Length);
+
         upgradesPanel.SetActive(false);
 
         enterUpgradesPanel.onClick.RemoveListener(EnterUpgrades);
@@ -34,7 +37,7 @@ public class GameUpgrades : MonoBehaviour
     {
         for (int i = 0; i < progressBar.Length; i++)
         {
-            if ((SavesLogic.Get("upgrade_speed", 10) - 10) / 10 > i)
+            if ((SavesLogic.Get("upgrade_speed_price", 10) - 10) / 10 > i)
                 progressBar[i].color = new Color32(255, 200, 0, 255);   // Желтый
             else
                 progressBar[i].color = new Color32(135, 135, 135, 255); // Серый
@@ -46,7 +49,7 @@ public class GameUpgrades : MonoBehaviour
         upgradesPanel.SetActive(true);
 
         coinsTotal.text = SavesLogic.Get("coins_total", 0).ToString();
-        speedUpgradeText.text = SavesLogic.Get("upgrade_speed", 10).ToString() + " $";
+        speedUpgradeText.text = SavesLogic.Get("upgrade_speed_price", 10).ToString() + " $";
 
         UpdateProgressBar();
 
@@ -68,17 +71,23 @@ public class GameUpgrades : MonoBehaviour
     private void SpeedUpgrade()
     {
         int coins_total = SavesLogic.Get("coins_total", 0);
-        int upgrade_speed = SavesLogic.Get("upgrade_speed", 10);
+        int upgrade_speed_price = SavesLogic.Get("upgrade_speed_price", 10);
 
-        if (progressBar.Length != progressBarStep && coins_total >= upgrade_speed)
+        if (progressBar.Length > progressBarStep && coins_total >= upgrade_speed_price)
         {
-            SavesLogic.Set("coins_total", coins_total - upgrade_speed);
-            SavesLogic.Set("upgrade_speed", upgrade_speed + 10);
+            SavesLogic.Set("coins_total", coins_total - upgrade_speed_price);
+            SavesLogic.Set("upgrade_speed_price", upgrade_speed_price + 10);
 
             coinsTotal.text = SavesLogic.Get("coins_total", 0).ToString();
-            speedUpgradeText.text = SavesLogic.Get("upgrade_speed", 10).ToString() + " $";
+            speedUpgradeText.text = SavesLogic.Get("upgrade_speed_price", 10).ToString() + " $";
+
+            List<ISpeedUpgradable> obj = new() { PlayerAnimator.Instance, PlayerController.Instance, SoundManager.Instance };
+            foreach (ISpeedUpgradable _obj in obj)
+                _obj.SpeedProgressUpdate();
 
             UpdateProgressBar();
+
+            progressBarStep++;
         }
     }
 }
