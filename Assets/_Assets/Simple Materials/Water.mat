@@ -18,7 +18,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -95,6 +95,8 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _BoatFloatSpeed: 1.5
+    - _BoatWaveSpeed: 2.04
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -121,11 +123,13 @@ Material:
     - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _Surface: 1
-    - _WaveFrequency: 28.3
+    - _WaveFrequency: 40.3
     - _WaveLiftTime: 2.44
+    - _WaveOffset: 0
     - _WaveSpeed: 0.1
     - _WaveStrength: 0.5
     - _WorkflowMode: 1
+    - _WorldScale: 0.5
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 0, g: 0.6808718, b: 0.9811321, a: 0.5176471}
