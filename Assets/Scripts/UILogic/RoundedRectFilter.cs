@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-[RequireComponent(typeof(RawImage))]
 public class RoundedRectFilter : MonoBehaviour, ICanvasRaycastFilter
 {
     [SerializeField] private float radius = 30f; // радиус скругления в пикселях

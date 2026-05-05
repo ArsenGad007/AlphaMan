@@ -21,15 +21,18 @@ public class GameWin : MonoBehaviour
         SoundManager.PlayWin();
         gameWinPanel.SetActive(true);
 
+        if (SavesLogic.Get(playerLevelKey, 0) <= numLevel)
+        {
+            SavesLogic.Set(playerLevelKey, numLevel + 1);
+            SavesLogic.Set("coins_total", SavesLogic.Get("coins_total", 0) + CoinTextCount.CoinCount);
+        }
+            
         continueButton.onClick.RemoveListener(ContinueGameWin);
         continueButton.onClick.AddListener(ContinueGameWin);
     }
 
     private void ContinueGameWin()
     {
-        if (SavesLogic.Get(playerLevelKey, 0) <= numLevel)
-            SavesLogic.Set(playerLevelKey, numLevel + 1);
-
         Time.timeScale = 1;
         gameWinPanel.SetActive(false);
 

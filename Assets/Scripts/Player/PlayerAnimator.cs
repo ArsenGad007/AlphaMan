@@ -1,26 +1,23 @@
 using UnityEngine;
 
-public class PlayerAnimator : MonoBehaviour
+public class PlayerAnimator : MonoBehaviour, ISpeedUpgradable
 {
+    public static PlayerAnimator Instance;
+
     [SerializeField] private PlayerController player;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private float minAnimationInterval = 0.25f; 
+    [SerializeField] [Range(1f, 2f)] private float minSpeedRunMultiplier = 1f; 
+    [SerializeField] [Range(1f, 2f)] private float maxSpeedRunMultiplier = 1.4f; 
 
     private Animator animator;
 
     private string currentAnimation = "idle";
     private float lastChangeTime;
 
-    public void SetAnimation(string tag)
+    private void Awake()
     {
-        animator.ResetTrigger(currentAnimation);
-        animator.SetTrigger(tag);
-        currentAnimation = tag;
-        Debug.Log("Current animation: " + tag);
-    }
-
-    void Start()
-    {
+        Instance = this;
         animator = player.GetComponent<Animator>();
     }
 
@@ -38,5 +35,22 @@ public class PlayerAnimator : MonoBehaviour
             SetAnimation(next_animation);
             lastChangeTime = Time.time;
         }
+    }
+    private void SetAnimation(string tag)
+    {
+        if (tag == "run")
+            animator.SetFloat("runSpeedMultiplier", SavesLogic.Get("speed_run_anim", minSpeedRunMultiplier));
+
+        animator.ResetTrigger(currentAnimation);
+        animator.SetTrigger(tag);
+        currentAnimation = tag;
+        Debug.Log("Current animation: " + tag);
+    }
+
+    public void SpeedProgressUpdate() 
+    {
+        float step = (maxSpeedRunMultiplier - minSpeedRunMultiplier) / SavesLogic.Get("progress_bar_size", 4);
+        SavesLogic.Set("speed_run_anim", SavesLogic.Get("speed_run_anim", minSpeedRunMultiplier) + step);
+        Debug.Log($"speed_run_anim: {SavesLogic.Get("speed_run_anim", minSpeedRunMultiplier)}");
     }
 }
