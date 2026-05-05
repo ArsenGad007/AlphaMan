@@ -40,6 +40,7 @@ public class GameOver : MonoBehaviour
         Time.timeScale = 1;
         gameOverPanel.SetActive(false);
 
-        SceneTransition.Load(SceneManager.GetActiveScene().name);
+        // SceneTransition.Load(SceneManager.GetActiveScene().name);
+        SceneTransition.Load(SceneManager.GetActiveScene().name, true);
     }
 }
