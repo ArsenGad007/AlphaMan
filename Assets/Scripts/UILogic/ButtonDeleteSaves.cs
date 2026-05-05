@@ -17,7 +17,7 @@ public class ButtonDeleteSaves : MonoBehaviour
 
     private void OnClick()
     {
-        SavesLogic.DeleteLevelSaves();
+        SavesLogic.DeleteSaves();
         if (SceneManager.GetActiveScene().name == exitLevel)
         {        
             var chooseLevel = FindFirstObjectByType<LevelsButtonsDisplay>();
