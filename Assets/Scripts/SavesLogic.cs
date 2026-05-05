@@ -1,13 +1,11 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// Класс для сохранения в файл
 /// </summary>
 public class SavesLogic : MonoBehaviour
 {
-
-    private readonly static string PlayerLevelKey = "player_level";
+    private readonly static string[] deleteSaves = { "player_level", "coins_total", "upgrade_speed_price", "speed_run_anim", "speed_run_move", "acceleration", "run_step_sound" };
 
     /// <summary>
     /// Сохранение ключа - значения
@@ -17,6 +15,17 @@ public class SavesLogic : MonoBehaviour
     public static void Set(string key, int value)
     {
         PlayerPrefs.SetInt(key, value);
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    /// Сохранение ключа - значения
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public static void Set(string key, float value)
+    {
+        PlayerPrefs.SetFloat(key, value);
         PlayerPrefs.Save();
     }
 
@@ -33,10 +42,23 @@ public class SavesLogic : MonoBehaviour
     }
 
     /// <summary>
+    /// Получение значения по ключу
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public static float Get(string key, float? default_value = null)
+    {
+        if (default_value == null)
+            return PlayerPrefs.GetFloat(key);
+        return PlayerPrefs.GetFloat(key, default_value.Value);
+    }
+
+    /// <summary>
     /// Удаление сохранения уровней
     /// </summary>
-    public static void DeleteLevelSaves()
+    public static void DeleteSaves()
     {
-        PlayerPrefs.DeleteKey(PlayerLevelKey);
+        foreach (var item in deleteSaves)
+            PlayerPrefs.DeleteKey(item);
     }
 }
