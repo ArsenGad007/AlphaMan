@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Splines;
-using System.Collections;
 
 /// <summary>
 /// скрипт патрулирования охранника - основная логика обнаружения
@@ -8,7 +9,7 @@ using System.Collections;
 public class GuardPatrol : MonoBehaviour
 {
     /// <summary>Перечисление состояний поведения охранника</summary>
-    public enum State { Walking, Alerted, Searching, Pursuing }
+    public enum State { Walking, Alerted, Searching, Pursuing, Returning }
 
     [SerializeField] private Animator animator;
     // Настройки движения
@@ -93,10 +94,18 @@ public class GuardPatrol : MonoBehaviour
     private Material Green;
     private Material Yellow; 
     private Material Red;
-    /// <summary>
+    ///
     [SerializeField] private Transform playerTransform;
     private Vector3 lastPosition;
     private float chaseBreakRadius = 15f;
+
+    private List<Vector3> breadcrumbs = new List<Vector3>();
+    private List<Vector3> returnPath = new List<Vector3>();
+    private Vector3 lastBreadcrumbPos;
+    private const float BREADCRUMB_DISTANCE = 2f;
+    private const int MAX_BREADCRUMBS = 50;
+    private float fixedGroundY;
+
 
     void Awake()
     {
@@ -108,6 +117,12 @@ public class GuardPatrol : MonoBehaviour
     {
         gameOver = FindAnyObjectByType<GameOver>();
         lastPosition = transform.position;
+        lastBreadcrumbPos = transform.position;
+        fixedGroundY = patrolPoints[0].position.y;
+
+        Vector3 startPos = transform.position;
+        startPos.y = fixedGroundY;
+        transform.position = startPos;
 
     }
 
@@ -124,18 +139,23 @@ public class GuardPatrol : MonoBehaviour
                     HandlePursuing();
                     fieldOfView?.SetMaterial(Yellow);
                     break;
-                case State.Alerted:
+            case State.Returning: // ⭐ Новое состояние
+                HandleReturning();
+                fieldOfView?.SetMaterial(Yellow);
+                break;
+            case State.Alerted:
                 case State.Searching:
                     HandleAlertedOrSearching();
                     fieldOfView?.SetMaterial(Yellow);
                     break;
             }
-
-
-            if (fieldOfView != null)
+        Vector3 correctedPos = transform.position;
+        correctedPos.y = fixedGroundY;
+        transform.position = correctedPos;
+        if (fieldOfView != null)
             {
-                fieldOfView.UpdateFOV(transform.position, transform.forward);
-            }
+            fieldOfView.UpdateFOV(correctedPos, transform.forward);
+        }
             if (isTurningToPlayer)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
@@ -150,68 +170,46 @@ public class GuardPatrol : MonoBehaviour
             }
     }
    
-    /// <summary>
-    /// Основная функция патрулирования, смена состояний
-    /// </summary>
-    private void Patrol()
-    {
-        switch (currentState)
-        {
-            case State.Walking:
-                HandleWalking();
-                break;
-            /*case State.LookingAround:
-                HandleLookingAround();
-                break;*/
-            case State.Pursuing: HandlePursuing(); break; 
-        }
-    }
-
 
     /// <summary>
     /// Логика перемещения между точками патруля
     /// </summary>
     private void HandleWalking()
     {
-        if (patrolPoints == null || patrolPoints.Length == 0)
-            return;
-
+        if (patrolPoints == null || patrolPoints.Length == 0) return;
+        //TryDropBreadcrumb();
         Transform target = patrolPoints[currentPointIndex];
         Vector3 directionToTarget = target.position - transform.position;
+        directionToTarget.y = 0f;
 
-        if (directionToTarget.magnitude > 0.1f &&
-            (!Mathf.Approximately(directionToTarget.magnitude, cachedDirectionToTarget.magnitude) || !isValidDirection()))
+        if (!IsPathBlocked(transform.position + Vector3.up * 0.5f, directionToTarget.normalized, 1.2f))
         {
-            directionToTarget.y = 0f;
-
-            if (directionToTarget.magnitude > 0.1f)
+            if (directionToTarget.magnitude > 0.1f &&
+                (!Mathf.Approximately(directionToTarget.magnitude, cachedDirectionToTarget.magnitude) || !isValidDirection()))
             {
                 cachedDirectionToTarget = directionToTarget.normalized;
             }
+
+            transform.position = Vector3.MoveTowards(transform.position, target.position, speedMove * Time.deltaTime);
+
+            if (isValidDirection() && cachedDirectionToTarget.magnitude > 0)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speedRotate * Time.deltaTime);
+            }
         }
-
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            target.position,
-            speedMove * Time.deltaTime
-        );
-
-        if (isValidDirection() && cachedDirectionToTarget.magnitude > 0)
+        else
         {
-            Quaternion targetRotation = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                targetRotation,
-                speedRotate * Time.deltaTime
-            );
+            MoveWithSteering(target.position);
         }
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-        if (distanceToTarget <= 0.1f)
+
+        if (Vector3.Distance(transform.position, target.position) <= 0.1f)
         {
             currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
             stateTimer = 0f;
         }
     }
+
     /// <summary>
     /// Возвращает true если текущее направление имеет значение больше eps
     /// </summary>
@@ -382,63 +380,118 @@ public class GuardPatrol : MonoBehaviour
     private void HandlePursuing()
     {
         if (playerTransform == null) return;
+        TryDropBreadcrumb();
 
         float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
         if (distToPlayer > chaseBreakRadius)
         {
-            currentState = State.Searching;
-            stateTimer = 0f;
+            currentState = State.Returning;
+            
+            stateTimer = 0f;BuildReturnPath();
             return;
         }
         lastSeenPlayerPosition = playerTransform.position;
         MoveWithSteering(lastSeenPlayerPosition);
     }
+    private Vector3 smoothMoveDir;
+    private const float DIR_SMOOTH_SPEED = 6f;
 
-    /// <summary>
     /// Движение к цели с плавным обходом стен
-    /// </summary>
-    /// <param name="target"></param>
     private void MoveWithSteering(Vector3 target)
     {
-        Vector3 dirToTarget = target - transform.position;
-        dirToTarget.y = 0f;
-        if (dirToTarget.magnitude < 0.3f)
+        Vector3 toTarget = target - transform.position;
+        toTarget.y = 0f;
+        if (toTarget.magnitude < 0.4f) return;
+
+        Vector3 targetDir = toTarget.normalized;
+
+        Vector3[] dirs = {
+        targetDir,
+        Quaternion.Euler(0, -30, 0) * targetDir,
+        Quaternion.Euler(0, 30, 0) * targetDir,
+        Quaternion.Euler(0, -60, 0) * targetDir,
+        Quaternion.Euler(0, 60, 0) * targetDir,
+        -targetDir
+    };
+
+        Vector3 bestDir = targetDir;
+        float bestScore = -999f;
+
+        for (int i = 0; i < dirs.Length; i++)
         {
-            cachedDirectionToTarget = dirToTarget.normalized;
-            return;
+            float clearDist = GetClearDistance(dirs[i]);
+            if (clearDist < 0.5f) continue;
+
+            float alignment = Vector3.Dot(dirs[i], targetDir);
+            float score = alignment + (clearDist * 0.4f);
+            if (score > bestScore) { bestScore = score; bestDir = dirs[i]; }
         }
 
-        Vector3 forwardDir = dirToTarget.normalized;
-        float checkDist = 1.5f;
-        Vector3 rayOrigin = transform.position + Vector3.up * 1.0f + forwardDir * 0.2f;
-        bool blockedFront = IsPathBlocked(rayOrigin, forwardDir, checkDist);
-        bool blockedLeft = IsPathBlocked(rayOrigin, Quaternion.Euler(0, -45, 0) * forwardDir, checkDist);
-        bool blockedRight = IsPathBlocked(rayOrigin, Quaternion.Euler(0, 45, 0) * forwardDir, checkDist);
-        Vector3 moveDir = forwardDir;
-        if (blockedFront)
-        {
-            if (!blockedLeft) moveDir = Quaternion.Euler(0, -50, 0) * forwardDir;
-            else if (!blockedRight) moveDir = Quaternion.Euler(0, 50, 0) * forwardDir;
-           
-        }
-        else if (blockedLeft) moveDir = Quaternion.Euler(0, 25, 0) * forwardDir;
-        else if (blockedRight) moveDir = Quaternion.Euler(0, -25, 0) * forwardDir;
+        smoothMoveDir = Vector3.Slerp(smoothMoveDir, bestDir, DIR_SMOOTH_SPEED * Time.deltaTime);
 
-        if (moveDir.magnitude > 0.1f)
+        if (smoothMoveDir.magnitude > 0.1f)
         {
-            transform.position += moveDir * speedMove * Time.deltaTime;
-            cachedDirectionToTarget = moveDir.normalized;
+            Vector3 moveStep = smoothMoveDir * speedMove * Time.deltaTime;
+            float stepDist = moveStep.magnitude;
+            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
+            int mask = LayerMask.GetMask("Obstacles");
+            if (mask != 0 && Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, mask, QueryTriggerInteraction.Ignore))
+            {
+                GameObject hitObj = hit.collider.gameObject;
+                bool isDoor = hitObj.CompareTag("Door") ||
+                              (hitObj.transform.parent != null && hitObj.transform.parent.CompareTag("Door")) ||
+                              hit.collider.isTrigger;
 
+                if (!isDoor)
+                {
+                    float safeDist = Mathf.Max(0f, hit.distance - 0.15f);
+                    moveStep = smoothMoveDir * safeDist;
+                }
+            }
+
+            transform.position += moveStep;
+
+            cachedDirectionToTarget = smoothMoveDir.normalized;
             Quaternion targetRot = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
+            Vector3 e = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, e.y, 0);
         }
     }
 
+    /// <summary>Возвращает дистанцию до ближайшего препятствия в направлении</summary>
+    private float GetClearDistance(Vector3 dir)
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        int mask = LayerMask.GetMask("Obstacles");
+        if (mask == 0) return 10f;
+
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, 2.5f, mask, QueryTriggerInteraction.Ignore))
+        {
+            GameObject hitObj = hit.collider.gameObject;
+            if (hitObj.CompareTag("Door") ||
+                (hitObj.transform.parent != null && hitObj.transform.parent.CompareTag("Door")) ||
+                hit.collider.isTrigger)
+                return 10f;
+            return hit.distance;
+        }
+        return 10f;
+    }
     private bool IsPathBlocked(Vector3 origin, Vector3 dir, float dist)
     {
         int obstacleMask = LayerMask.GetMask("Obstacles");
-        if (obstacleMask == 0) obstacleMask = ~0;
-        return Physics.Raycast(origin, dir, out RaycastHit hit, dist, obstacleMask) && !hit.collider.CompareTag("Door");
+        if (obstacleMask == 0) return false;
+
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, obstacleMask, QueryTriggerInteraction.Ignore))
+        {
+            GameObject hitObj = hit.collider.gameObject;
+            if (hitObj.CompareTag("Door") ||
+                (hitObj.transform.parent != null && hitObj.transform.parent.CompareTag("Door")) ||
+                hit.collider.isTrigger)
+                return false;
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -456,5 +509,91 @@ public class GuardPatrol : MonoBehaviour
     {
 
         return currentState == State.Walking;
+    }
+
+    private void TryDropBreadcrumb()
+    {
+        if (Vector3.Distance(transform.position, lastBreadcrumbPos) >= BREADCRUMB_DISTANCE)
+        {
+            breadcrumbs.Add(transform.position);
+            lastBreadcrumbPos = transform.position;
+
+            if (breadcrumbs.Count > MAX_BREADCRUMBS)
+                breadcrumbs.RemoveAt(0);
+        }
+    }
+
+    ///<summary>Строит возвратный маршрут срезает круги + выбирает оптимальную сторону обхода</summary>
+    private void BuildReturnPath()
+    {
+        returnPath.Clear();
+        List<Vector3> candidates = new List<Vector3>(breadcrumbs.Count + 2);
+        candidates.Add(transform.position);
+        for (int i = breadcrumbs.Count - 1; i >= 0; i--)
+            candidates.Add(breadcrumbs[i]);
+
+        if (patrolPoints != null && patrolPoints.Length > 0)
+            candidates.Add(patrolPoints[currentPointIndex].position);
+        int current = 0;
+        while (current < candidates.Count - 1)
+        {
+            int farthestClear = current + 1;
+            for (int i = candidates.Count - 1; i > current + 1; i--)
+            {
+                if (HasClearPath(candidates[current], candidates[i]))
+                {
+                    farthestClear = i;
+                    break;
+                }
+            }
+            returnPath.Add(candidates[farthestClear]);
+            current = farthestClear;
+        }
+    }
+
+
+
+    /// <summary>Проверяет прямую проходимость между двумя точками</summary>
+    private bool HasClearPath(Vector3 from, Vector3 to)
+    {
+        Vector3 dir = to - from;
+        float dist = dir.magnitude;
+        if (dist < 0.5f) return true;
+        return !IsPathBlocked(from + Vector3.up * 0.6f, dir.normalized, dist);
+    }
+    private float waypointStuckTimer = 0f;
+    private Vector3 lastPosForWaypointStuck;
+
+    /// <summary>Возврат по "крошкам"</summary>
+    private void HandleReturning()
+    {
+        if (returnPath.Count == 0)
+        {
+            currentState = State.Walking;
+            breadcrumbs.Clear();
+            waypointStuckTimer = 0f;
+            return;
+        }
+
+        Vector3 target = returnPath[0];
+        float dist = Vector3.Distance(transform.position, target);
+
+        if (Vector3.Distance(transform.position, lastPosForWaypointStuck) < 0.05f)
+            waypointStuckTimer += Time.deltaTime;
+        else
+            waypointStuckTimer = 0f;
+        lastPosForWaypointStuck = transform.position;
+        if (waypointStuckTimer >= 2f && returnPath.Count > 1)
+        {
+            returnPath.RemoveAt(0);
+            waypointStuckTimer = 0f;
+            return;
+        }
+        MoveWithSteering(target);
+        if (dist < 0.8f)
+        {
+            returnPath.RemoveAt(0);
+            waypointStuckTimer = 0f;
+        }
     }
 }
