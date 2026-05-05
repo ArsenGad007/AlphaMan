@@ -527,6 +527,7 @@ MonoBehaviour:
   updateInterval: 0.0001
   player: {fileID: 1146775665}
   detectionRadius: 1.3
+  alertDelay: 1
 --- !u!23 &16289501
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -607,17 +608,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab224d567c8d19740984f417a6a8ba34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 16289499}
   patrolPoints:
   - {fileID: 2134411101}
   - {fileID: 124497828}
   - {fileID: 1254000359}
   - {fileID: 250896296}
-  speedMove: 2
-  speedRotate: 15
   fieldOfView: {fileID: 16289500}
-  gameOver: {fileID: 1604182756}
-  searchDuration: 3
-  alertTime: 0.5
+  pursueDuration: 5
+  playerTransform: {fileID: 1146775671}
 --- !u!1001 &26932983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -629,6 +628,10 @@ PrefabInstance:
     - target: {fileID: 253828440315130689, guid: e465d16aa9c0ab443b8be55fb64d37fc, type: 3}
       propertyPath: m_Name
       value: Door Frame 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 253828440315130689, guid: e465d16aa9c0ab443b8be55fb64d37fc, type: 3}
+      propertyPath: m_TagString
+      value: Door
       objectReference: {fileID: 0}
     - target: {fileID: 253828440315130689, guid: e465d16aa9c0ab443b8be55fb64d37fc, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2383,7 +2386,7 @@ GameObject:
   - component: {fileID: 108921411}
   - component: {fileID: 108921410}
   - component: {fileID: 108921415}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4609,6 +4612,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gruntSounds:
   - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
+--- !u!95 &201013351 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1896669769371717926, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+  m_PrefabInstance: {fileID: 1917509006}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &204032097 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1033094240981571515, guid: d5d69b2c6eead224caebe10ced6c3619, type: 3}
@@ -4628,7 +4636,7 @@ GameObject:
   - component: {fileID: 206995338}
   - component: {fileID: 206995337}
   - component: {fileID: 206995342}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8573,6 +8581,10 @@ PrefabInstance:
       value: Door 4 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 3142737648796138184, guid: 2581f3f1da23cc94b973b7cd49ec1424, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3142737648796138184, guid: 2581f3f1da23cc94b973b7cd49ec1424, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -10141,7 +10153,7 @@ GameObject:
   - component: {fileID: 316605940}
   - component: {fileID: 316605939}
   - component: {fileID: 316605944}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11699,7 +11711,7 @@ GameObject:
   - component: {fileID: 363685438}
   - component: {fileID: 363685437}
   - component: {fileID: 363685442}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12381,6 +12393,10 @@ PrefabInstance:
     - target: {fileID: 1248767474631093451, guid: d369d6eace77e5844b6822d8b1d751ab, type: 3}
       propertyPath: m_Name
       value: Door 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1248767474631093451, guid: d369d6eace77e5844b6822d8b1d751ab, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 1248767474631093451, guid: d369d6eace77e5844b6822d8b1d751ab, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -13469,6 +13485,10 @@ PrefabInstance:
       value: Door 4 (2)
       objectReference: {fileID: 0}
     - target: {fileID: 3142737648796138184, guid: 2581f3f1da23cc94b973b7cd49ec1424, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3142737648796138184, guid: 2581f3f1da23cc94b973b7cd49ec1424, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -14092,7 +14112,7 @@ GameObject:
   - component: {fileID: 491844674}
   - component: {fileID: 491844673}
   - component: {fileID: 491844678}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16594,7 +16614,7 @@ GameObject:
   - component: {fileID: 508212083}
   - component: {fileID: 508212082}
   - component: {fileID: 508212087}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19922,7 +19942,7 @@ GameObject:
   - component: {fileID: 530583354}
   - component: {fileID: 530583353}
   - component: {fileID: 530583358}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20556,6 +20576,10 @@ PrefabInstance:
     - target: {fileID: 6323515308807893591, guid: 1577d5a63dc44304d9ad0966d64f91f1, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6323515309588668736, guid: 1577d5a63dc44304d9ad0966d64f91f1, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6323515309588668736, guid: 1577d5a63dc44304d9ad0966d64f91f1, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -21207,9 +21231,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2068949467}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: gameOver
       value: 
       objectReference: {fileID: 1604182756}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1146775671}
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -25007,7 +25039,7 @@ GameObject:
   - component: {fileID: 808080814}
   - component: {fileID: 808080813}
   - component: {fileID: 808080818}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26075,6 +26107,7 @@ MonoBehaviour:
   updateInterval: 0.0001
   player: {fileID: 1146775665}
   detectionRadius: 1.3
+  alertDelay: 1
 --- !u!23 &860778511
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26155,17 +26188,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab224d567c8d19740984f417a6a8ba34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 860778515}
   patrolPoints:
   - {fileID: 2086242782}
   - {fileID: 2092256170}
   - {fileID: 271981808}
   - {fileID: 1290199154}
-  speedMove: 2
-  speedRotate: 15
   fieldOfView: {fileID: 860778510}
-  gameOver: {fileID: 1604182756}
-  searchDuration: 3
-  alertTime: 0.5
+  pursueDuration: 5
+  playerTransform: {fileID: 1146775671}
 --- !u!95 &860778515 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5339130301091616329, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
@@ -26300,7 +26331,7 @@ GameObject:
   - component: {fileID: 868658440}
   - component: {fileID: 868658439}
   - component: {fileID: 868658438}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28235,7 +28266,7 @@ GameObject:
   - component: {fileID: 939457625}
   - component: {fileID: 939457624}
   - component: {fileID: 939457629}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28710,7 +28741,7 @@ GameObject:
   - component: {fileID: 939998636}
   - component: {fileID: 939998635}
   - component: {fileID: 939998634}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35464,7 +35495,7 @@ GameObject:
   - component: {fileID: 1271071483}
   - component: {fileID: 1271071482}
   - component: {fileID: 1271071487}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39147,6 +39178,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 563530869786215646, guid: e462a430ab3954940ac6cd65fc6d5a9b, type: 3}
   m_PrefabInstance: {fileID: 99837364}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1403775991 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1896669769371717926, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+  m_PrefabInstance: {fileID: 1731400029}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1405319687
 GameObject:
   m_ObjectHideFlags: 0
@@ -39161,7 +39197,7 @@ GameObject:
   - component: {fileID: 1405319690}
   - component: {fileID: 1405319689}
   - component: {fileID: 1405319688}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41042,6 +41078,10 @@ PrefabInstance:
       value: Door 3
       objectReference: {fileID: 0}
     - target: {fileID: 8382267193760728214, guid: be6206654a140a3449fe2687e0d68cb4, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 8382267193760728214, guid: be6206654a140a3449fe2687e0d68cb4, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -42459,7 +42499,7 @@ GameObject:
   - component: {fileID: 1516844866}
   - component: {fileID: 1516844865}
   - component: {fileID: 1516844870}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46913,7 +46953,7 @@ GameObject:
   - component: {fileID: 1629149888}
   - component: {fileID: 1629149887}
   - component: {fileID: 1629149886}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48568,6 +48608,10 @@ PrefabInstance:
       value: Door 4 (3)
       objectReference: {fileID: 0}
     - target: {fileID: 3142737648796138184, guid: 2581f3f1da23cc94b973b7cd49ec1424, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3142737648796138184, guid: 2581f3f1da23cc94b973b7cd49ec1424, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -49277,9 +49321,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1403775991}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: gameOver
       value: 
       objectReference: {fileID: 1604182756}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1146775671}
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -49685,7 +49737,7 @@ GameObject:
   - component: {fileID: 1746778376}
   - component: {fileID: 1746778375}
   - component: {fileID: 1746778374}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52537,7 +52589,7 @@ GameObject:
   - component: {fileID: 1850787459}
   - component: {fileID: 1850787458}
   - component: {fileID: 1850787463}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53132,7 +53184,7 @@ GameObject:
   - component: {fileID: 1875771475}
   - component: {fileID: 1875771474}
   - component: {fileID: 1875771473}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54236,6 +54288,7 @@ MonoBehaviour:
   updateInterval: 0.0001
   player: {fileID: 1146775665}
   detectionRadius: 1.3
+  alertDelay: 1
 --- !u!23 &1890352391
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -54316,17 +54369,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab224d567c8d19740984f417a6a8ba34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1890352395}
   patrolPoints:
   - {fileID: 1504776770}
   - {fileID: 1058765721}
   - {fileID: 684820247}
   - {fileID: 1371274521}
-  speedMove: 2
-  speedRotate: 15
   fieldOfView: {fileID: 1890352390}
-  gameOver: {fileID: 1604182756}
-  searchDuration: 3
-  alertTime: 0.5
+  pursueDuration: 5
+  playerTransform: {fileID: 1146775671}
 --- !u!95 &1890352395 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5339130301091616329, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
@@ -55032,9 +55083,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 201013351}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: gameOver
       value: 
       objectReference: {fileID: 1604182756}
+    - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1146775671}
     - target: {fileID: 241016212241812559, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -57307,6 +57366,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gruntSounds:
   - {fileID: 8300000, guid: 22077dec272ff634494d93847d8b31f2, type: 3}
+--- !u!95 &2068949467 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1896669769371717926, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+  m_PrefabInstance: {fileID: 602561270}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2069882554
 GameObject:
   m_ObjectHideFlags: 0
