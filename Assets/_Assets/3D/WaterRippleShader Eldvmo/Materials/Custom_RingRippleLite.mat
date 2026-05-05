@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Custom_RingRippleLite
-  m_Shader: {fileID: 4800000, guid: 7e0baa2417f1b9d45a9d3235098b9ac9, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1e21c53eb68e10345afe81fc1f259904, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,12 +29,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Decay: 2
+    - _BoatWaveSpeed: 8
+    - _Decay: 2.44
     - _StencilRef: 0
-    - _WaveFrequency: 40
-    - _WaveLiftTime: 2.4
+    - _WaveFrequency: 35.8
+    - _WaveLiftTime: 2.43
     - _WaveSpeed: 0.1
-    - _WaveStrength: 0.5
+    - _WaveStrength: 0.4
     - _WorldScale: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0.39607844}
