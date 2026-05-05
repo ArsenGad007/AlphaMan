@@ -63,13 +63,6 @@ struct VertexOutput
                 float2 rawUV : TEXCOORD1;
             };
 
-// Возвращает кратчайшую разницу между uv и centre с учётом периодичности (0..1)
-float2 periodicDelta(float2 uv, float2 centre)
-{
-    float2 delta = uv - centre;
-    delta = frac(delta + 0.5) - 0.5;   // теперь в диапазоне [-0.5, 0.5]
-    return delta;
-}
 
 float Wave(float2 uv, float2 centre, float startTime)
 {
@@ -78,7 +71,7 @@ float Wave(float2 uv, float2 centre, float startTime)
     float age = _Time.y - startTime;
     if (age < 0 || age > _WaveLiftTime) return 0;
 
-    float2 offset = periodicDelta(uv, centre);
+    float2 offset = uv - centre;
     float distanceFromCentre = length(offset) / _WorldScale;
 
     float rippleRadius = age * _WaveSpeed;
@@ -96,7 +89,7 @@ float ContinuousWave(float2 uv, float2 centre, float startTime)
 {
     if(startTime <= 0) return 0;
 
-    float2 offset = periodicDelta(uv, centre);
+    float2 offset = uv - centre;
     float distanceFromCentre = length(offset) / _WorldScale;
 
     // Отдельная скорость для лодки

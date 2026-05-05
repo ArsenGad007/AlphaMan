@@ -16,7 +16,6 @@ namespace Eldvmo.Ripples
         [Header("Mode")]
         [SerializeField] private bool continuousMode = false;
 
-        // ✅ ДОБАВЛЕНО: поля для плавания лодки
         [SerializeField] private bool floatWithWater = false;
         [SerializeField] private float floatAmplitude = 0.2f;
         [SerializeField] private float floatSpeed = 2f;
@@ -56,8 +55,8 @@ namespace Eldvmo.Ripples
                 if (other == water.waterTrigger)
                 {
                     currentWater = water;
-                    isInWater = true;          // ✅
-                    baseY = transform.position.y; // ✅ обновляем при входе в воду
+                    isInWater = true;          
+                    baseY = transform.position.y; 
                     return;
                 }
             }
@@ -68,7 +67,7 @@ namespace Eldvmo.Ripples
             if (currentWater != null && other == currentWater.waterTrigger)
             {
                 currentWater = null;
-                isInWater = false; // ✅
+                isInWater = false; 
             }
         }
 
@@ -111,7 +110,6 @@ namespace Eldvmo.Ripples
             {
                 Vector2 uv = hit.textureCoord;
 
-                // ✅ Баг 2: если UV прыгнул слишком далеко — это артефакт меша, игнорируем
                 float uvJump = Vector2.Distance(lastUV, uv);
                 if (lastUV != Vector2.zero && uvJump > 0.3f)
                 {

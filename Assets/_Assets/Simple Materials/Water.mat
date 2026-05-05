@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Water
-  m_Shader: {fileID: 4800000, guid: 7e0baa2417f1b9d45a9d3235098b9ac9, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1e21c53eb68e10345afe81fc1f259904, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -74,7 +74,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Texture:
         m_Texture: {fileID: 2800000, guid: f441d426057765a44b265770dfdcbfe7, type: 3}
-        m_Scale: {x: 10.12, y: 27.54}
+        m_Scale: {x: 12.4, y: 16.6}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
@@ -96,13 +96,13 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BoatFloatSpeed: 1.5
-    - _BoatWaveSpeed: 2.04
+    - _BoatWaveSpeed: 1.6
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Decay: 2
+    - _Decay: 1.7
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
@@ -123,13 +123,13 @@ Material:
     - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _Surface: 1
-    - _WaveFrequency: 40.3
+    - _WaveFrequency: 42
     - _WaveLiftTime: 2.44
     - _WaveOffset: 0
     - _WaveSpeed: 0.1
-    - _WaveStrength: 0.5
+    - _WaveStrength: 0.8
     - _WorkflowMode: 1
-    - _WorldScale: 0.5
+    - _WorldScale: 0.27
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 0, g: 0.6808718, b: 0.9811321, a: 0.5176471}
