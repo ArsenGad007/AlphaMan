@@ -105,6 +105,7 @@ public class GuardPatrol : MonoBehaviour
     private const float BREADCRUMB_DISTANCE = 2f;
     private const int MAX_BREADCRUMBS = 50;
     private float fixedGroundY;
+    private Vector3 lastAnimPos;
 
 
     void Awake()
@@ -123,6 +124,7 @@ public class GuardPatrol : MonoBehaviour
         Vector3 startPos = transform.position;
         startPos.y = fixedGroundY;
         transform.position = startPos;
+        lastAnimPos = transform.position;
 
     }
 
@@ -139,7 +141,7 @@ public class GuardPatrol : MonoBehaviour
                     HandlePursuing();
                     fieldOfView?.SetMaterial(Yellow);
                     break;
-            case State.Returning: // ⭐ Новое состояние
+            case State.Returning:
                 HandleReturning();
                 fieldOfView?.SetMaterial(Yellow);
                 break;
@@ -168,8 +170,16 @@ public class GuardPatrol : MonoBehaviour
                 }
 
             }
+        UpdateAnimator();
     }
-   
+    private void UpdateAnimator()
+    {
+        float rawSpeed = (transform.position - lastAnimPos).magnitude / Mathf.Max(Time.deltaTime, 0.01f);
+        lastAnimPos = transform.position;
+        bool isMoving = rawSpeed > 0.15f && !isTurningToPlayer;
+        animator.SetBool("IsWalking", isMoving);
+    }
+
 
     /// <summary>
     /// Логика перемещения между точками патруля

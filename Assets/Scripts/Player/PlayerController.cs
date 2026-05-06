@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
     public void StopAllComponents()
     {
         // -ввод
-            gameInput.DisablePlayerInputActions();
+        gameInput.DisablePlayerInputActions();
         //-звук
         var audioSources = GetComponents<AudioSource>();
         foreach (var audioSource in audioSources)
@@ -70,11 +70,12 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
         }
         // -аниматор
         var animator = GetComponent<Animator>();
-            animator.enabled = false;
-            animator.speed = 0f;
+        animator.enabled = false;
+        animator.speed = 0f;
         // -скорость движения
         smooth_movement = Vector3.zero;
         verticalVelocity = 0f;
+    }
 
     public void SpeedProgressUpdate()
     {
