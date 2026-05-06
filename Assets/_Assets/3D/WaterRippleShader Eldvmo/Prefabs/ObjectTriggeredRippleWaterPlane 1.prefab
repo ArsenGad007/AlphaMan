@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3018543958855174168
 Transform:
@@ -147,20 +147,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 41f13888c7d53ba42ad7b641b4f6230b, type: 2}
     - target: {fileID: 919132149155446097, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
       propertyPath: m_Name
-      value: ObjectTriggeredRippleWaterPlane
+      value: ObjectTriggeredRippleWaterPlane 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
       propertyPath: m_Layer
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: ed6c61e7a14740a41a6f87af9cdff7ab, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
