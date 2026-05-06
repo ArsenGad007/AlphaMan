@@ -12,7 +12,7 @@ public class GamePlay : MonoBehaviour
         playButton.onClick.AddListener(LoadSceneByName);
     }
 
-    public void LoadSceneByName()
+    private void LoadSceneByName()
     {
         //SceneTransition.Load(nameNextScene);
         SceneTransition.dontOpenNextScene = true;
