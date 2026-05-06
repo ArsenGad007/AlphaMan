@@ -7,16 +7,16 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_RingRippleLite
-  m_Shader: {fileID: 4800000, guid: 1e21c53eb68e10345afe81fc1f259904, type: 3}
+  m_Name: Custom_RingRippleLite 1
+  m_Shader: {fileID: 4800000, guid: 7e0baa2417f1b9d45a9d3235098b9ac9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -25,18 +25,16 @@ Material:
     m_TexEnvs:
     - _Texture:
         m_Texture: {fileID: 2800000, guid: 64245e28b38ea65499103ee71cf3737d, type: 3}
-        m_Scale: {x: 9.68, y: 4}
+        m_Scale: {x: 8.57, y: 4}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BoatWaveSpeed: 8
-    - _Decay: 2.44
+    - _Decay: 2
     - _StencilRef: 0
-    - _WaveFrequency: 35.8
-    - _WaveLiftTime: 2.43
+    - _WaveFrequency: 38.07
+    - _WaveLiftTime: 2.4
     - _WaveSpeed: 0.1
-    - _WaveStrength: 0.4
-    - _WorldScale: 1
+    - _WaveStrength: 0.68
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0.39607844}
   m_BuildTextureStacks: []
