@@ -106,6 +106,7 @@ public class GuardPatrol : MonoBehaviour
     private const int MAX_BREADCRUMBS = 50;
     private float fixedGroundY;
     private Vector3 lastAnimPos;
+    private float speedRun = 3.5f;
 
 
     void Awake()
@@ -176,10 +177,18 @@ public class GuardPatrol : MonoBehaviour
     {
         float rawSpeed = (transform.position - lastAnimPos).magnitude / Mathf.Max(Time.deltaTime, 0.01f);
         lastAnimPos = transform.position;
-        bool isMoving = rawSpeed > 0.15f && !isTurningToPlayer;
-        animator.SetBool("IsWalking", isMoving);
+        bool isMoving = rawSpeed > 0.15f;
+        animator.SetBool("IsWalking", false);
+        animator.SetBool("IsRunning", false);
+        if (currentState == State.Pursuing && isMoving)
+        {
+            animator.SetBool("IsRunning", true);
+        }
+        else if (isMoving)
+        {
+            animator.SetBool("IsWalking", true);
+        }
     }
-
 
     /// <summary>
     /// Логика перемещения между точками патруля
@@ -210,7 +219,7 @@ public class GuardPatrol : MonoBehaviour
         }
         else
         {
-            MoveWithSteering(target.position);
+            MoveWithSteering(target.position, speedMove);
         }
 
         if (Vector3.Distance(transform.position, target.position) <= 0.1f)
@@ -401,13 +410,13 @@ public class GuardPatrol : MonoBehaviour
             return;
         }
         lastSeenPlayerPosition = playerTransform.position;
-        MoveWithSteering(lastSeenPlayerPosition);
+        MoveWithSteering(lastSeenPlayerPosition, speedRun);
     }
     private Vector3 smoothMoveDir;
     private const float DIR_SMOOTH_SPEED = 6f;
 
     /// Движение к цели с плавным обходом стен
-    private void MoveWithSteering(Vector3 target)
+    private void MoveWithSteering(Vector3 target, float currentSpeed)
     {
         Vector3 toTarget = target - transform.position;
         toTarget.y = 0f;
@@ -441,7 +450,7 @@ public class GuardPatrol : MonoBehaviour
 
         if (smoothMoveDir.magnitude > 0.1f)
         {
-            Vector3 moveStep = smoothMoveDir * speedMove * Time.deltaTime;
+            Vector3 moveStep = smoothMoveDir * currentSpeed * Time.deltaTime;
             float stepDist = moveStep.magnitude;
             Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
             int mask = LayerMask.GetMask("Obstacles");
@@ -599,7 +608,7 @@ public class GuardPatrol : MonoBehaviour
             waypointStuckTimer = 0f;
             return;
         }
-        MoveWithSteering(target);
+        MoveWithSteering(target, speedMove);
         if (dist < 0.8f)
         {
             returnPath.RemoveAt(0);
