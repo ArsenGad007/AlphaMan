@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// скрипт патрулирования охранника - основная логика обнаружения
@@ -111,6 +112,9 @@ public class GuardPatrol : MonoBehaviour
     private Quaternion lookStartRot;
     private const float LOOK_PHASE_DURATION = 0.7f;
     private const float SCAN_ROTATION_SPEED = 2.5f;
+     private float groundFollowHeight = 0.01f; 
+     private float groundSmoothSpeed = 10f;   
+     private LayerMask groundMask = ~0;
 
 
 
@@ -125,22 +129,20 @@ public class GuardPatrol : MonoBehaviour
     {
         gameOver = FindAnyObjectByType<GameOver>();
         lastBreadcrumbPos = transform.position;
-        fixedGroundY = patrolPoints[0].position.y;
-        Vector3 startPos = transform.position;
-        startPos.y = fixedGroundY;
-        transform.position = startPos;
+        //fixedGroundY = patrolPoints[0].position.y;
+        //Vector3 startPos = transform.position;
+       // startPos.y = fixedGroundY;
+      //  transform.position = startPos;
         lastAnimPos = transform.position;
 
     }
 
     void Update()
     {
-        Vector3 correctedPos = transform.position;
-        correctedPos.y = fixedGroundY;
-        transform.position = correctedPos;
+
         if (fieldOfView != null)
         {
-            fieldOfView.UpdateFOV(correctedPos, transform.forward);
+            fieldOfView.UpdateFOV(transform.position, transform.forward);
         }
         PlayerCheck();
             switch (currentState)
@@ -176,9 +178,28 @@ public class GuardPatrol : MonoBehaviour
 
             }
         UpdateAnimator();
+        RaycastHit hit;
+        bool foundGround = Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down, out hit, 3f, groundMask, QueryTriggerInteraction.Ignore);
+
+        if (foundGround && !hit.collider.CompareTag("Water") && hit.collider.gameObject != gameObject)
+        {
+            float targetY = hit.point.y + groundFollowHeight;
+            Vector3 pos = transform.position;
+            pos.y = Mathf.Lerp(pos.y, targetY, groundSmoothSpeed * Time.deltaTime);
+            transform.position = pos;
+        }
+        else if (playerTransform != null)
+        {
+            float targetY = playerTransform.position.y + groundFollowHeight;
+            Vector3 pos = transform.position;
+            pos.y = Mathf.Lerp(pos.y, targetY, groundSmoothSpeed * 0.5f * Time.deltaTime);
+            transform.position = pos;
+        }
     }
     private void UpdateAnimator()
     {
+        if (animator != null)
+        { 
         float rawSpeed = (transform.position - lastAnimPos).magnitude / Mathf.Max(Time.deltaTime, 0.01f);
         lastAnimPos = transform.position;
         bool isMoving = rawSpeed > 0.15f;
@@ -192,6 +213,7 @@ public class GuardPatrol : MonoBehaviour
         {
             animator.SetBool("IsWalking", true);
         }
+    }
     }
 
     /// <summary>
@@ -477,25 +499,44 @@ public class GuardPatrol : MonoBehaviour
     private void MoveWithSteering(Vector3 target, float currentSpeed)
     {
         Vector3 toTarget = target - transform.position;
-        toTarget.y = 0f;
+        if (toTarget.y < 0) toTarget.y = 0f;
+
         if (toTarget.magnitude < 0.4f) return;
 
         Vector3 targetDir = toTarget.normalized;
+        bool isClimbing = target.y > transform.position.y + 0.5f;
 
-        Vector3[] dirs = {
-        targetDir,
-        Quaternion.Euler(0, -30, 0) * targetDir,
-        Quaternion.Euler(0, 30, 0) * targetDir,
-        Quaternion.Euler(0, -60, 0) * targetDir,
-        Quaternion.Euler(0, 60, 0) * targetDir,
-        -targetDir
-    };
+        Vector3[] dirs;
+
+        if (isClimbing)
+        {
+            dirs = new Vector3[] { targetDir };
+        }
+        else
+        {
+
+            dirs = new Vector3[] {
+                targetDir,
+                Quaternion.Euler(0, -30, 0) * targetDir,
+                Quaternion.Euler(0, 30, 0) * targetDir,
+                Quaternion.Euler(0, -60, 0) * targetDir,
+                Quaternion.Euler(0, 60, 0) * targetDir,
+                -targetDir
+            };
+        }
 
         Vector3 bestDir = targetDir;
         float bestScore = -999f;
 
         for (int i = 0; i < dirs.Length; i++)
         {
+            if (isClimbing)
+            {
+                bestDir = dirs[i];
+                bestScore = 100f;
+                break;
+            }
+
             float clearDist = GetClearDistance(dirs[i]);
             if (clearDist < 0.5f) continue;
 
@@ -510,26 +551,33 @@ public class GuardPatrol : MonoBehaviour
         {
             Vector3 moveStep = smoothMoveDir * currentSpeed * Time.deltaTime;
             float stepDist = moveStep.magnitude;
-            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
-            if (Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, -1, QueryTriggerInteraction.Ignore))
+            if (!isClimbing)
             {
-                if (hit.collider.gameObject != gameObject)
+                Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
+                if (Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, -1, QueryTriggerInteraction.Ignore))
                 {
-                    float safeDist = Mathf.Max(0f, hit.distance - 0.15f);
-                    moveStep = smoothMoveDir * safeDist;
+                    if (hit.collider.gameObject != gameObject)
+                    {
+                        float safeDist = Mathf.Max(0f, hit.distance - 0.15f);
+                        moveStep = smoothMoveDir * safeDist;
+                    }
                 }
             }
 
             transform.position += moveStep;
 
             cachedDirectionToTarget = smoothMoveDir.normalized;
-            Quaternion targetRot = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
-            Vector3 e = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(0, e.y, 0);
+
+            Vector3 lookDir = cachedDirectionToTarget;
+            lookDir.y = 0f;
+
+            if (lookDir.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(lookDir, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, speedRotate * Time.deltaTime);
+            }
         }
     }
-
     /// <summary>Возвращает дистанцию до ближайшего препятствия в направлении</summary>
     private float GetClearDistance(Vector3 dir)
     {
