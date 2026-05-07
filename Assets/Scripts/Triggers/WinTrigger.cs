@@ -6,9 +6,20 @@ public class WinTrigger : MonoBehaviour
     [SerializeField] private GameWin gameWin;
     [SerializeField] private string playerTag = "Player";
 
+    private static GameObject spriteObj;
+
+    private void Awake()
+    {
+        if (transform.childCount > 0)
+            spriteObj = transform.GetChild(0).gameObject;
+    }
+
     private void Start()
     {
-        CountItems.UpdateItemCountPanel(requiredItems.Length);
+        if (spriteObj != null)
+            spriteObj.SetActive(false);
+
+        CountItems.UpdateItemCountPanel(requiredItems.Length);     
     }
 
     private void OnTriggerEnter(Collider other)
@@ -24,5 +35,13 @@ public class WinTrigger : MonoBehaviour
                 return false;
 
         return true;
+    }
+
+    /// <summary>
+    /// ѕоказывает область куда зайти дл€ победы
+    /// </summary>
+    public static void ShowAriaWin()
+    {
+        spriteObj.SetActive(true);
     }
 }
