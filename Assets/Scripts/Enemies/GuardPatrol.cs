@@ -114,9 +114,8 @@ public class GuardPatrol : MonoBehaviour
     private const float SCAN_ROTATION_SPEED = 2.5f;
      private float groundFollowHeight = 0.1f; 
      private float groundSmoothSpeed = 10f;   
-     private LayerMask groundMask = ~0;
     private LayerMask raycastMask;
-
+    private List<GuardPatrol> allGuards = new List<GuardPatrol>();
 
 
 
@@ -136,6 +135,7 @@ public class GuardPatrol : MonoBehaviour
       //  transform.position = startPos;
         lastAnimPos = transform.position;
         raycastMask = ~LayerMask.GetMask("Guard");
+        allGuards = new List<GuardPatrol>(Object.FindObjectsByType<GuardPatrol>(FindObjectsSortMode.None));
 
     }
 
@@ -202,9 +202,10 @@ public class GuardPatrol : MonoBehaviour
     /// <summary>расталкивание охранников (X/Z)</summary>
     private void AvoidGuards()
     {
-        foreach (var other in FindObjectsOfType<GuardPatrol>())
+        foreach (var other in allGuards)
         {
             if (other == this) continue;
+
             float dist = Vector3.Distance(transform.position, other.transform.position);
             if (dist < 1.0f && dist > 0.1f)
             {
