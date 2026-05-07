@@ -40,9 +40,8 @@ public class GuardPatrol : MonoBehaviour
     /// длительность поиска
     /// </summary>
     private float searchDuration = 3f;
-    [SerializeField] private float pursueDuration = 5f;
     /// задержка перед поиском
-    private float alertTime = 0.5f;
+    private float alertTime = 0.2f;
     /// угол обзора
     private float lookAngle = 45f;
 
@@ -96,8 +95,7 @@ public class GuardPatrol : MonoBehaviour
     private Material Red;
     ///
     [SerializeField] private Transform playerTransform;
-    private Vector3 lastPosition;
-    private float chaseBreakRadius = 15f;
+    private float chaseBreakRadius = 5f;
 
     private List<Vector3> breadcrumbs = new List<Vector3>();
     private List<Vector3> returnPath = new List<Vector3>();
@@ -107,6 +105,15 @@ public class GuardPatrol : MonoBehaviour
     private float fixedGroundY;
     private Vector3 lastAnimPos;
     private float speedRun = 3.5f;
+
+    private bool isLookingAround = false;
+    private float lookTimer = 0f;
+    private Quaternion lookStartRot;
+    private const float LOOK_PHASE_DURATION = 0.7f;
+    private const float SCAN_ROTATION_SPEED = 2.5f;
+    private const float SLOWDOWN = 2f;
+    private bool isSlowingDown = false;
+
 
 
     void Awake()
@@ -118,10 +125,8 @@ public class GuardPatrol : MonoBehaviour
     private void Start()
     {
         gameOver = FindAnyObjectByType<GameOver>();
-        lastPosition = transform.position;
         lastBreadcrumbPos = transform.position;
         fixedGroundY = patrolPoints[0].position.y;
-
         Vector3 startPos = transform.position;
         startPos.y = fixedGroundY;
         transform.position = startPos;
@@ -201,8 +206,7 @@ public class GuardPatrol : MonoBehaviour
         Vector3 directionToTarget = target.position - transform.position;
         directionToTarget.y = 0f;
 
-        if (!IsPathBlocked(transform.position + Vector3.up * 0.5f, directionToTarget.normalized, 1.2f))
-        {
+
             if (directionToTarget.magnitude > 0.1f &&
                 (!Mathf.Approximately(directionToTarget.magnitude, cachedDirectionToTarget.magnitude) || !isValidDirection()))
             {
@@ -216,11 +220,7 @@ public class GuardPatrol : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speedRotate * Time.deltaTime);
             }
-        }
-        else
-        {
-            MoveWithSteering(target.position, speedMove);
-        }
+
 
         if (Vector3.Distance(transform.position, target.position) <= 0.1f)
         {
@@ -234,26 +234,28 @@ public class GuardPatrol : MonoBehaviour
     /// </summary>
     private bool isValidDirection() => cachedDirectionToTarget.magnitude > 0.1f;
 
-    /*private void HandleLookingAround()
+    /// <summary>Плавный осмотр по сторонам при разрыве дистанции</summary>
+    private void HandleLookingAround()
     {
-        stateTimer += Time.deltaTime;
-        Transform target = patrolPoints[currentPointIndex];
-        Vector3 baseForward = target.forward;
-        baseForward.y = 0f;
-        if (baseForward == Vector3.zero) baseForward = Vector3.forward;
+        lookTimer += Time.deltaTime;
 
-        float angleOffset = lookAngle * Mathf.Sin(Mathf.PI * 2 * stateTimer / lookAroundDuration);
-        Quaternion baseRotation = Quaternion.LookRotation(baseForward, Vector3.up);
-        Quaternion lookRotation = baseRotation * Quaternion.Euler(0, angleOffset, 0);
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, speedRotate * Time.deltaTime);
-
-        if (stateTimer >= lookAroundDuration)
+        int currentPhase = Mathf.FloorToInt(lookTimer / LOOK_PHASE_DURATION);
+        float phaseT = Mathf.Clamp01((lookTimer % LOOK_PHASE_DURATION) / LOOK_PHASE_DURATION);
+        phaseT = Mathf.SmoothStep(0f, 1f, phaseT);
+        float baseY = lookStartRot.eulerAngles.y;
+        Quaternion targetRot = lookStartRot;
+        switch (currentPhase)
         {
-            currentState = State.Walking; 
-            currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
+            case 0: targetRot = lookStartRot; break; 
+            case 1: targetRot = Quaternion.Euler(0, baseY - 45f, 0); break;
+            case 2: targetRot = Quaternion.Euler(0, baseY, 0); break;
+            case 3: targetRot = Quaternion.Euler(0, baseY + 45f, 0); break;
+            case 4: targetRot = Quaternion.Euler(0, baseY, 0); break;
         }
-    }*/
+
+        // Плавный поворот с фиксированной низкой скоростью
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, SCAN_ROTATION_SPEED * Time.deltaTime);
+    }
 
 
     /// <summary>
@@ -333,6 +335,16 @@ public class GuardPatrol : MonoBehaviour
         {
             StartTurnAndDie(playerPosition);
         }
+        else if (currentState == State.Returning)
+        {
+            EnterAlertedState(playerPosition);
+        }
+        else if (currentState == State.Pursuing)
+        {
+            isLookingAround = false; 
+            lastSeenPlayerPosition = playerPosition;
+                                                     
+        }
     }
 
     /// <summary>
@@ -393,22 +405,62 @@ public class GuardPatrol : MonoBehaviour
             }
         }
     }
-
-
-    ///Преследование, идёт за игроком, пока тот не уйдёт за радиус разрыва</summary>
+    /// <summary>
+    /// Преследование, идёт за игроком, пока тот не уйдёт за радиус разрыва
+    /// </summary>
+    private float slowdownTimer = 0f;
+    private const float SLOWDOWN_TIME = 1.0f;
     private void HandlePursuing()
     {
-        if (playerTransform == null) return;
         TryDropBreadcrumb();
-
-        float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-        if (distToPlayer > chaseBreakRadius)
+        if (playerTransform == null) return;
+        if (isLookingAround)
         {
-            currentState = State.Returning;
-            
-            stateTimer = 0f;BuildReturnPath();
+            HandleLookingAround();
+            if (lookTimer >= LOOK_PHASE_DURATION * 4f)
+            {
+                isLookingAround = false;
+                currentState = State.Returning;
+                BuildReturnPath();
+            }
             return;
         }
+        float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distToPlayer < 1.2f)
+        {
+            StartTurnAndDie(playerTransform.position);
+            return;
+        }
+        if (distToPlayer > chaseBreakRadius)
+        {
+            slowdownTimer += Time.deltaTime;
+            if (slowdownTimer < SLOWDOWN_TIME)
+            {
+                MoveWithSteering(lastSeenPlayerPosition, speedMove);
+                return;
+            }
+            if (!isLookingAround)
+            {
+                isLookingAround = true;
+                lookTimer = 0f;
+                lookStartRot = transform.rotation;
+                isHiding = false;
+                smoothMoveDir = Vector3.zero;
+            }
+
+            HandleLookingAround();
+
+            if (lookTimer >= LOOK_PHASE_DURATION * 4f)
+            {
+                isLookingAround = false;
+                currentState = State.Returning;
+                BuildReturnPath();
+            }
+            return;
+        }
+        slowdownTimer = 0f;
+        isLookingAround = false;
         lastSeenPlayerPosition = playerTransform.position;
         MoveWithSteering(lastSeenPlayerPosition, speedRun);
     }
@@ -482,32 +534,18 @@ public class GuardPatrol : MonoBehaviour
     private float GetClearDistance(Vector3 dir)
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        int mask = LayerMask.GetMask("Obstacles");
-        if (mask == 0) return 10f;
-
-        if (Physics.Raycast(origin, dir, out RaycastHit hit, 2.5f, mask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, 2.5f, -1, QueryTriggerInteraction.Ignore))
         {
-            GameObject hitObj = hit.collider.gameObject;
-            if (hitObj.CompareTag("Door") ||
-                (hitObj.transform.parent != null && hitObj.transform.parent.CompareTag("Door")) ||
-                hit.collider.isTrigger)
-                return 10f;
+            if (hit.collider.gameObject == gameObject) return 10f;
             return hit.distance;
         }
         return 10f;
     }
     private bool IsPathBlocked(Vector3 origin, Vector3 dir, float dist)
     {
-        int obstacleMask = LayerMask.GetMask("Obstacles");
-        if (obstacleMask == 0) return false;
-
-        if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, obstacleMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, -1, QueryTriggerInteraction.Ignore))
         {
-            GameObject hitObj = hit.collider.gameObject;
-            if (hitObj.CompareTag("Door") ||
-                (hitObj.transform.parent != null && hitObj.transform.parent.CompareTag("Door")) ||
-                hit.collider.isTrigger)
-                return false;
+            if (hit.collider.gameObject == gameObject) return false;
             return true;
         }
         return false;
@@ -546,6 +584,7 @@ public class GuardPatrol : MonoBehaviour
     private void BuildReturnPath()
     {
         returnPath.Clear();
+        isHiding = false;
         List<Vector3> candidates = new List<Vector3>(breadcrumbs.Count + 2);
         candidates.Add(transform.position);
         for (int i = breadcrumbs.Count - 1; i >= 0; i--)
