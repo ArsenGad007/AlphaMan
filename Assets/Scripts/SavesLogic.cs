@@ -30,6 +30,17 @@ public class SavesLogic : MonoBehaviour
     }
 
     /// <summary>
+    /// Сохранение ключа - значения
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public static void Set(string key, string value)
+    {
+        PlayerPrefs.SetString(key, value);
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
     /// Получение значения по ключу
     /// </summary>
     /// <param name="key"></param>
@@ -51,6 +62,18 @@ public class SavesLogic : MonoBehaviour
         if (default_value == null)
             return PlayerPrefs.GetFloat(key);
         return PlayerPrefs.GetFloat(key, default_value.Value);
+    }
+
+    /// <summary>
+    /// Получение значения по ключу
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public static string Get(string key, string default_value = null)
+    {
+        if (default_value == null)
+            return PlayerPrefs.GetString(key);
+        return PlayerPrefs.GetString(key, default_value);
     }
 
     /// <summary>
