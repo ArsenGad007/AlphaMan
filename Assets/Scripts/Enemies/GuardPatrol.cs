@@ -95,13 +95,13 @@ public class GuardPatrol : MonoBehaviour
     private Material Red;
     ///
     [SerializeField] private Transform playerTransform;
-    private float chaseBreakRadius = 5f;
+    private float chaseBreakRadius = 12f;
 
     private List<Vector3> breadcrumbs = new List<Vector3>();
     private List<Vector3> returnPath = new List<Vector3>();
     private Vector3 lastBreadcrumbPos;
     private const float BREADCRUMB_DISTANCE = 2f;
-    private const int MAX_BREADCRUMBS = 50;
+    private const int MAX_BREADCRUMBS = 500;
     private float fixedGroundY;
     private Vector3 lastAnimPos;
     private float speedRun = 3.5f;
@@ -111,8 +111,7 @@ public class GuardPatrol : MonoBehaviour
     private Quaternion lookStartRot;
     private const float LOOK_PHASE_DURATION = 0.7f;
     private const float SCAN_ROTATION_SPEED = 2.5f;
-    private const float SLOWDOWN = 2f;
-    private bool isSlowingDown = false;
+
 
 
 
@@ -136,7 +135,14 @@ public class GuardPatrol : MonoBehaviour
 
     void Update()
     {
-            PlayerCheck();
+        Vector3 correctedPos = transform.position;
+        correctedPos.y = fixedGroundY;
+        transform.position = correctedPos;
+        if (fieldOfView != null)
+        {
+            fieldOfView.UpdateFOV(correctedPos, transform.forward);
+        }
+        PlayerCheck();
             switch (currentState)
             {
                 case State.Walking:
@@ -157,13 +163,6 @@ public class GuardPatrol : MonoBehaviour
                     fieldOfView?.SetMaterial(Yellow);
                     break;
             }
-        Vector3 correctedPos = transform.position;
-        correctedPos.y = fixedGroundY;
-        transform.position = correctedPos;
-        if (fieldOfView != null)
-            {
-            fieldOfView.UpdateFOV(correctedPos, transform.forward);
-        }
             if (isTurningToPlayer)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
@@ -240,8 +239,6 @@ public class GuardPatrol : MonoBehaviour
         lookTimer += Time.deltaTime;
 
         int currentPhase = Mathf.FloorToInt(lookTimer / LOOK_PHASE_DURATION);
-        float phaseT = Mathf.Clamp01((lookTimer % LOOK_PHASE_DURATION) / LOOK_PHASE_DURATION);
-        phaseT = Mathf.SmoothStep(0f, 1f, phaseT);
         float baseY = lookStartRot.eulerAngles.y;
         Quaternion targetRot = lookStartRot;
         switch (currentPhase)
@@ -282,7 +279,7 @@ public class GuardPatrol : MonoBehaviour
             StartTurnAndDie(lastSeenPlayerPosition);
             return;
         }
-        if (isHiding)
+        if(isHiding && currentState != State.Pursuing)
             return;
 
         OnPlayerDetected(fieldOfView.PlayerTransform.position);
@@ -341,9 +338,10 @@ public class GuardPatrol : MonoBehaviour
         }
         else if (currentState == State.Pursuing)
         {
-            isLookingAround = false; 
+            isLookingAround = false;
             lastSeenPlayerPosition = playerPosition;
-                                                     
+                animator.SetBool("IsRunning", true);
+                animator.SetBool("IsWalking", false);
         }
     }
 
@@ -408,12 +406,25 @@ public class GuardPatrol : MonoBehaviour
     /// <summary>
     /// Преследование, идёт за игроком, пока тот не уйдёт за радиус разрыва
     /// </summary>
-    private float slowdownTimer = 0f;
-    private const float SLOWDOWN_TIME = 1.0f;
     private void HandlePursuing()
     {
         TryDropBreadcrumb();
         if (playerTransform == null) return;
+        FieldOfView.DetectionType currentDetection = fieldOfView.CheckForDetection();
+        if (currentDetection != FieldOfView.DetectionType.None && currentDetection != FieldOfView.DetectionType.InstantDeath)
+        {
+            isLookingAround = false;
+            lastSeenPlayerPosition = playerTransform.position;
+
+            if (animator != null)
+            {
+                animator.SetBool("IsRunning", true);
+                animator.SetBool("IsWalking", false);
+            }
+
+            MoveWithSteering(lastSeenPlayerPosition, speedRun);
+            return;
+        }
         if (isLookingAround)
         {
             HandleLookingAround();
@@ -434,12 +445,6 @@ public class GuardPatrol : MonoBehaviour
         }
         if (distToPlayer > chaseBreakRadius)
         {
-            slowdownTimer += Time.deltaTime;
-            if (slowdownTimer < SLOWDOWN_TIME)
-            {
-                MoveWithSteering(lastSeenPlayerPosition, speedMove);
-                return;
-            }
             if (!isLookingAround)
             {
                 isLookingAround = true;
@@ -447,6 +452,8 @@ public class GuardPatrol : MonoBehaviour
                 lookStartRot = transform.rotation;
                 isHiding = false;
                 smoothMoveDir = Vector3.zero;
+                    animator.SetBool("IsRunning", false);
+                    animator.SetBool("IsWalking", false);
             }
 
             HandleLookingAround();
@@ -459,7 +466,6 @@ public class GuardPatrol : MonoBehaviour
             }
             return;
         }
-        slowdownTimer = 0f;
         isLookingAround = false;
         lastSeenPlayerPosition = playerTransform.position;
         MoveWithSteering(lastSeenPlayerPosition, speedRun);
@@ -505,15 +511,9 @@ public class GuardPatrol : MonoBehaviour
             Vector3 moveStep = smoothMoveDir * currentSpeed * Time.deltaTime;
             float stepDist = moveStep.magnitude;
             Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
-            int mask = LayerMask.GetMask("Obstacles");
-            if (mask != 0 && Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, mask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, -1, QueryTriggerInteraction.Ignore))
             {
-                GameObject hitObj = hit.collider.gameObject;
-                bool isDoor = hitObj.CompareTag("Door") ||
-                              (hitObj.transform.parent != null && hitObj.transform.parent.CompareTag("Door")) ||
-                              hit.collider.isTrigger;
-
-                if (!isDoor)
+                if (hit.collider.gameObject != gameObject)
                 {
                     float safeDist = Mathf.Max(0f, hit.distance - 0.15f);
                     moveStep = smoothMoveDir * safeDist;
