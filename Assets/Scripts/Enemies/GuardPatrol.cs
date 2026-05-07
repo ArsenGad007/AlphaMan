@@ -112,9 +112,10 @@ public class GuardPatrol : MonoBehaviour
     private Quaternion lookStartRot;
     private const float LOOK_PHASE_DURATION = 0.7f;
     private const float SCAN_ROTATION_SPEED = 2.5f;
-     private float groundFollowHeight = 0.01f; 
+     private float groundFollowHeight = 0.1f; 
      private float groundSmoothSpeed = 10f;   
      private LayerMask groundMask = ~0;
+    private LayerMask raycastMask;
 
 
 
@@ -134,6 +135,7 @@ public class GuardPatrol : MonoBehaviour
        // startPos.y = fixedGroundY;
       //  transform.position = startPos;
         lastAnimPos = transform.position;
+        raycastMask = ~LayerMask.GetMask("Guard");
 
     }
 
@@ -179,7 +181,7 @@ public class GuardPatrol : MonoBehaviour
             }
         UpdateAnimator();
         RaycastHit hit;
-        bool foundGround = Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down, out hit, 3f, groundMask, QueryTriggerInteraction.Ignore);
+        bool foundGround = Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down, out hit, 3f, raycastMask, QueryTriggerInteraction.Ignore);
 
         if (foundGround && !hit.collider.CompareTag("Water") && hit.collider.gameObject != gameObject)
         {
@@ -194,6 +196,26 @@ public class GuardPatrol : MonoBehaviour
             Vector3 pos = transform.position;
             pos.y = Mathf.Lerp(pos.y, targetY, groundSmoothSpeed * 0.5f * Time.deltaTime);
             transform.position = pos;
+        }
+        AvoidGuards();
+    }
+    /// <summary>расталкивание охранников (X/Z)</summary>
+    private void AvoidGuards()
+    {
+        foreach (var other in FindObjectsOfType<GuardPatrol>())
+        {
+            if (other == this) continue;
+            float dist = Vector3.Distance(transform.position, other.transform.position);
+            if (dist < 1.0f && dist > 0.1f)
+            {
+                Vector3 push = transform.position - other.transform.position;
+                push.y = 0f;
+                if (push.sqrMagnitude > 0.01f)
+                {
+                    push.Normalize();
+                    transform.position += push * 0.02f;
+                }
+            }
         }
     }
     private void UpdateAnimator()
@@ -554,7 +576,7 @@ public class GuardPatrol : MonoBehaviour
             if (!isClimbing)
             {
                 Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
-                if (Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, -1, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(rayOrigin, smoothMoveDir, out RaycastHit hit, stepDist + 0.1f, raycastMask, QueryTriggerInteraction.Ignore))
                 {
                     if (hit.collider.gameObject != gameObject)
                     {
@@ -582,7 +604,7 @@ public class GuardPatrol : MonoBehaviour
     private float GetClearDistance(Vector3 dir)
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        if (Physics.Raycast(origin, dir, out RaycastHit hit, 2.5f, -1, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, 2.5f, raycastMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.gameObject == gameObject) return 10f;
             return hit.distance;
@@ -591,7 +613,7 @@ public class GuardPatrol : MonoBehaviour
     }
     private bool IsPathBlocked(Vector3 origin, Vector3 dir, float dist)
     {
-        if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, -1, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, dist, raycastMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.gameObject == gameObject) return false;
             return true;

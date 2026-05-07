@@ -21,6 +21,7 @@ public class FieldOfView : MonoBehaviour
     private Vector3 lastPosition = Vector3.zero;
     private Vector3 lastForward = Vector3.forward;
     private float lastUpdateTime;
+    private LayerMask raycastMask;
 
     void Awake()
     {
