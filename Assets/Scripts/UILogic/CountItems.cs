@@ -14,6 +14,9 @@ public class CountItems : MonoBehaviour
 
     public static void UpdateItemCountPanel(int num)
     {
+        if (num == 0)
+            WinTrigger.ShowAriaWin();
+
         itemCount = num;
         itemCountText.text = itemCount.ToString();
     }
