@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 8e8496055b5c4d64da5b205924c06df6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -25690,9 +25690,9 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: f05e4260099bbb543b076dd734602d85, type: 2}
-  m_TreeDistance: 890
-  m_TreeBillboardDistance: 50
-  m_TreeCrossFadeLength: 6.6
+  m_TreeDistance: 607
+  m_TreeBillboardDistance: 30
+  m_TreeCrossFadeLength: 0
   m_TreeMaximumFullLODCount: 25
   m_DetailObjectDistance: 30
   m_DetailObjectDensity: 1
@@ -75494,7 +75494,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.91690177, b: 0.6933962, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -130507,8 +130507,8 @@ BoxCollider:
   m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.49877834, y: 3.8975754, z: 1.20156}
-  m_Center: {x: -0.032842055, y: -4.3366055, z: 0.15624478}
+  m_Size: {x: 0.51601005, y: 3.8975754, z: 1.20156}
+  m_Center: {x: -0.024226185, y: -4.3366055, z: 0.15624478}
 --- !u!1001 &1735089649
 PrefabInstance:
   m_ObjectHideFlags: 0
