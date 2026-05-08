@@ -22,18 +22,18 @@ public class SceneTransition : MonoBehaviour
     void Awake()
     {
         instance = this;
-    }
-
-    void Start()
-    {       
         overlay = GetComponentInChildren<RawImage>(true);   // true Ч находит неактивные
+
         overlay.gameObject.SetActive(true);
 
         mat = Instantiate(overlay.material);                // создаЄм копию
         overlay.material = mat;
 
         mat.SetFloat("_Aspect", (float)Screen.width / Screen.height);
+    }
 
+    void Start()
+    {          
         if (!dontOpenNextScene)
         {
             mat.SetFloat("_Radius", 0f);
