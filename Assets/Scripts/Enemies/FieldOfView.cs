@@ -6,7 +6,7 @@ public class FieldOfView : MonoBehaviour
 {
     public Transform PlayerTransform => player?.transform;
     [SerializeField] private float viewDistance = 5f;
-    [SerializeField] private float fov = 90f;          
+    [SerializeField] private float fov = 90f;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField, Range(20, 100)] private int rayCount = 80;
     [SerializeField, Range(0f, 1f)] private float updateInterval = 0.001f;
@@ -15,21 +15,22 @@ public class FieldOfView : MonoBehaviour
     private Renderer fieldOfViewRenderer;
 
     [SerializeField] private float detectionRadius = 3f;
-     public float alertDelay = 1f;
+    public float alertDelay = 1f;
 
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
     private Vector3 lastForward = Vector3.forward;
     private float lastUpdateTime;
-    private int detectionFramesRequired = 4;
+    private int detectionFramesRequired = 2;
     private int visibleFramesCount = 0;
+    private float raycastForwardOffset = 1f;
 
     void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         fieldOfViewRenderer = GetComponent<Renderer>();
-       
+
     }
     /// <summary>
     /// Смена цвета конуса зрения.
@@ -37,7 +38,7 @@ public class FieldOfView : MonoBehaviour
     /// </summary>
     public void SetMaterial(Material mat)
     {
-            fieldOfViewRenderer.sharedMaterial = mat;
+        fieldOfViewRenderer.sharedMaterial = mat;
     }
     /// <summary>
     /// Обновляет визуальный меш и проверяет обнаружение игрока.
@@ -198,28 +199,30 @@ public class FieldOfView : MonoBehaviour
         if (player == null) return true;
 
         Vector3 dir = player.transform.position - transform.position;
-        dir.y = 0f; 
+        dir.y = 0f;
         float distMag = dir.magnitude;
 
-        if (distMag > distance) return true; 
+        if (distMag > distance) return true;
         //if (distMag < 0.05f) return false;   
 
         float[] heights = { 0.6f, 1.0f, 1.7f };
 
         foreach (float h in heights)
         {
-            Vector3 rayOrigin = transform.position + Vector3.up * h;
+            Vector3 rayOrigin = transform.position - transform.forward * raycastForwardOffset + Vector3.up * h;
 
             if (Physics.Raycast(rayOrigin, dir.normalized, out RaycastHit hit, distMag, obstacleMask, QueryTriggerInteraction.Ignore))
             {
+                if (hit.distance < 0.12f)
+                    continue;
                 if (hit.collider.gameObject != player)
                     return true;
             }
         }
         return false;
     }
-    private bool? cachedBlockedResult;        
-    private int cachedBlockedFrame = -1;      
+    private bool? cachedBlockedResult;
+    private int cachedBlockedFrame = -1;
     private float cachedBlockedDistance = -1f;
 
     /// <summary>
@@ -251,7 +254,7 @@ public class FieldOfView : MonoBehaviour
         if (dist > viewDistance) return false;
         if (Vector3.Angle(transform.forward, player.transform.position - transform.position) > fov * 0.5f) return false;
 
-        return !IsPlayerBlockedCached(viewDistance);
+        return !IsPlayerBlocked(viewDistance);
     }
     /// <summary>
     /// Помогает определить, какая дб задержка.
@@ -273,11 +276,11 @@ public class FieldOfView : MonoBehaviour
         {
             bool bothNearWall = IsNearWall(0.4f) && IsPlayerNearWall(0.4f);
 
-            if (!IsPlayerBlockedCached(detectionRadius))
+            if (!IsPlayerBlocked(detectionRadius))
             {
                 if (bothNearWall)
                 {
-                    Vector3 extraOrigin = transform.position + Vector3.up * 1.3f;
+                    Vector3 extraOrigin = transform.position - transform.forward * raycastForwardOffset + Vector3.up * 1.3f;
 
                     if (Physics.Raycast(extraOrigin, directionToPlayer.normalized, out RaycastHit extraHit, distance, obstacleMask, QueryTriggerInteraction.Ignore))
                     {
@@ -303,7 +306,7 @@ public class FieldOfView : MonoBehaviour
         else if (distance <= viewDistance &&
                  Vector3.Angle(transform.forward, directionToPlayer.normalized) <= fov * 0.5f)
         {
-            if (!IsPlayerBlockedCached(viewDistance))
+            if (!IsPlayerBlocked(viewDistance))
                 isVisible = true;
         }
         if (isVisible)
@@ -326,18 +329,20 @@ public class FieldOfView : MonoBehaviour
     /// <summary>Проверяет, прижат ли охранник к стене</summary>
     private bool IsNearWall(float distance)
     {
-        return Physics.Raycast(transform.position + Vector3.up * 1.0f, transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
-               Physics.Raycast(transform.position + Vector3.up * 1.0f, -transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore);
+        Vector3 origin = transform.position - transform.forward * raycastForwardOffset + Vector3.up * 1.0f;
+        return Physics.Raycast(origin, transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
+               Physics.Raycast(origin, -transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore);
     }
-
     /// <summary>Проверяет, прижат ли игрок к стене</summary>
     private bool IsPlayerNearWall(float distance)
     {
         if (player == null) return false;
         Vector3 toPlayer = player.transform.position - transform.position;
         toPlayer.y = 0f;
-        return Physics.Raycast(player.transform.position + Vector3.up * 1.0f, toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
-               Physics.Raycast(player.transform.position + Vector3.up * 1.0f, -toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore);
+        Vector3 playerOrigin = player.transform.position - toPlayer.normalized * raycastForwardOffset + Vector3.up * 1.0f;
+
+        return Physics.Raycast(playerOrigin, toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
+               Physics.Raycast(playerOrigin, -toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore);
     }
 
     /// <summary>
@@ -345,8 +350,8 @@ public class FieldOfView : MonoBehaviour
     /// </summary>
     public enum DetectionType
     {
-        None,       
-        AlertDelay, 
-        InstantDeath 
+        None,
+        AlertDelay,
+        InstantDeath
     }
 }

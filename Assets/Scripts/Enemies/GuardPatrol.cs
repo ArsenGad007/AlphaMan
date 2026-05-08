@@ -65,7 +65,7 @@ public class GuardPatrol : MonoBehaviour
     /// <summary>
     /// Последняя известная позиция игрока
     /// </summary>
-    private Vector3 lastSeenPlayerPosition;  
+    private Vector3 lastSeenPlayerPosition;
     /// <summary>
     /// Флаг скрытия от охранника
     /// </summary>
@@ -92,7 +92,7 @@ public class GuardPatrol : MonoBehaviour
     /// цвета сетки
     /// </summary>
     private Material Green;
-    private Material Yellow; 
+    private Material Yellow;
     private Material Red;
     ///
     [SerializeField] private Transform playerTransform;
@@ -112,10 +112,12 @@ public class GuardPatrol : MonoBehaviour
     private Quaternion lookStartRot;
     private const float LOOK_PHASE_DURATION = 0.7f;
     private const float SCAN_ROTATION_SPEED = 2.5f;
-     private float groundFollowHeight = 0.1f; 
-     private float groundSmoothSpeed = 10f;   
+    private float groundFollowHeight = 0.1f;
+    private float groundSmoothSpeed = 10f;
     private LayerMask raycastMask;
     private List<GuardPatrol> allGuards = new List<GuardPatrol>();
+    private float pursuitLostTimeout = 4f;
+    private float pursuitLostTimer = 0f;
 
 
 
@@ -131,8 +133,8 @@ public class GuardPatrol : MonoBehaviour
         lastBreadcrumbPos = transform.position;
         //fixedGroundY = patrolPoints[0].position.y;
         //Vector3 startPos = transform.position;
-       // startPos.y = fixedGroundY;
-      //  transform.position = startPos;
+        // startPos.y = fixedGroundY;
+        //  transform.position = startPos;
         lastAnimPos = transform.position;
         raycastMask = ~LayerMask.GetMask("Guard");
         allGuards = new List<GuardPatrol>(Object.FindObjectsByType<GuardPatrol>(FindObjectsSortMode.None));
@@ -147,38 +149,38 @@ public class GuardPatrol : MonoBehaviour
             fieldOfView.UpdateFOV(transform.position, transform.forward);
         }
         PlayerCheck();
-            switch (currentState)
-            {
-                case State.Walking:
-                    HandleWalking();
-                    fieldOfView?.SetMaterial(Green);
-                    break;
-                case State.Pursuing:
-                    HandlePursuing();
-                    fieldOfView?.SetMaterial(Yellow);
-                    break;
+        switch (currentState)
+        {
+            case State.Walking:
+                HandleWalking();
+                fieldOfView?.SetMaterial(Green);
+                break;
+            case State.Pursuing:
+                HandlePursuing();
+                fieldOfView?.SetMaterial(Yellow);
+                break;
             case State.Returning:
                 HandleReturning();
                 fieldOfView?.SetMaterial(Yellow);
                 break;
             case State.Alerted:
-                case State.Searching:
-                    HandleAlertedOrSearching();
-                    fieldOfView?.SetMaterial(Yellow);
-                    break;
-            }
-            if (isTurningToPlayer)
+            case State.Searching:
+                HandleAlertedOrSearching();
+                fieldOfView?.SetMaterial(Yellow);
+                break;
+        }
+        if (isTurningToPlayer)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
+            float timeSinceStarted = Time.time - turnStartTime;
+            fieldOfView?.SetMaterial(Red);
+
+            if (timeSinceStarted >= 0.3f)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, speedRotate * Time.deltaTime);
-                float timeSinceStarted = Time.time - turnStartTime;
-                fieldOfView?.SetMaterial(Red);
-
-                if (timeSinceStarted >= 0.3f)
-                {
-                    isTurningToPlayer = false;
-                }
-
+                isTurningToPlayer = false;
             }
+
+        }
         UpdateAnimator();
         RaycastHit hit;
         bool foundGround = Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down, out hit, 3f, raycastMask, QueryTriggerInteraction.Ignore);
@@ -215,7 +217,7 @@ public class GuardPatrol : MonoBehaviour
                 if (push.sqrMagnitude > 0.01f)
                 {
                     push.Normalize();
-                    transform.position += push * 0.02f;
+                    transform.position += push * 0.01f;
                 }
             }
         }
@@ -223,21 +225,21 @@ public class GuardPatrol : MonoBehaviour
     private void UpdateAnimator()
     {
         if (animator != null)
-        { 
-        float rawSpeed = (transform.position - lastAnimPos).magnitude / Mathf.Max(Time.deltaTime, 0.01f);
-        lastAnimPos = transform.position;
-        bool isMoving = rawSpeed > 0.15f;
-        animator.SetBool("IsWalking", false);
-        animator.SetBool("IsRunning", false);
-        if (currentState == State.Pursuing && isMoving)
         {
-            animator.SetBool("IsRunning", true);
+            float rawSpeed = (transform.position - lastAnimPos).magnitude / Mathf.Max(Time.deltaTime, 0.01f);
+            lastAnimPos = transform.position;
+            bool isMoving = rawSpeed > 0.15f;
+            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", false);
+            if (currentState == State.Pursuing && isMoving)
+            {
+                animator.SetBool("IsRunning", true);
+            }
+            else if (isMoving)
+            {
+                animator.SetBool("IsWalking", true);
+            }
         }
-        else if (isMoving)
-        {
-            animator.SetBool("IsWalking", true);
-        }
-    }
     }
 
     /// <summary>
@@ -252,19 +254,19 @@ public class GuardPatrol : MonoBehaviour
         directionToTarget.y = 0f;
 
 
-            if (directionToTarget.magnitude > 0.1f &&
-                (!Mathf.Approximately(directionToTarget.magnitude, cachedDirectionToTarget.magnitude) || !isValidDirection()))
-            {
-                cachedDirectionToTarget = directionToTarget.normalized;
-            }
+        if (directionToTarget.magnitude > 0.1f &&
+            (!Mathf.Approximately(directionToTarget.magnitude, cachedDirectionToTarget.magnitude) || !isValidDirection()))
+        {
+            cachedDirectionToTarget = directionToTarget.normalized;
+        }
 
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speedMove * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target.position, speedMove * Time.deltaTime);
 
-            if (isValidDirection() && cachedDirectionToTarget.magnitude > 0)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speedRotate * Time.deltaTime);
-            }
+        if (isValidDirection() && cachedDirectionToTarget.magnitude > 0)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(cachedDirectionToTarget, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speedRotate * Time.deltaTime);
+        }
 
 
         if (Vector3.Distance(transform.position, target.position) <= 0.1f)
@@ -289,7 +291,7 @@ public class GuardPatrol : MonoBehaviour
         Quaternion targetRot = lookStartRot;
         switch (currentPhase)
         {
-            case 0: targetRot = lookStartRot; break; 
+            case 0: targetRot = lookStartRot; break;
             case 1: targetRot = Quaternion.Euler(0, baseY - 45f, 0); break;
             case 2: targetRot = Quaternion.Euler(0, baseY, 0); break;
             case 3: targetRot = Quaternion.Euler(0, baseY + 45f, 0); break;
@@ -308,16 +310,31 @@ public class GuardPatrol : MonoBehaviour
     private void PlayerCheck()
     {
         FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
+
         if (detection == FieldOfView.DetectionType.InstantDeath)
         {
             lastSeenPlayerPosition = fieldOfView.PlayerTransform.position;
             StartTurnAndDie(lastSeenPlayerPosition);
+            return;
         }
 
         if (detection == FieldOfView.DetectionType.None)
         {
-            isHiding = false;
-            return;
+            if (playerTransform != null)
+            {
+                float dist = Vector3.Distance(transform.position, playerTransform.position);
+                if (dist > chaseBreakRadius)
+                {
+                    isHiding = false;
+                }
+            }
+            else
+            {
+                isHiding = false;
+            }
+
+            if (currentState != State.Pursuing)
+                return;
         }
 
         if (currentState == State.Searching)
@@ -325,10 +342,14 @@ public class GuardPatrol : MonoBehaviour
             StartTurnAndDie(lastSeenPlayerPosition);
             return;
         }
-        if(isHiding && currentState != State.Pursuing)
+        if (isHiding && currentState != State.Pursuing)
             return;
 
-        OnPlayerDetected(fieldOfView.PlayerTransform.position);
+        if (playerTransform != null)
+            lastSeenPlayerPosition = playerTransform.position;
+
+        if (currentState != State.Pursuing)
+            OnPlayerDetected(fieldOfView.PlayerTransform.position);
     }
 
     /// <summary>
@@ -386,8 +407,8 @@ public class GuardPatrol : MonoBehaviour
         {
             isLookingAround = false;
             lastSeenPlayerPosition = playerPosition;
-                animator.SetBool("IsRunning", true);
-                animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", true);
+            animator.SetBool("IsWalking", false);
         }
     }
 
@@ -424,6 +445,7 @@ public class GuardPatrol : MonoBehaviour
             {
                 currentState = State.Pursuing;
                 stateTimer = 0f;
+                pursuitLostTimer = 0f;
             }
         }
         else if (currentState == State.Searching)
@@ -482,6 +504,7 @@ public class GuardPatrol : MonoBehaviour
             }
             return;
         }
+
         float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
         if (distToPlayer < 1.2f)
@@ -498,12 +521,10 @@ public class GuardPatrol : MonoBehaviour
                 lookStartRot = transform.rotation;
                 isHiding = false;
                 smoothMoveDir = Vector3.zero;
-                    animator.SetBool("IsRunning", false);
-                    animator.SetBool("IsWalking", false);
+                animator.SetBool("IsRunning", false);
+                animator.SetBool("IsWalking", false);
             }
-
             HandleLookingAround();
-
             if (lookTimer >= LOOK_PHASE_DURATION * 4f)
             {
                 isLookingAround = false;
@@ -512,6 +533,32 @@ public class GuardPatrol : MonoBehaviour
             }
             return;
         }
+        Vector3 dirToPlayer = playerTransform.position - transform.position;
+        dirToPlayer.y = 0f;
+        Vector3 rayOrigin = transform.position + Vector3.up * 1.0f;
+
+        if (Physics.Raycast(rayOrigin, dirToPlayer.normalized, out RaycastHit hit, distToPlayer, raycastMask, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.collider.gameObject != playerTransform?.gameObject)
+            {
+                pursuitLostTimer += Time.deltaTime;
+                if (pursuitLostTimer >= pursuitLostTimeout)
+                {
+                    currentState = State.Returning;
+                    BuildReturnPath();
+                    pursuitLostTimer = 0f;
+                    return;
+                }
+            }
+            else
+            {
+                pursuitLostTimer = 0f;
+            }
+        }
+        else
+        {
+            pursuitLostTimer = 0f;
+        }
         isLookingAround = false;
         lastSeenPlayerPosition = playerTransform.position;
         MoveWithSteering(lastSeenPlayerPosition, speedRun);
@@ -519,7 +566,11 @@ public class GuardPatrol : MonoBehaviour
     private Vector3 smoothMoveDir;
     private const float DIR_SMOOTH_SPEED = 6f;
 
+    /// <summary>
     /// Движение к цели с плавным обходом стен
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="currentSpeed"></param>
     private void MoveWithSteering(Vector3 target, float currentSpeed)
     {
         Vector3 toTarget = target - transform.position;
@@ -628,7 +679,7 @@ public class GuardPatrol : MonoBehaviour
     /// </summary>
     private void TriggerGameOver()
     {
-            gameOver.GameOverPanel();
+        gameOver.GameOverPanel();
     }
     /// <summary>
     ///  движется ли охранник (патрулируя)
@@ -689,7 +740,7 @@ public class GuardPatrol : MonoBehaviour
         Vector3 dir = to - from;
         float dist = dir.magnitude;
         if (dist < 0.5f) return true;
-        return !IsPathBlocked(from + Vector3.up * 0.6f, dir.normalized, dist);
+        return !Physics.SphereCast(from + Vector3.up * 0.6f, 0.4f, dir.normalized, out _, dist, raycastMask);
     }
     private float waypointStuckTimer = 0f;
     private Vector3 lastPosForWaypointStuck;
@@ -732,7 +783,7 @@ public class GuardPatrol : MonoBehaviour
     private void ResolveWallClipping()
     {
         Vector3[] directions = { transform.forward, -transform.forward, transform.right, -transform.right };
-        float checkDistance = 0.5f;
+        float checkDistance = 0.6f;
 
         foreach (var dir in directions)
         {
@@ -743,7 +794,7 @@ public class GuardPatrol : MonoBehaviour
                 if (hit.collider.gameObject != playerTransform?.gameObject &&
                     hit.collider.gameObject != gameObject)
                 {
-                    float pushAmount = checkDistance - hit.distance + 0.07f;
+                    float pushAmount = checkDistance - hit.distance + 0.01f;
                     transform.position -= dir.normalized * pushAmount;
                 }
             }
