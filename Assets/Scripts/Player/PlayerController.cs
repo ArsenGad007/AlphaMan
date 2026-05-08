@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// ���������� �������
+/// Управление главным героем
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour, ISpeedUpgradable
