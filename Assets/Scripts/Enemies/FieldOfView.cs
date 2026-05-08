@@ -12,20 +12,36 @@ public class FieldOfView : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float updateInterval = 0.001f;
     [SerializeField] private GameObject player;
     //[SerializeField] private GameOver gameOver;
+    private Renderer fieldOfViewRenderer;
 
-    [SerializeField] private float detectionRadius = 1.7f;
+    [SerializeField] private float detectionRadius = 3f;
+     public float alertDelay = 1f;
 
     private Mesh mesh;
     private Vector3 lastPosition = Vector3.zero;
     private Vector3 lastForward = Vector3.forward;
     private float lastUpdateTime;
+    private int detectionFramesRequired = 4;
+    private int visibleFramesCount = 0;
 
     void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        fieldOfViewRenderer = GetComponent<Renderer>();
+       
     }
-
+    /// <summary>
+    /// Смена цвета конуса зрения.
+    /// Используется для индикации состояния.
+    /// </summary>
+    public void SetMaterial(Material mat)
+    {
+            fieldOfViewRenderer.sharedMaterial = mat;
+    }
+    /// <summary>
+    /// Обновляет визуальный меш и проверяет обнаружение игрока.
+    /// </summary>
     public void UpdateFOV(Vector3 originPosition, Vector3 forwardDirection)
     {
         if (Time.time - lastUpdateTime < updateInterval)
@@ -45,21 +61,22 @@ public class FieldOfView : MonoBehaviour
         lastPosition = originPosition;
         lastForward = forward;
         lastUpdateTime = Time.time;
-        CheckForPlayer();
     }
-
+    /// <summary>
+    /// Генерирует Mesh для визуализации конуса зрения.
+    /// </summary>
     private void RebuildMesh(Vector3 originPosition, Vector3 forwardDirection)
     {
         float halfFov = fov * 0.5f;
         float angleStep = fov / rayCount;
-        const int circleSegments = 32;
+        //  const int circleSegments = 32;
 
-        int coneVerticesCount = rayCount + 2; 
-        int circleVerticesCount = circleSegments + 1; 
+        int coneVerticesCount = rayCount + 2;
+        //  int circleVerticesCount = circleSegments + 1; 
 
-        Vector3[] vertices = new Vector3[coneVerticesCount + circleVerticesCount];
+        Vector3[] vertices = new Vector3[coneVerticesCount];
         Vector2[] uvs = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3 + circleSegments * 3];
+        int[] triangles = new int[rayCount * 3];
 
         int vertexIndex = 0;
         int triangleIndex = 0;
@@ -135,7 +152,7 @@ public class FieldOfView : MonoBehaviour
         }
 
         //круг
-        int circleCenterIndex = vertexIndex;
+        /*int circleCenterIndex = vertexIndex;
         vertices[vertexIndex] = transform.InverseTransformPoint(originPosition); 
         vertexIndex++;
 
@@ -165,7 +182,7 @@ public class FieldOfView : MonoBehaviour
             triangles[triangleIndex + 1] = currentVertex; 
             triangles[triangleIndex + 2] = nextVertex;    
             triangleIndex += 3;
-        }
+        }*/
 
         mesh.Clear();
         mesh.vertices = vertices;
@@ -173,72 +190,163 @@ public class FieldOfView : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
-
-    //проверка для обнаружения
-    private void CheckForPlayer()
+    /// <summary>
+    /// Проверяет, мешает ли стена между охранником и игроком
+    /// </summary>
+    private bool IsPlayerBlocked(float distance)
     {
-        if (player == null) return;
+        if (player == null) return true;
 
-        Vector3 directionToPlayer = player.transform.position - transform.position;
-        directionToPlayer.y = 0f;
-        float distanceToPlayer = directionToPlayer.magnitude;
+        Vector3 dir = player.transform.position - transform.position;
+        dir.y = 0f; 
+        float distMag = dir.magnitude;
 
+        if (distMag > distance) return true; 
+        //if (distMag < 0.05f) return false;   
 
-        if (distanceToPlayer <= detectionRadius)
+        float[] heights = { 0.6f, 1.0f, 1.7f };
+
+        foreach (float h in heights)
         {
-            if (!Physics.Raycast(transform.position, directionToPlayer.normalized, out RaycastHit hitCircular, distanceToPlayer, obstacleMask) ||
-                hitCircular.collider.gameObject == player)
+            Vector3 rayOrigin = transform.position + Vector3.up * h;
+
+            if (Physics.Raycast(rayOrigin, dir.normalized, out RaycastHit hit, distMag, obstacleMask, QueryTriggerInteraction.Ignore))
             {
-                OnPlayerDetected();
-                return;
+                if (hit.collider.gameObject != player)
+                    return true;
             }
         }
-
-
-        if (distanceToPlayer > viewDistance) return;
-
-        
-        if (Vector3.Angle(transform.forward, directionToPlayer) > fov / 2f) return;
-
-        
-        if (Physics.Raycast(transform.position, directionToPlayer.normalized, out RaycastHit hit, distanceToPlayer, obstacleMask))
-        {
-           
-            if (hit.collider.gameObject == player)
-            {
-                OnPlayerDetected();
-            }
-        }
-        else
-        {
-            OnPlayerDetected();
-        }
+        return false;
     }
+    private bool? cachedBlockedResult;        
+    private int cachedBlockedFrame = -1;      
+    private float cachedBlockedDistance = -1f;
 
-    //что делать при обнаружении
-    private void OnPlayerDetected()
+    /// <summary>
+    /// Кешированная проверка: есть ли стена между охранником и игроком.
+    /// </summary>                                          
+    private bool IsPlayerBlockedCached(float distance)
     {
-        //gameOver.GameOverPanel();
+        if (cachedBlockedFrame == Time.frameCount &&
+            Mathf.Approximately(cachedBlockedDistance, distance))
+        {
+            return cachedBlockedResult.Value;
+        }
+        bool result = IsPlayerBlocked(distance);
+        cachedBlockedResult = result;
+        cachedBlockedFrame = Time.frameCount;
+        cachedBlockedDistance = distance;
+
+        return result;
     }
+    /// <summary>
+    ///  Простая проверка видимости
+    /// </summary>
+    /// <returns></returns>
     public bool IsPlayerVisible()
     {
         if (player == null) return false;
 
-        Vector3 dir = player.transform.position - transform.position;
-        dir.y = 0f;
-        float dist = dir.magnitude;
-
-        RaycastHit hit;
-
-        if (dist <= detectionRadius)
-        {
-            if (!Physics.Raycast(transform.position, dir.normalized, out hit, dist, obstacleMask)||hit.collider.gameObject == player)
-                return true;
-        }
+        float dist = Vector3.Distance(transform.position, player.transform.position);
         if (dist > viewDistance) return false;
-        if (Vector3.Angle(transform.forward, dir) > fov * 0.5f) return false;
-        if (Physics.Raycast(transform.position, dir.normalized, out hit, dist, obstacleMask))
-            return hit.collider.gameObject == player;
-        return true;
+        if (Vector3.Angle(transform.forward, player.transform.position - transform.position) > fov * 0.5f) return false;
+
+        return !IsPlayerBlockedCached(viewDistance);
+    }
+    /// <summary>
+    /// Помогает определить, какая дб задержка.
+    /// </summary>
+    public DetectionType CheckForDetection()
+    {
+        if (player == null)
+        {
+            visibleFramesCount = 0;
+            return DetectionType.None;
+        }
+
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        directionToPlayer.y = 0f;
+
+        bool isVisible = false;
+        if (distance <= detectionRadius)
+        {
+            bool bothNearWall = IsNearWall(0.4f) && IsPlayerNearWall(0.4f);
+
+            if (!IsPlayerBlockedCached(detectionRadius))
+            {
+                if (bothNearWall)
+                {
+                    Vector3 extraOrigin = transform.position + Vector3.up * 1.3f;
+
+                    if (Physics.Raycast(extraOrigin, directionToPlayer.normalized, out RaycastHit extraHit, distance, obstacleMask, QueryTriggerInteraction.Ignore))
+                    {
+                        if (extraHit.collider.gameObject != player)
+                        {
+                        }
+                        else
+                        {
+                            isVisible = true;
+                        }
+                    }
+                    else
+                    {
+                        isVisible = true;
+                    }
+                }
+                else
+                {
+                    isVisible = true;
+                }
+            }
+        }
+        else if (distance <= viewDistance &&
+                 Vector3.Angle(transform.forward, directionToPlayer.normalized) <= fov * 0.5f)
+        {
+            if (!IsPlayerBlockedCached(viewDistance))
+                isVisible = true;
+        }
+        if (isVisible)
+        {
+            visibleFramesCount++;
+            if (visibleFramesCount >= detectionFramesRequired)
+            {
+                return (distance <= detectionRadius)
+                    ? DetectionType.InstantDeath
+                    : DetectionType.AlertDelay;
+            }
+        }
+        else
+        {
+            visibleFramesCount = 0;
+        }
+
+        return DetectionType.None;
+    }
+    /// <summary>Проверяет, прижат ли охранник к стене</summary>
+    private bool IsNearWall(float distance)
+    {
+        return Physics.Raycast(transform.position + Vector3.up * 1.0f, transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
+               Physics.Raycast(transform.position + Vector3.up * 1.0f, -transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore);
+    }
+
+    /// <summary>Проверяет, прижат ли игрок к стене</summary>
+    private bool IsPlayerNearWall(float distance)
+    {
+        if (player == null) return false;
+        Vector3 toPlayer = player.transform.position - transform.position;
+        toPlayer.y = 0f;
+        return Physics.Raycast(player.transform.position + Vector3.up * 1.0f, toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
+               Physics.Raycast(player.transform.position + Vector3.up * 1.0f, -toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore);
+    }
+
+    /// <summary>
+    /// Типы дистанции/реакции на игрока.
+    /// </summary>
+    public enum DetectionType
+    {
+        None,       
+        AlertDelay, 
+        InstantDeath 
     }
 }
