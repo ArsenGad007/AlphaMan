@@ -1,7 +1,7 @@
-using UnityEngine;
+п»їusing UnityEngine;
 
 /// <summary>
-/// Управление игроком
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour, ISpeedUpgradable
@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
         float speed_move = gameInput.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
         smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, SavesLogic.Get("acceleration", minAcceleration) * Time.deltaTime);
 
-        // Гравитация
+        // Р“СЂР°РІРёС‚Р°С†РёСЏ
         if (characterController.isGrounded)
-            verticalVelocity = -5f;         // прижимаем к земле        
+            verticalVelocity = -5f;         // РїСЂРёР¶РёРјР°РµРј Рє Р·РµРјР»Рµ        
         else
             verticalVelocity += gravity * Time.deltaTime;
  
@@ -55,6 +55,26 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
             else
                 SoundManager.PlayWalk();
         }
+    }
+    //С‚РѕС‚Р°Р»СЊРЅР°СЏ РѕСЃС‚Р°РЅРѕРІРєР° РёРіСЂРѕРєР°
+    public void StopAllComponents()
+    {
+        // -РІРІРѕРґ
+        gameInput.DisablePlayerInputActions();
+        //-Р·РІСѓРє
+        var audioSources = GetComponents<AudioSource>();
+        foreach (var audioSource in audioSources)
+        {
+            audioSource.Stop();
+            audioSource.enabled = false;
+        }
+        // -Р°РЅРёРјР°С‚РѕСЂ
+        var animator = GetComponent<Animator>();
+        animator.enabled = false;
+        animator.speed = 0f;
+        // -СЃРєРѕСЂРѕСЃС‚СЊ РґРІРёР¶РµРЅРёСЏ
+        smooth_movement = Vector3.zero;
+        verticalVelocity = 0f;
     }
 
     public void SpeedProgressUpdate()
