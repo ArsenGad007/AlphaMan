@@ -337,6 +337,7 @@ public class GuardPatrol : MonoBehaviour
                 return;
         }
 
+
         if (currentState == State.Searching)
         {
             StartTurnAndDie(lastSeenPlayerPosition);
