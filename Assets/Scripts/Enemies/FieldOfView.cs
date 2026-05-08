@@ -9,7 +9,7 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] private float fov = 90f;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField, Range(20, 100)] private int rayCount = 80;
-    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.001f;
+    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.0f;
     [SerializeField] private GameObject player;
     //[SerializeField] private GameOver gameOver;
     private Renderer fieldOfViewRenderer;
@@ -23,7 +23,7 @@ public class FieldOfView : MonoBehaviour
     private float lastUpdateTime;
     private int detectionFramesRequired = 2;
     private int visibleFramesCount = 0;
-    private float raycastForwardOffset = 1f;
+    private float raycastForwardOffset = 0.5f;
 
     void Awake()
     {
@@ -203,9 +203,9 @@ public class FieldOfView : MonoBehaviour
         float distMag = dir.magnitude;
 
         if (distMag > distance) return true;
-        //if (distMag < 0.05f) return false;   
 
         float[] heights = { 0.6f, 1.0f, 1.7f };
+        int blockedCount = 0;
 
         foreach (float h in heights)
         {
@@ -213,13 +213,12 @@ public class FieldOfView : MonoBehaviour
 
             if (Physics.Raycast(rayOrigin, dir.normalized, out RaycastHit hit, distMag, obstacleMask, QueryTriggerInteraction.Ignore))
             {
-                if (hit.distance < 0.12f)
-                    continue;
+                if (hit.distance < 0.12f) continue;
                 if (hit.collider.gameObject != player)
-                    return true;
+                    blockedCount++;
             }
         }
-        return false;
+        return blockedCount >= 2;
     }
     private bool? cachedBlockedResult;
     private int cachedBlockedFrame = -1;
