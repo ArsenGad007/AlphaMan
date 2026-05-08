@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -23,13 +25,13 @@ public class VideoController : MonoBehaviour
 
         if (checkVersion && SavesLogic.Get("player_level", 0) != 0)
         {
-            yesButton.onClick.RemoveListener(PlayVideo);
-            yesButton.onClick.AddListener(PlayVideo);
+            panelDeletePastSaves.SetActive(true);
+
+            yesButton.onClick.RemoveListener(YesButton);
+            yesButton.onClick.AddListener(YesButton);
 
             noButton.onClick.RemoveListener(LoadStartScene);
             noButton.onClick.AddListener(LoadStartScene);
-
-            panelDeletePastSaves.SetActive(true);
         }
         else if (checkVersion)
             PlayVideo();
@@ -42,6 +44,16 @@ public class VideoController : MonoBehaviour
         videoPlayer.loopPointReached -= OnVideoFinished;
     }
 
+    private void YesButton()
+    {
+        panelDeletePastSaves.SetActive(false);
+        Debug.Log("YesButton");
+        SavesLogic.DeleteSaves();
+        Resolution standart_res = Screen.resolutions.Last();
+        Screen.SetResolution(standart_res.width, standart_res.height, FullScreenMode.FullScreenWindow);
+        PlayVideo();
+    }
+
     private void PlayVideo()
     {
         videoPlayer.loopPointReached += OnVideoFinished;
@@ -52,6 +64,8 @@ public class VideoController : MonoBehaviour
 
     private void LoadStartScene()
     {
+        panelDeletePastSaves.SetActive(false);
+
         if (checkVersion)
             SavesLogic.Set("version", Application.version);
 
