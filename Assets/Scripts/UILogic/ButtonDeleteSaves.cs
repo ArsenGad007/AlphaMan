@@ -18,11 +18,8 @@ public class ButtonDeleteSaves : MonoBehaviour
     private void OnClick()
     {
         SavesLogic.DeleteSaves();
-        if (SceneManager.GetActiveScene().name == exitLevel)
-        {        
-            var chooseLevel = FindFirstObjectByType<LevelsButtonsDisplay>();
-            chooseLevel.UpdateLevelButtons();
-        }
+        if (SceneManager.GetActiveScene().name == exitLevel) 
+            LevelsButtonsDisplay.Instance.UpdateLevelButtons();
         else if (SceneManager.GetActiveScene().name != startMenu)
         {
             Time.timeScale = 1;

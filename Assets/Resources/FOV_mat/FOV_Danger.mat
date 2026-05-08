@@ -7,35 +7,38 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlayerBody_Green
+  m_Name: FOV_Danger
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 2100000, guid: 870ec5fc30e653642a3d1c671bda31b9, type: 2}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_Parent: {fileID: 2100000, guid: 1a0afd856a35421469b28b916116fd9c, type: 2}
+  m_ModifiedSerializedProperties: 20
+  m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _SPECULAR_SETUP
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2950
   stringTagMap:
-    RenderType: Opaque
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
+  - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _GlossMapScale: 0
-    - _Glossiness: 0
-    - _GlossyReflections: 0
-    - _Parallax: 0.005
-    - _Smoothness: 0.5
+    - _BlendModePreserveSpecular: 1
+    - _QueueOffset: -50
+    - _Smoothness: 0
+    - _SrcBlend: 1
     m_Colors:
-    - _BaseColor: {r: 0.2271074, g: 1, b: 0, a: 1}
-    - _Color: {r: 0.22710738, g: 1, b: 0, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 0.29164237, b: 0, a: 0.49019608}
+    - _Color: {r: 1, g: 0.29164234, b: 0, a: 0.49019608}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &8299195706861943354

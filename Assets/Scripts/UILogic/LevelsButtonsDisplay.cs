@@ -8,13 +8,22 @@ public class ButtonStringPair
 {
     public Button button;
     public string sceneName;   
+    public GameObject panelLevel;   
 }
 
 public class LevelsButtonsDisplay : MonoBehaviour
 {
+    public static LevelsButtonsDisplay Instance;
+
     [SerializeField] private List<ButtonStringPair> buttonPairs;
 
     private string playerLevelKey = "player_level";
+    public string selectedPanelName { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -23,8 +32,14 @@ public class LevelsButtonsDisplay : MonoBehaviour
 
         foreach (var pair in buttonPairs)
             if (pair.button != null)
-                pair.button.onClick.AddListener(() => LoadSceneByName(pair.sceneName));
+                pair.button.onClick.AddListener(() => ShowPanelLevel(pair));
         UpdateLevelButtons();
+    }
+
+    private void ShowPanelLevel(ButtonStringPair bsp)
+    {
+        selectedPanelName = bsp.sceneName;
+        bsp.panelLevel.SetActive(true);
     }
 
     /// <summary>
@@ -37,11 +52,5 @@ public class LevelsButtonsDisplay : MonoBehaviour
         for (int i = 0; i < buttonPairs.Count; i++)
             if (buttonPairs[i].button != null)
                 buttonPairs[i].button.gameObject.SetActive(i <= level);
-    }
-
-    public void LoadSceneByName(string name)
-    {
-        MenuMusic.Stop();
-        SceneTransition.Load(name, true);
     }
 }

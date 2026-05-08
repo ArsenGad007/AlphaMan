@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
-/// ���������� �������
+/// Управление главным героем
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour, ISpeedUpgradable
@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
         float speed_move = gameInput.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
         smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, SavesLogic.Get("acceleration", minAcceleration) * Time.deltaTime);
 
-        // ����������
+        // Гравитация
         if (characterController.isGrounded)
-            verticalVelocity = -5f;         // ��������� � �����        
+            verticalVelocity = -5f;         // прижимаем к земле        
         else
             verticalVelocity += gravity * Time.deltaTime;
  
@@ -55,6 +55,26 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
             else
                 SoundManager.PlayWalk();
         }
+    }
+    //тотальная остановка игрока
+    public void StopAllComponents()
+    {
+        // -ввод
+        gameInput.DisablePlayerInputActions();
+        //-звук
+        var audioSources = GetComponents<AudioSource>();
+        foreach (var audioSource in audioSources)
+        {
+            audioSource.Stop();
+            audioSource.enabled = false;
+        }
+        // -аниматор
+        var animator = GetComponent<Animator>();
+        animator.enabled = false;
+        animator.speed = 0f;
+        // -скорость движения
+        smooth_movement = Vector3.zero;
+        verticalVelocity = 0f;
     }
 
     public void SpeedProgressUpdate()
