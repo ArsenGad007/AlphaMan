@@ -198,6 +198,7 @@ public class GuardPatrol : MonoBehaviour
             transform.position = pos;
         }
         AvoidGuards();
+        ResolveWallClipping();
     }
     /// <summary>расталкивание охранников (X/Z)</summary>
     private void AvoidGuards()
@@ -723,6 +724,29 @@ public class GuardPatrol : MonoBehaviour
         {
             returnPath.RemoveAt(0);
             waypointStuckTimer = 0f;
+        }
+    }
+    /// <summary>
+    /// Выталкивает охранника из стен, если произошел клиппинг-въезд в стену.
+    /// </summary>
+    private void ResolveWallClipping()
+    {
+        Vector3[] directions = { transform.forward, -transform.forward, transform.right, -transform.right };
+        float checkDistance = 0.5f;
+
+        foreach (var dir in directions)
+        {
+            Vector3 rayOrigin = transform.position + Vector3.up * 1.0f;
+
+            if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, checkDistance, raycastMask, QueryTriggerInteraction.Ignore))
+            {
+                if (hit.collider.gameObject != playerTransform?.gameObject &&
+                    hit.collider.gameObject != gameObject)
+                {
+                    float pushAmount = checkDistance - hit.distance + 0.07f;
+                    transform.position -= dir.normalized * pushAmount;
+                }
+            }
         }
     }
 }
