@@ -30,13 +30,13 @@ public class VideoController : MonoBehaviour
             yesButton.onClick.RemoveListener(YesButton);
             yesButton.onClick.AddListener(YesButton);
 
-            noButton.onClick.RemoveListener(SaveVersion);
-            noButton.onClick.AddListener(SaveVersion);        
+            noButton.onClick.RemoveListener(LoadStartScene);
+            noButton.onClick.AddListener(LoadStartScene);
         }
         else if (checkVersion)
             PlayVideo();
         else
-            StartCoroutine(LoadStartScene());
+            LoadStartScene();
     }
 
     void OnDestroy()
@@ -60,22 +60,14 @@ public class VideoController : MonoBehaviour
         videoPlayer.Play();
     }
 
-    private void OnVideoFinished(VideoPlayer vp) => SaveVersion();
+    private void OnVideoFinished(VideoPlayer vp) => LoadStartScene();
 
-    private void SaveVersion()
+    private void LoadStartScene()
     {
         panelDeletePastSaves.SetActive(false);
 
         if (checkVersion)
             SavesLogic.Set("version", Application.version);
-
-        StartCoroutine(LoadStartScene());
-    }
-
-    IEnumerator LoadStartScene()
-    {
-        if (SceneTransition.IsTransitionGo)
-            yield return null;
 
         SceneTransition.Load("StartMenu");
     }
