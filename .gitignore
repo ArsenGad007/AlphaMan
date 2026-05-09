@@ -99,7 +99,10 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Baked lighting
-Assets/Scenes/**/*.exr
+Assets/Scenes/**/Lightmap-*.exr
+Assets/Scenes/**/Lightmap-*.png
+Assets/Scenes/**/Lightmap-*.exr.meta
+Assets/Scenes/**/Lightmap-*.png.meta
 
 # NDepend
 NDependOut/
