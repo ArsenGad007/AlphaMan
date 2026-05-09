@@ -2653,6 +2653,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &27305310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27305294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &29620026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24374,6 +24395,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1763249242}
+    - targetCorrespondingSourceObject: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1763249244}
   m_SourcePrefab: {fileID: 100100000, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
 --- !u!1 &246714757
 GameObject:
@@ -31844,6 +31868,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &342129886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342129875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!43 &343653143
 Mesh:
   m_ObjectHideFlags: 0
@@ -32988,6 +33033,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1773400789}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1773400796}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!1001 &365703343
 PrefabInstance:
@@ -44761,6 +44809,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1465087270}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1465087277}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!43 &512443562
 Mesh:
@@ -55268,6 +55319,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1037253989}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1037253996}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!43 &571946518
 Mesh:
@@ -79183,6 +79237,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &777427577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777427561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &778353759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79576,7 +79651,7 @@ Transform:
   m_GameObject: {fileID: 780202247}
   serializedVersion: 2
   m_LocalRotation: {x: 0.054254446, y: 0.7092192, z: -0.07152433, w: 0.6992488}
-  m_LocalPosition: {x: -34.349113, y: 1.734382, z: 67.99095}
+  m_LocalPosition: {x: -34.349113, y: 2.096, z: 67.99095}
   m_LocalScale: {x: 50, y: 50, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -79912,6 +79987,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 27305303}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 27305310}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!1 &787437061
 GameObject:
@@ -107630,6 +107708,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1037253996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037253980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!43 &1037277060
 Mesh:
   m_ObjectHideFlags: 0
@@ -108155,6 +108254,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2113459987}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2113459994}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!4 &1049634314 stripped
 Transform:
@@ -109258,6 +109360,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1074500917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074500901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &1075552517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110512,6 +110635,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1500798968}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1500798975}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!1001 &1094152438
 PrefabInstance:
@@ -110734,15 +110860,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00011036839
+      value: 0.0001
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00023162228
+      value: 0.0024
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00074746076
+      value: 0.0004
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -125154,6 +125280,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1619635670}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1619635677}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!1001 &1241746491
 PrefabInstance:
@@ -127390,6 +127519,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1267130656}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1267130663}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!4 &1250708129 stripped
 Transform:
@@ -128794,6 +128926,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1267130663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267130647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!4 &1268548623 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1403062838417144973, guid: 6f3c6ff916e6ac9498cc857c664136dc, type: 3}
@@ -132314,6 +132467,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1747372786}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1747372793}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!4 &1329872186 stripped
 Transform:
@@ -142002,15 +142158,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0047
+      value: 0.0044
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0007
+      value: 0.0069
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0045
+      value: 0.0028
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 82906a56bc1b01e4a8d1929cda717e7b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -142567,6 +142723,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1465087277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465087260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1 &1468931192 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7018149740049990884, guid: 872286f6db1951c418d11e2ad7a14841, type: 3}
@@ -144366,6 +144543,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1500798975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500798959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &1504651188
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -153483,6 +153681,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1619635677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619635661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &1620129543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158166,6 +158385,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
       insertIndex: -1
       addedObject: {fileID: 342129884}
+    - targetCorrespondingSourceObject: {fileID: 5339130301091616328, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 342129886}
   m_SourcePrefab: {fileID: 100100000, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
 --- !u!1001 &1677090380
 PrefabInstance:
@@ -165384,6 +165606,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1747372793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747372777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &1751245413
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -166510,6 +166753,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1763249244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763249233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1001 &1766663449
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -167157,6 +167421,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &1773400796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773400780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!1 &1777411036 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1712598794445152689, guid: e5a128c33f192b747963b721167f4c12, type: 3}
@@ -171426,6 +171711,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1074500910}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1074500917}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!4 &1867382649 stripped
 Transform:
@@ -172483,6 +172771,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 777427570}
+    - targetCorrespondingSourceObject: {fileID: 1896669769371717927, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 777427577}
   m_SourcePrefab: {fileID: 100100000, guid: d65bb4016db8bce48abb258b5fa2ff61, type: 3}
 --- !u!1001 &1889290291
 PrefabInstance:
@@ -192105,6 +192396,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3e6143270ef5f934688f28b0a312796b, type: 3}
   minInterval: 10
   maxInterval: 30
+--- !u!114 &2113459994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113459978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4401cdea5cfe86c4faa258aa85c02d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waters:
+  - ripplePlane: {fileID: 347643523}
+    waterTrigger: {fileID: 901592269}
+  - ripplePlane: {fileID: 562321769}
+    waterTrigger: {fileID: 1734392037}
+  continuousMode: 0
+  floatWithWater: 0
+  floatAmplitude: 0.2
+  floatSpeed: 2
 --- !u!4 &2113782706 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1403062838417144973, guid: 6f3c6ff916e6ac9498cc857c664136dc, type: 3}
