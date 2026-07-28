@@ -50,16 +50,20 @@ namespace Eldvmo.Ripples
 
         void OnTriggerEnter(Collider other)
         {
+            Debug.Log($"[Ripple] {gameObject.name} TriggerEnter: {other.name} | layer: {LayerMask.LayerToName(other.gameObject.layer)} | pos охранника: {transform.position.y:F2} | pos триггера: {other.bounds.center.y:F2} | bounds min Y: {other.bounds.min.y:F2} max Y: {other.bounds.max.y:F2}");
             foreach (var water in waters)
             {
+                Debug.Log($"[Ripple] Проверяем water.waterTrigger: {water.waterTrigger?.name}");
                 if (other == water.waterTrigger)
                 {
                     currentWater = water;
-                    isInWater = true;          
-                    baseY = transform.position.y; 
+                    isInWater = true;
+                    baseY = transform.position.y;
+                    Debug.Log($"[Ripple] ВОДА НАЙДЕНА — currentWater установлен");
                     return;
                 }
             }
+            Debug.Log($"[Ripple] Триггер сработал но ни один waterTrigger не совпал");
         }
 
         void OnTriggerExit(Collider other)
