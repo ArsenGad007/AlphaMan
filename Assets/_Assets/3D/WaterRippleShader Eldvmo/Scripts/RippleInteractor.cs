@@ -41,6 +41,15 @@ namespace Eldvmo.Ripples
         private static Dictionary<MeshRenderer, Vector4[]> sharedArrays
             = new Dictionary<MeshRenderer, Vector4[]>();
 
+        // Гарантированно сбрасывает статический словарь в начале КАЖДОГО запуска игры,
+        // даже если в Project Settings отключён Reload Domain (Enter Play Mode Options).
+        // Без этого старые "призрачные" точки могли пережить остановку Play Mode.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStaticStateOnLoad()
+        {
+            sharedArrays.Clear();
+        }
+
         void Start()
         {
             waterLayerMask = LayerMask.GetMask("Water");
