@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace Eldvmo.Ripples
 {
@@ -15,20 +16,30 @@ namespace Eldvmo.Ripples
 
         [Header("Mode")]
         [SerializeField] private bool continuousMode = false;
-
         [SerializeField] private bool floatWithWater = false;
         [SerializeField] private float floatAmplitude = 0.2f;
         [SerializeField] private float floatSpeed = 2f;
+
+        [Header("Personal slot range in shared array (64 total)")]
+        [Tooltip("Начальный индекс диапазона этого объекта в общем массиве.")]
+        [SerializeField] private int slotStart = 0;
+        [Tooltip("Сколько последовательных ripple-точек оставляет за собой этот объект (как хвост следа).")]
+        [SerializeField] private int slotCount = 4;
+
+        private const int TOTAL_SLOTS = 64;
+
         private float baseY;
         private bool isInWater = false;
-
         private WaterData currentWater;
 
-        private Vector4[] ripplePoints = new Vector4[10];
-        private int rippleIndex = 0;
+        private int localIndex = 0; // локальный индекс внутри своего диапазона
 
         private int waterLayerMask;
         private Vector2 lastUV;
+
+        // Один общий массив на материал — каждый объект пишет только в свой диапазон
+        private static Dictionary<MeshRenderer, Vector4[]> sharedArrays
+            = new Dictionary<MeshRenderer, Vector4[]>();
 
         void Start()
         {
@@ -37,12 +48,21 @@ namespace Eldvmo.Ripples
 
             foreach (var water in waters)
             {
+                if (water.ripplePlane != null && !sharedArrays.ContainsKey(water.ripplePlane))
+                {
+                    var arr = new Vector4[TOTAL_SLOTS];
+                    for (int i = 0; i < TOTAL_SLOTS; i++)
+                        arr[i] = new Vector4(0, 0, -1, 0);
+                    sharedArrays[water.ripplePlane] = arr;
+                    water.ripplePlane.sharedMaterial.SetVectorArray("_InputCentre", arr);
+                }
+
                 if (water.waterTrigger != null &&
                     water.waterTrigger.bounds.Contains(transform.position))
                 {
                     currentWater = water;
                     isInWater = true;
-                    Debug.Log("[Ripple] Лодка стартовала внутри воды — isInWater = true");
+                    baseY = transform.position.y;
                     break;
                 }
             }
@@ -50,47 +70,40 @@ namespace Eldvmo.Ripples
 
         void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"[Ripple] {gameObject.name} TriggerEnter: {other.name} | layer: {LayerMask.LayerToName(other.gameObject.layer)} | pos охранника: {transform.position.y:F2} | pos триггера: {other.bounds.center.y:F2} | bounds min Y: {other.bounds.min.y:F2} max Y: {other.bounds.max.y:F2}");
             foreach (var water in waters)
             {
-                Debug.Log($"[Ripple] Проверяем water.waterTrigger: {water.waterTrigger?.name}");
                 if (other == water.waterTrigger)
                 {
                     currentWater = water;
                     isInWater = true;
                     baseY = transform.position.y;
-                    Debug.Log($"[Ripple] ВОДА НАЙДЕНА — currentWater установлен");
                     return;
                 }
             }
-            Debug.Log($"[Ripple] Триггер сработал но ни один waterTrigger не совпал");
         }
 
         void OnTriggerExit(Collider other)
         {
             if (currentWater != null && other == currentWater.waterTrigger)
             {
+                
                 currentWater = null;
-                isInWater = false; 
+                isInWater = false;
             }
         }
 
-        // Сбрасывает материал когда останавливаешь игру в редакторе
         void OnApplicationQuit()
         {
             foreach (var water in waters)
             {
-                if (water.ripplePlane != null)
-                {
-                    water.ripplePlane.sharedMaterial
-                        .SetVector("_ContinuousCentre", new Vector4(0, 0, -1, 0));
+                if (water.ripplePlane == null) continue;
+                water.ripplePlane.sharedMaterial
+                    .SetVector("_ContinuousCentre", new Vector4(0, 0, -1, 0));
 
-                    var empty = new Vector4[10];
-                    for (int i = 0; i < empty.Length; i++)
-                        empty[i] = new Vector4(0, 0, -1, 0);
-                    water.ripplePlane.sharedMaterial
-                        .SetVectorArray("_InputCentre", empty);
-                }
+                var empty = new Vector4[TOTAL_SLOTS];
+                for (int i = 0; i < TOTAL_SLOTS; i++)
+                    empty[i] = new Vector4(0, 0, -1, 0);
+                water.ripplePlane.sharedMaterial.SetVectorArray("_InputCentre", empty);
             }
         }
 
@@ -125,29 +138,25 @@ namespace Eldvmo.Ripples
                 {
                     if (uvJump < 0.03f) return;
 
-                    ripplePoints[rippleIndex] = new Vector4(uv.x, uv.y, Time.time, 0);
-                    rippleIndex = (rippleIndex + 1) % ripplePoints.Length;
+                    // Пишем в следующую ячейку СВОЕГО диапазона — старые точки в этом же
+                    // диапазоне остаются жить своё время и расплываются, как в оригинале
+                    if (sharedArrays.TryGetValue(currentWater.ripplePlane, out var arr))
+                    {
+                        arr[slotStart + localIndex] = new Vector4(uv.x, uv.y, Time.time, 0);
+                        localIndex = (localIndex + 1) % slotCount;
 
-                    currentWater.ripplePlane.sharedMaterial
-                        .SetVectorArray("_InputCentre", ripplePoints);
+                        currentWater.ripplePlane.sharedMaterial
+                            .SetVectorArray("_InputCentre", arr);
+                    }
                 }
                 else
                 {
-                    Vector4 ripple = new Vector4(uv.x, uv.y, Time.time, 0);
                     currentWater.ripplePlane.sharedMaterial
-                        .SetVector("_ContinuousCentre", ripple);
+                        .SetVector("_ContinuousCentre",
+                            new Vector4(uv.x, uv.y, Time.time, 0));
                 }
 
                 lastUV = uv;
-            }
-            if (floatWithWater && continuousMode)
-            {
-                float wave = Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;
-                transform.position = new Vector3(
-                    transform.position.x,
-                    baseY + wave,
-                    transform.position.z
-                );
             }
         }
     }

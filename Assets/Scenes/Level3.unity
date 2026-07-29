@@ -2734,6 +2734,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 8
+  slotCount: 5
 --- !u!65 &27305311
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22291,7 +22293,6 @@ GameObject:
   - component: {fileID: 233462030}
   - component: {fileID: 233462023}
   - component: {fileID: 233462022}
-  - component: {fileID: 233462029}
   - component: {fileID: 233462031}
   m_Layer: 0
   m_Name: Boat (1)
@@ -22438,20 +22439,6 @@ Transform:
   - {fileID: 1186098379}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &233462029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 233462021}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 793645ca3c164564583ce42d58da7532, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ripplePlane: {fileID: 562321769}
-  moveUpStrength: 0.2
 --- !u!114 &233462030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22471,6 +22458,8 @@ MonoBehaviour:
   floatWithWater: 1
   floatAmplitude: 0.15
   floatSpeed: 1.3
+  slotStart: 56
+  slotCount: 4
 --- !u!64 &233462031
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -31880,6 +31869,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 48
+  slotCount: 4
 --- !u!143 &342129887
 CharacterController:
   m_ObjectHideFlags: 0
@@ -57831,6 +57822,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 0
+  slotCount: 8
 --- !u!1001 &589664355
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78831,6 +78824,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 28
+  slotCount: 4
 --- !u!143 &777427578
 CharacterController:
   m_ObjectHideFlags: 0
@@ -85488,6 +85483,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 36
+  slotCount: 4
 --- !u!143 &855598683
 CharacterController:
   m_ObjectHideFlags: 0
@@ -107340,6 +107337,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 23
+  slotCount: 5
 --- !u!143 &1037253997
 CharacterController:
   m_ObjectHideFlags: 0
@@ -109001,6 +109000,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 40
+  slotCount: 4
 --- !u!143 &1074500918
 CharacterController:
   m_ObjectHideFlags: 0
@@ -128085,6 +128086,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 0
+  slotCount: 4
 --- !u!143 &1267130664
 CharacterController:
   m_ObjectHideFlags: 0
@@ -141693,6 +141696,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 32
+  slotCount: 4
 --- !u!143 &1465087278
 CharacterController:
   m_ObjectHideFlags: 0
@@ -143522,6 +143527,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 0
+  slotCount: 4
 --- !u!143 &1500798976
 CharacterController:
   m_ObjectHideFlags: 0
@@ -152554,6 +152561,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 13
+  slotCount: 5
 --- !u!143 &1619635678
 CharacterController:
   m_ObjectHideFlags: 0
@@ -164377,6 +164386,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 44
+  slotCount: 4
 --- !u!143 &1747372794
 CharacterController:
   m_ObjectHideFlags: 0
@@ -165502,6 +165513,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 52
+  slotCount: 4
 --- !u!143 &1763249245
 CharacterController:
   m_ObjectHideFlags: 0
@@ -166068,6 +166081,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 18
+  slotCount: 5
 --- !u!143 &1773400797
 CharacterController:
   m_ObjectHideFlags: 0
@@ -190726,6 +190741,8 @@ MonoBehaviour:
   floatWithWater: 0
   floatAmplitude: 0.2
   floatSpeed: 2
+  slotStart: 60
+  slotCount: 4
 --- !u!143 &2113459995
 CharacterController:
   m_ObjectHideFlags: 0
@@ -196106,20 +196123,20 @@ SceneRoots:
   - {fileID: 797562492}
   - {fileID: 2268273}
   - {fileID: 834012}
+  - {fileID: 1093956379}
+  - {fileID: 1250123036}
   - {fileID: 245583312}
-  - {fileID: 785179436}
   - {fileID: 1672982393}
   - {fileID: 1328413777}
   - {fileID: 1866747461}
-  - {fileID: 1093956379}
+  - {fileID: 339837419}
+  - {fileID: 511644308}
+  - {fileID: 1888878380}
+  - {fileID: 1045947638}
+  - {fileID: 785179436}
   - {fileID: 1241327242}
   - {fileID: 363898879}
-  - {fileID: 1250123036}
-  - {fileID: 1045947638}
-  - {fileID: 1888878380}
-  - {fileID: 339837419}
   - {fileID: 569800634}
-  - {fileID: 511644308}
   - {fileID: 781197542}
   - {fileID: 690052918}
   - {fileID: 826242796}

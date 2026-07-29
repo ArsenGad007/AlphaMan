@@ -47,7 +47,7 @@ float _WaveStrength;
 float _WorldScale;
 float _BoatWaveSpeed;
 
-float4 _InputCentre[10];
+float4 _InputCentre[64];
 float4 _ContinuousCentre;
 
 struct VertexInput
@@ -107,7 +107,7 @@ VertexOutput vert(VertexInput v)
     float combinedWave = 0;
 
     // импульсные волны (игрок)
-    for (int n = 0; n < 10; n++)
+    for (int n = 0; n < 64; n++)
     {
         combinedWave += Wave(v.uv, _InputCentre[n].xy, _InputCentre[n].z);
     }
@@ -130,7 +130,7 @@ float4 frag(VertexOutput o) : SV_Target
                 float4 tex = tex2D(_Texture, o.uv);
 float combinedWave = 0;
 
-for (int n = 0; n < 10; n++)
+for (int n = 0; n < 64; n++)
 {
     combinedWave += Wave(o.rawUV, _InputCentre[n].xy, _InputCentre[n].z);
 }
