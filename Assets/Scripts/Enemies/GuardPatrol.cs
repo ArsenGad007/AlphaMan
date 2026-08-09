@@ -50,6 +50,7 @@ public class GuardPatrol : MonoBehaviour
 
     // Физика
     private const float GROUND_FOLLOW_HEIGHT = 0.1f;
+    private const float WATER_SUBMERGE_DEPTH = 0.4f;
     private const float GROUND_SMOOTH_SPEED = 10f;
     private const float GUARD_PUSH_RADIUS = 1.0f;
     private const float GUARD_MIN_DIST = 0.1f;
@@ -785,10 +786,15 @@ public class GuardPatrol : MonoBehaviour
 
         float targetY;
 
-        if (foundGround && !hit.collider.CompareTag("Water") && hit.collider.gameObject != gameObject)
-            targetY = hit.point.y + GROUND_FOLLOW_HEIGHT;
+        if (foundGround && hit.collider.gameObject != gameObject)
+        {
+            if (hit.collider.CompareTag("Water"))
+                targetY = hit.point.y - WATER_SUBMERGE_DEPTH; // "тонет" на нужную глубину
+            else
+                targetY = hit.point.y + GROUND_FOLLOW_HEIGHT;
+        }
         else if (playerTransform != null)
-            targetY = playerTransform.position.y + GROUND_FOLLOW_HEIGHT;
+            targetY = playerTransform.position.y + GROUND_FOLLOW_HEIGHT; // крайний случай, если рейкаст вообще ничего не нашёл
         else
             return;
 
