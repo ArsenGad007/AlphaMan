@@ -8,7 +8,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAABAAAgASEAIABAAAAAQgAAAgAAAAABAAEAgAAJAAI=</HashCode>
+      <HashCode>hAABAAAgASEAIABAAAAAQgAAAgAAgAABAAEAgAAJAAI=</HashCode>
       <FileName>Assets\Scripts\Player\GameInput.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -19,28 +19,30 @@
     <Position X="4" Y="5.5" Width="1.75" />
     <AssociationLine Name="player" Type="PlayerController">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.118" Y="0.176" />
+        <Position X="0.176" Y="0.118" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAQAAAAAACAAAAAAAAAAAAAQAgAAAAABAAAAIAAgAAA=</HashCode>
+      <HashCode>BBQAAAAAAAAAAACAAAAAAAAQAgAAAAABQAIAIAAgAEA=</HashCode>
       <FileName>Assets\Scripts\Player\PlayerAnimator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
+      <Field Name="player" />
       <Field Name="gameInput" />
       <Field Name="animator" />
-      <Field Name="player" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="PlayerController">
-    <Position X="4" Y="1.75" Width="1.75" />
+    <Position X="4" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAQQAAgAAAAAAUAAAAAAAgAAAgAAAIQAAAAAAAIAAEA=</HashCode>
+      <HashCode>ABQRAAgAAAAAAQAAAAAAAgAAAgAAAIAAQAEAABIAEEA=</HashCode>
       <FileName>Assets\Scripts\Player\PlayerController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="gameInput" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="UnityEngine.Animator" Collapsed="true">
     <Position X="6.75" Y="5.5" Width="1.5" />
@@ -48,20 +50,8 @@
   </Class>
   <Class Name="@PlayerInputActions" Collapsed="true">
     <Position X="1" Y="0.75" Width="1.75" />
-    <NestedTypes>
-      <Struct Name="@PlayerInputActions.PlayerActions" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Assets\PlayerInputActions.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Interface Name="@PlayerInputActions.IPlayerActions" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Assets\PlayerInputActions.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Interface>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAAIBACAAAECBABAAAAAGCEAEAgAEBQAAA=</HashCode>
+      <HashCode>AAACAAAAACAAIBACAAAECBABAAAAAGCEAEAgAEBQAAg=</HashCode>
       <FileName>Assets\PlayerInputActions.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

@@ -6,14 +6,12 @@ public class GameOver : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;  // Ссылка на панель проигрыша;
     [SerializeField] private Button restartButton;
-    PlayerController playerController;
 
     private bool isGameOver = false;
 
     void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        playerController = playerObj.GetComponent<PlayerController>();
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
     }
@@ -28,7 +26,6 @@ public class GameOver : MonoBehaviour
 
         Time.timeScale = 0;
         SoundManager.PlayLose();
-        playerController.StopAllComponents();//останавливаем перед проигрышем игрока(чтоб никуда не убежал)
         gameOverPanel.SetActive(true);  // Показать панель проигрыша
 
         restartButton.onClick.RemoveListener(RestartGameOver); 

@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class PlayerAnimator : MonoBehaviour, ISpeedUpgradable
+public class PlayerAnimator : Singleton<PlayerAnimator>, ISpeedUpgradable
 {
-    public static PlayerAnimator Instance;
-
     [SerializeField] private PlayerController player;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private float minAnimationInterval = 0.25f; 
@@ -15,9 +13,9 @@ public class PlayerAnimator : MonoBehaviour, ISpeedUpgradable
     private string currentAnimation = "idle";
     private float lastChangeTime;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         animator = player.GetComponent<Animator>();
     }
 

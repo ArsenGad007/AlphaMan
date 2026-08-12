@@ -5,10 +5,8 @@ using UnityEngine;
 /// Единый менеджер звука: фоновая музыка + все SFX.
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
-public class SoundManager : MonoBehaviour, ISpeedUpgradable
+public class SoundManager : Singleton<SoundManager>, ISpeedUpgradable
 {
-    public static SoundManager Instance;
-
     [Header("Фоновая музыка")]
     [SerializeField] private AudioSource musicSource; 
 
@@ -41,9 +39,9 @@ public class SoundManager : MonoBehaviour, ISpeedUpgradable
     private AudioSource sfxSource;
     private float lastStepTime = 0f;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         sfxSource = GetComponent<AudioSource>();
     }
 

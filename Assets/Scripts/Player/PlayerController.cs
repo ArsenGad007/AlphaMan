@@ -4,10 +4,8 @@
 /// Управление главным героем
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour, ISpeedUpgradable
+public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
 {
-    public static PlayerController Instance;
-
     [SerializeField] [Min(0)] private float speedWalkMove = 2.0f;
     [SerializeField] [Min(0)] private float minSpeedRunMove = 5.0f;
     [SerializeField] [Min(0)] private float maxSpeedRunMove = 6.5f;
@@ -22,9 +20,9 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
     private Vector3 smooth_movement;
     private float verticalVelocity;
     
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         characterController = GetComponent<CharacterController>();
     }
 
@@ -55,26 +53,6 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
             else
                 SoundManager.PlayWalk();
         }
-    }
-    //тотальная остановка игрока
-    public void StopAllComponents()
-    {
-        // -ввод
-        gameInput.DisablePlayerInputActions();
-        //-звук
-        var audioSources = GetComponents<AudioSource>();
-        foreach (var audioSource in audioSources)
-        {
-            audioSource.Stop();
-            audioSource.enabled = false;
-        }
-        // -аниматор
-        var animator = GetComponent<Animator>();
-        animator.enabled = false;
-        animator.speed = 0f;
-        // -скорость движения
-        smooth_movement = Vector3.zero;
-        verticalVelocity = 0f;
     }
 
     public void SpeedProgressUpdate()
