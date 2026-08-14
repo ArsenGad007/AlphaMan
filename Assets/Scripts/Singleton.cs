@@ -18,10 +18,4 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
         if (!IsDestroyOnLoad)
             DontDestroyOnLoad(Instance);
     }
-
-    protected virtual void OnDestroy()
-    {
-        if (Instance == this)
-            Instance = null;
-    }
 }

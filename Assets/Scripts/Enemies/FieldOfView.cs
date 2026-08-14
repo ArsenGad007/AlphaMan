@@ -220,27 +220,7 @@ public class FieldOfView : MonoBehaviour
         }
         return blockedCount >= 2;
     }
-    private bool? cachedBlockedResult;
-    private int cachedBlockedFrame = -1;
-    private float cachedBlockedDistance = -1f;
 
-    /// <summary>
-    ///  ешированна€ проверка: есть ли стена между охранником и игроком.
-    /// </summary>                                          
-    private bool IsPlayerBlockedCached(float distance)
-    {
-        if (cachedBlockedFrame == Time.frameCount &&
-            Mathf.Approximately(cachedBlockedDistance, distance))
-        {
-            return cachedBlockedResult.Value;
-        }
-        bool result = IsPlayerBlocked(distance);
-        cachedBlockedResult = result;
-        cachedBlockedFrame = Time.frameCount;
-        cachedBlockedDistance = distance;
-
-        return result;
-    }
     /// <summary>
     ///  ѕроста€ проверка видимости
     /// </summary>

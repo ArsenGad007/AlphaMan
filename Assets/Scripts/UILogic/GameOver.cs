@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameOver : MonoBehaviour
+public class GameOver : Singleton<GameOver>
 {
     [SerializeField] private GameObject gameOverPanel;  // —сылка на панель проигрыша;
     [SerializeField] private Button restartButton;
