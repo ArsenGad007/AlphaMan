@@ -1,142 +1,101 @@
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class FieldOfView : MonoBehaviour
+public abstract class FieldOfView : MonoBehaviour
 {
-    public Transform PlayerTransform => player?.transform;
-    [SerializeField] private float viewDistance = 5f;
-    [SerializeField] private float fov = 90f;
-    [SerializeField] private LayerMask obstacleMask;
-    [SerializeField, Range(20, 100)] private int rayCount = 80;
-    [SerializeField, Range(0f, 1f)] private float updateInterval = 0.0f;
-    [SerializeField] private GameObject player;
-    //[SerializeField] private GameOver gameOver;
-    private Renderer fieldOfViewRenderer;
+    [Header("Основные настройки")]
+    [SerializeField][Min(0)] protected float viewDistance = 8f;         // дальность
+    [SerializeField][Range(0, 180)] protected float fovAngle = 90f;     // ширина (в градусах)
+    [SerializeField][Range(1, 50)] protected int rayCount = 10;         // кол-во лучей, на которые разбивается угол
+    [SerializeField] protected LayerMask obstacleMask;                  // маска слоёв, которые лучи считают препятствием
+    [SerializeField] protected GameObject player;
 
-    [SerializeField] private float detectionRadius = 3f;
-    public float alertDelay = 1f;
+    protected Mesh mesh;        // меш конуса обзора
+    protected Renderer rend;    // рендер конуса обзора
 
-    private Mesh mesh;
-    private Vector3 lastPosition = Vector3.zero;
-    private Vector3 lastForward = Vector3.forward;
-    private float lastUpdateTime;
-    private int detectionFramesRequired = 2;
-    private int visibleFramesCount = 0;
-    private float raycastForwardOffset = 0.5f;
+    protected readonly float[] CheckHeights = { 1.8f, 0.9f, 0f };               // высоты (голова/тело/ноги), по которым проверяется вход в поле зрения
+    
+    protected float CosHalfFov => Mathf.Cos(fovAngle * 0.5f * Mathf.Deg2Rad);   // Косинус половины угла обзора. Используется для проверки "виден ли игрок"
 
-    void Awake()
+    protected virtual void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        fieldOfViewRenderer = GetComponent<Renderer>();
-
+        rend = GetComponent<Renderer>();
     }
+
     /// <summary>
-    /// Смена цвета конуса зрения.
-    /// Используется для индикации состояния.
+    /// Устонавливает материал меша
     /// </summary>
-    public void SetMaterial(Material mat)
-    {
-        fieldOfViewRenderer.sharedMaterial = mat;
-    }
+    /// <param name="mat"></param>
+    public void SetMaterial(Material mat) => rend.sharedMaterial = mat;
+
     /// <summary>
-    /// Обновляет визуальный меш и проверяет обнаружение игрока.
+    /// Проверяет наличие препятствия
     /// </summary>
-    public void UpdateFOV(Vector3 originPosition, Vector3 forwardDirection)
-    {
-        if (Time.time - lastUpdateTime < updateInterval)
-            return;
+    /// <param name="origin"></param>
+    /// <param name="direction"></param>
+    /// <param name="distance"></param>
+    /// <param name="hit"></param>
+    /// <returns></returns>
+    protected bool CheckObstacle(Vector3 origin, Vector3 direction, float distance, out RaycastHit hit)
+       => Physics.Raycast(origin, direction, out hit, distance, obstacleMask, QueryTriggerInteraction.Ignore);
 
-        Vector3 forward = forwardDirection;
-        forward.y = 0f;
-        if (forward == Vector3.zero) forward = Vector3.forward;
-
-        bool shouldUpdate =
-            Vector3.Distance(originPosition, lastPosition) > 0.1f ||
-            Vector3.Angle(lastForward, forward) > 2f;
-
-        if (!shouldUpdate) return;
-
-        RebuildMesh(originPosition, forward);
-        lastPosition = originPosition;
-        lastForward = forward;
-        lastUpdateTime = Time.time;
-    }
     /// <summary>
-    /// Генерирует Mesh для визуализации конуса зрения.
+    /// Проверяет наличие препятствия
     /// </summary>
-    private void RebuildMesh(Vector3 originPosition, Vector3 forwardDirection)
+    /// <param name="origin"></param>
+    /// <param name="direction"></param>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    protected bool CheckObstacle(Vector3 origin, Vector3 direction, float distance)
+        => Physics.Raycast(origin, direction, distance, obstacleMask, QueryTriggerInteraction.Ignore);
+
+    /// <summary>
+    /// Строит меш конуса обзора от originPosition в направлении forwardDirection,
+    /// сглаживая разрывы между соседними лучами (например, на краях препятствий).
+    /// </summary>
+    protected void RebuildMesh(Vector3 originPosition, Vector3 forwardDirection)
     {
-        float halfFov = fov * 0.5f;
-        float angleStep = fov / rayCount;
-        //  const int circleSegments = 32;
+        float halfFov = fovAngle * 0.5f;
+        float angleStep = fovAngle / rayCount;
 
-        int coneVerticesCount = rayCount + 2;
-        //  int circleVerticesCount = circleSegments + 1; 
-
-        Vector3[] vertices = new Vector3[coneVerticesCount];
-        Vector2[] uvs = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3];
+        var vertices = new Vector3[rayCount + 2];
+        var uvs = new Vector2[vertices.Length];
+        var triangles = new int[rayCount * 3];
 
         int vertexIndex = 0;
         int triangleIndex = 0;
 
-        //конус
-        vertices[vertexIndex] = transform.InverseTransformPoint(originPosition);
-        vertexIndex++;
+        vertices[vertexIndex++] = transform.InverseTransformPoint(originPosition);
 
         for (int i = 0; i <= rayCount; i++)
         {
             float angle = -halfFov + i * angleStep;
-            Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * forwardDirection.normalized;
+            Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * forwardDirection;
+            Vector3 currentPoint = CastRay(originPosition, rayDirection);
+            Vector3 finalPoint = currentPoint;
 
-            // интерполяция
-            Vector3 finalPoint;
-
-            if (i == 0)
-            {
-                if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask, QueryTriggerInteraction.Ignore))
-                {
-                    finalPoint = hit.point;
-                }
-                else
-                {
-                    finalPoint = originPosition + rayDirection * viewDistance;
-                }
-            }
-            else
+            if (i > 0)
             {
                 Vector3 prevPoint = vertices[vertexIndex - 1];
-                Vector3 currentPoint;
 
-                if (Physics.Raycast(originPosition, rayDirection, out RaycastHit hit, viewDistance, obstacleMask, QueryTriggerInteraction.Ignore))
-                {
-                    currentPoint = hit.point;
-                }
-                else
-                {
-                    currentPoint = originPosition + rayDirection * viewDistance;
-                }
-
-                if (Vector3.Distance(prevPoint, currentPoint) > 1f)
+                if ((prevPoint - currentPoint).sqrMagnitude > 1f)
                 {
                     float midAngle = -halfFov + (i - 0.5f) * angleStep;
-                    Vector3 midDirection = Quaternion.Euler(0, midAngle, 0) * forwardDirection.normalized;
+                    Vector3 midDirection = Quaternion.Euler(0, midAngle, 0) * forwardDirection;
 
-                    if (Physics.Raycast(originPosition, midDirection, out RaycastHit midHit, viewDistance, obstacleMask, QueryTriggerInteraction.Ignore))
+                    if (CheckObstacle(originPosition, midDirection, viewDistance, out RaycastHit midHit))
                     {
-                        Vector3[] candidates = { prevPoint, midHit.point, currentPoint };
-                        finalPoint = candidates.OrderBy(p => Vector3.Distance(p, originPosition)).First();
+                        Vector3 midPoint = midHit.point;
+
+                        float prevDistance = (prevPoint - originPosition).sqrMagnitude;
+                        float midDistance = (midPoint - originPosition).sqrMagnitude;
+                        float currentDistance = (currentPoint - originPosition).sqrMagnitude;
+
+                        finalPoint = prevPoint;
+                        if (midDistance < prevDistance) finalPoint = midPoint;
+                        if (currentDistance < (finalPoint - originPosition).sqrMagnitude) finalPoint = currentPoint;
                     }
-                    else
-                    {
-                        finalPoint = currentPoint;
-                    }
-                }
-                else
-                {
-                    finalPoint = currentPoint;
                 }
             }
 
@@ -152,185 +111,21 @@ public class FieldOfView : MonoBehaviour
             vertexIndex++;
         }
 
-        //круг
-        /*int circleCenterIndex = vertexIndex;
-        vertices[vertexIndex] = transform.InverseTransformPoint(originPosition); 
-        vertexIndex++;
-
-        for (int i = 0; i < circleSegments; i++)
-        {
-            float angle = (i / (float)circleSegments) * 360f;
-            Vector3 circleDirection = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-            if (Physics.Raycast(originPosition, circleDirection, out RaycastHit hit, detectionRadius, obstacleMask))
-            {
-                vertices[vertexIndex] = transform.InverseTransformPoint(hit.point);
-            }
-            else
-            {
-                Vector3 circlePoint = originPosition + circleDirection * detectionRadius;
-                vertices[vertexIndex] = transform.InverseTransformPoint(circlePoint);
-            }
-            vertexIndex++;
-        }
-    
-
-        for (int i = 0; i < circleSegments; i++)
-        {
-            int currentVertex = circleCenterIndex + 1 + i;
-            int nextVertex = circleCenterIndex + 1 + ((i + 1) % circleSegments);
-
-            triangles[triangleIndex] = circleCenterIndex; 
-            triangles[triangleIndex + 1] = currentVertex; 
-            triangles[triangleIndex + 2] = nextVertex;    
-            triangleIndex += 3;
-        }*/
-
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
-    /// <summary>
-    /// Проверяет, мешает ли стена между охранником и игроком
-    /// </summary>
-    private bool IsPlayerBlocked(float distance)
-    {
-        if (player == null) return true;
-
-        Vector3 dir = player.transform.position - transform.position;
-        dir.y = 0f;
-        float distMag = dir.magnitude;
-
-        if (distMag > distance) return true;
-
-        float[] heights = { 0.6f, 1.0f, 1.7f };
-        int blockedCount = 0;
-
-        foreach (float h in heights)
-        {
-            Vector3 rayOrigin = transform.position - transform.forward * raycastForwardOffset + Vector3.up * h;
-
-            if (Physics.Raycast(rayOrigin, dir.normalized, out RaycastHit hit, distMag, obstacleMask, QueryTriggerInteraction.Ignore))
-            {
-                if (hit.distance < 0.12f) continue;
-                if (hit.collider.gameObject != player)
-                    blockedCount++;
-            }
-        }
-        return blockedCount >= 2;
-    }
 
     /// <summary>
-    ///  Простая проверка видимости
+    /// Возращает точку конца луча
     /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="direction"></param>
     /// <returns></returns>
-    public bool IsPlayerVisible()
-    {
-        if (player == null) return false;
-
-        float dist = Vector3.Distance(transform.position, player.transform.position);
-        if (dist > viewDistance) return false;
-        if (Vector3.Angle(transform.forward, player.transform.position - transform.position) > fov * 0.5f) return false;
-
-        return !IsPlayerBlocked(viewDistance);
-    }
-    /// <summary>
-    /// Помогает определить, какая дб задержка.
-    /// </summary>
-    public DetectionType CheckForDetection()
-    {
-        if (player == null)
-        {
-            visibleFramesCount = 0;
-            return DetectionType.None;
-        }
-
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-        Vector3 directionToPlayer = player.transform.position - transform.position;
-        directionToPlayer.y = 0f;
-
-        bool isVisible = false;
-        if (distance <= detectionRadius)
-        {
-            bool bothNearWall = IsNearWall(0.4f) && IsPlayerNearWall(0.4f);
-
-            if (!IsPlayerBlocked(detectionRadius))
-            {
-                if (bothNearWall)
-                {
-                    Vector3 extraOrigin = transform.position - transform.forward * raycastForwardOffset + Vector3.up * 1.3f;
-
-                    if (Physics.Raycast(extraOrigin, directionToPlayer.normalized, out RaycastHit extraHit, distance, obstacleMask, QueryTriggerInteraction.Ignore))
-                    {
-                        if (extraHit.collider.gameObject != player)
-                        {
-                        }
-                        else
-                        {
-                            isVisible = true;
-                        }
-                    }
-                    else
-                    {
-                        isVisible = true;
-                    }
-                }
-                else
-                {
-                    isVisible = true;
-                }
-            }
-        }
-        else if (distance <= viewDistance &&
-                 Vector3.Angle(transform.forward, directionToPlayer.normalized) <= fov * 0.5f)
-        {
-            if (!IsPlayerBlocked(viewDistance))
-                isVisible = true;
-        }
-        if (isVisible)
-        {
-            visibleFramesCount++;
-            if (visibleFramesCount >= detectionFramesRequired)
-            {
-                return (distance <= detectionRadius)
-                    ? DetectionType.InstantDeath
-                    : DetectionType.AlertDelay;
-            }
-        }
-        else
-        {
-            visibleFramesCount = 0;
-        }
-
-        return DetectionType.None;
-    }
-    /// <summary>Проверяет, прижат ли охранник к стене</summary>
-    private bool IsNearWall(float distance)
-    {
-        Vector3 origin = transform.position - transform.forward * raycastForwardOffset + Vector3.up * 1.0f;
-        return Physics.Raycast(origin, transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
-               Physics.Raycast(origin, -transform.forward, distance, obstacleMask, QueryTriggerInteraction.Ignore);
-    }
-    /// <summary>Проверяет, прижат ли игрок к стене</summary>
-    private bool IsPlayerNearWall(float distance)
-    {
-        if (player == null) return false;
-        Vector3 toPlayer = player.transform.position - transform.position;
-        toPlayer.y = 0f;
-        Vector3 playerOrigin = player.transform.position - toPlayer.normalized * raycastForwardOffset + Vector3.up * 1.0f;
-
-        return Physics.Raycast(playerOrigin, toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore) ||
-               Physics.Raycast(playerOrigin, -toPlayer.normalized, distance, obstacleMask, QueryTriggerInteraction.Ignore);
-    }
-
-    /// <summary>
-    /// Типы дистанции/реакции на игрока.
-    /// </summary>
-    public enum DetectionType
-    {
-        None,
-        AlertDelay,
-        InstantDeath
-    }
+    private Vector3 CastRay(Vector3 origin, Vector3 direction)
+        => CheckObstacle(origin, direction, viewDistance, out RaycastHit hit)
+            ? hit.point
+            : origin + direction * viewDistance;
 }

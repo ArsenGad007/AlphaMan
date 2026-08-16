@@ -19,7 +19,7 @@ public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
     private CharacterController characterController;
     private Vector3 smooth_movement;
     private float verticalVelocity;
-    
+
     protected override void Awake()
     {
         base.Awake();

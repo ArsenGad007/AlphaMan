@@ -14,7 +14,7 @@ public class GuardPatrol : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private Transform[] patrolPoints;
-    [SerializeField] private FieldOfView fieldOfView;
+    [SerializeField] private GuardFieldOfView fieldOfView;
     [SerializeField] private Transform playerTransform;
 
     #endregion
@@ -192,16 +192,16 @@ public class GuardPatrol : MonoBehaviour
     /// </summary>
     private void PlayerCheck()
     {
-        FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
+        GuardFieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
 
-        if (detection == FieldOfView.DetectionType.InstantDeath)
+        if (detection == GuardFieldOfView.DetectionType.InstantDeath)
         {
             lastSeenPlayerPosition = fieldOfView.PlayerTransform.position;
             StartTurnAndDie(lastSeenPlayerPosition);
             return;
         }
 
-        if (detection == FieldOfView.DetectionType.None)
+        if (detection == GuardFieldOfView.DetectionType.None)
         {
             TryResetHiding();
 
@@ -334,7 +334,7 @@ public class GuardPatrol : MonoBehaviour
         }
         else // State.Searching
         {
-            if (fieldOfView.CheckForDetection() != FieldOfView.DetectionType.None)
+            if (fieldOfView.CheckForDetection() != GuardFieldOfView.DetectionType.None)
             {
                 StartTurnAndDie(lastSeenPlayerPosition);
                 return;
@@ -361,9 +361,9 @@ public class GuardPatrol : MonoBehaviour
         if (playerTransform == null)
             return;
 
-        FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
-        bool playerVisible = detection != FieldOfView.DetectionType.None
-                          && detection != FieldOfView.DetectionType.InstantDeath;
+        GuardFieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
+        bool playerVisible = detection != GuardFieldOfView.DetectionType.None
+                          && detection != GuardFieldOfView.DetectionType.InstantDeath;
 
         if (playerVisible)
         {
@@ -380,7 +380,7 @@ public class GuardPatrol : MonoBehaviour
 
         float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        if (distToPlayer < MELEE_KILL_RADIUS)
+        if (distToPlayer < MELEE_KILL_RADIUS && !IsPlayerBehindWall(distToPlayer))
         {
             StartTurnAndDie(playerTransform.position);
             return;
