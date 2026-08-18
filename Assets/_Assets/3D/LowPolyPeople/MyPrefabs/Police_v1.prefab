@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 9217781428102828225}
   - component: {fileID: 5101394246199950730}
   - component: {fileID: 4724280375729903123}
-  - component: {fileID: 3941163481570192511}
   m_Layer: 7
   m_Name: Police_v1
   m_TagString: Untagged
@@ -33,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 7737903137981646936}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -16, y: 70.01, z: 34}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -92,8 +91,7 @@ MeshRenderer:
   m_SmallMeshCulling: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 5ab04d90f9e9cd646a3bd2193331a761, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -135,7 +133,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1.7
+  m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &9217781428102828225
@@ -150,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc1115def15ca0843ac1546fb224ba68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guardPatrol: {fileID: 3941163481570192511}
+  guardPatrol: {fileID: 0}
   animationChangeDelay: 0.1
   animator: {fileID: 2171043903933155193}
 --- !u!114 &5101394246199950730
@@ -198,26 +196,6 @@ MonoBehaviour:
   player: {fileID: 0}
   instantDetectionRadius: 1.4
   updateMeshInterval: 0
---- !u!114 &3941163481570192511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737903137981646936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab224d567c8d19740984f417a6a8ba34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 2171043903933155193}
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  fieldOfView: {fileID: 4724280375729903123}
-  playerTransform: {fileID: 0}
 --- !u!1001 &5231216772238514506
 PrefabInstance:
   m_ObjectHideFlags: 0

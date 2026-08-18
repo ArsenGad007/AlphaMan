@@ -23,7 +23,7 @@ public class GuardFieldOfView : FieldOfView
     public Transform PlayerTransform => player?.transform;
 
     /// <summary>
-    /// Обновляет визуальный меш и проверяет обнаружение игрока.
+    /// Обновляет визуальный меш
     /// </summary>
     public void UpdateFOV(Vector3 originPosition, Vector3 forwardDirection)
     {
@@ -72,6 +72,35 @@ public class GuardFieldOfView : FieldOfView
         }
 
         return blockedCount >= 2;
+    }
+
+    /// <summary>
+    /// Проверяет есть ли рядом стена
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    private bool IsNearWall(float distance)
+    {
+        Vector3 origin = transform.position + Vector3.up;
+        return CheckObstacle(origin, transform.forward, distance) || CheckObstacle(origin, -transform.forward, distance);
+    }
+
+    /// <summary>
+    /// Проверяет есть ли игрок рядом с стеной
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    private bool IsPlayerNearWall(float distance)
+    {
+        if (!player) return false;
+
+        Vector3 toPlayer = player.transform.position - transform.position;
+        toPlayer.y = 0f;
+        toPlayer.Normalize();
+
+        Vector3 playerOrigin = player.transform.position + Vector3.up;
+
+        return CheckObstacle(playerOrigin, toPlayer, distance) || CheckObstacle(playerOrigin, -toPlayer, distance);
     }
 
     /// <summary>
@@ -133,31 +162,52 @@ public class GuardFieldOfView : FieldOfView
     }
 
     /// <summary>
-    /// Проверяет есть ли рядом стена
+    /// Простая проверка, видит ли охранник игрока в данный момент.
     /// </summary>
-    /// <param name="distance"></param>
-    /// <returns></returns>
-    private bool IsNearWall(float distance)
+    public bool IsPlayerInFOV()
     {
-        Vector3 origin = transform.position + Vector3.up;
-        return CheckObstacle(origin, transform.forward, distance) || CheckObstacle(origin, -transform.forward, distance);
-    }
-
-    /// <summary>
-    /// Проверяет есть ли игрок рядом с стеной
-    /// </summary>
-    /// <param name="distance"></param>
-    /// <returns></returns>
-    private bool IsPlayerNearWall(float distance)
-    {
-        if (!player) return false;
+        if (player == null) 
+            return false;
 
         Vector3 toPlayer = player.transform.position - transform.position;
-        toPlayer.y = 0f;
-        toPlayer.Normalize();
+        float distance = toPlayer.magnitude;
 
-        Vector3 playerOrigin = player.transform.position + Vector3.up;
+        if (distance > viewDistance) 
+            return false;
 
-        return CheckObstacle(playerOrigin, toPlayer, distance) || CheckObstacle(playerOrigin, -toPlayer, distance);
+        Vector3 directionToPlayer = toPlayer / distance;
+
+        // Проверка угла (только по горизонтали)
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+        forward.Normalize();
+        Vector3 dirFlat = directionToPlayer;
+        dirFlat.y = 0f;
+        dirFlat.Normalize();
+
+        if (Vector3.Dot(forward, dirFlat) < CosHalfFov) 
+            return false;
+
+        // Проверка препятствий по трём высотам 
+        int blockedCount = 0;
+        foreach (float height in CheckHeights)
+        {
+            Vector3 origin = transform.position + Vector3.up * height;
+            Vector3 target = player.transform.position + Vector3.up * height;
+            Vector3 direction = target - origin;
+            float dist = direction.magnitude;
+
+            if (dist > viewDistance)
+            {
+                blockedCount++;
+                continue;
+            }
+
+            if (CheckObstacle(origin, direction.normalized, dist))
+                blockedCount++;
+        }
+
+        // Если хотя бы две высоты не заблокированы – игрок виден
+        return blockedCount < 2;
     }
 }

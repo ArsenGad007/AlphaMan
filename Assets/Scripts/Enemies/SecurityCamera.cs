@@ -10,20 +10,11 @@ public class SecurityCamera : FieldOfView
     [Header("Тест")]
     [SerializeField] private bool debugUpdateFOV = false;
 
-    private Material Green;
-    private Material Red;
     private bool isTriggered = false;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        Green = Resources.Load<Material>("FOV_mat/FOV_Walking");
-        Red = Resources.Load<Material>("FOV_mat/FOV_Danger");
-    }
 
     private void Start()
     {
-        SetMaterial(Green);
+        SetGreenMaterial();
         RebuildMesh(GetRayStartPoint(), transform.forward);
     }
 
@@ -35,7 +26,7 @@ public class SecurityCamera : FieldOfView
         if (!isTriggered && IsPlayerVisible())
         {
             isTriggered = true;
-            SetMaterial(Red);
+            SetRedMaterial();
             GameOver.Instance.GameOverPanel();
         }
     }

@@ -9,7 +9,7 @@ public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
     [SerializeField] [Min(0)] private float speedWalkMove = 2.0f;
     [SerializeField] [Min(0)] private float minSpeedRunMove = 5.0f;
     [SerializeField] [Min(0)] private float maxSpeedRunMove = 6.5f;
-    [SerializeField] [Min(0)] private float speedRotate = 15.0f;
+    [SerializeField] [Min(0)] private float speedRotate = 10.0f;
     [SerializeField] [Min(0)] private float minAcceleration = 20.0f;
     [SerializeField] [Min(0)] private float maxAcceleration = 30.0f;
     [SerializeField] private float gravity = -9.81f;

@@ -42,7 +42,7 @@ public class PlayerAnimator : Singleton<PlayerAnimator>, ISpeedUpgradable
         animator.ResetTrigger(currentAnimation);
         animator.SetTrigger(tag);
         currentAnimation = tag;
-        Debug.Log("Current animation: " + tag);
+        // Debug.Log("Current animation: " + tag);
     }
 
     public void SpeedProgressUpdate() 
