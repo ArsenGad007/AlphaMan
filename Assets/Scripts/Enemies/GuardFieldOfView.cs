@@ -162,6 +162,22 @@ public class GuardFieldOfView : FieldOfView
     }
 
     /// <summary>
+    /// Проверяет, находится ли персонаж в радиусе мгновенного обнаружения (по горизонтали).
+    /// </summary>
+    /// <param name="person">Transform проверяемого персонажа.</param>
+    /// <returns>True, если расстояние по горизонтали меньше или равно instantDetectionRadius.</returns>
+    public bool IsPersonInInstantRange(Transform person)
+    {
+        if (person == null)
+            return false;
+
+        Vector3 delta = person.position - transform.position;
+        delta.y = 0f;   // Игнорируем разницу по высоте
+
+        return delta.sqrMagnitude <= instantDetectionRadius * instantDetectionRadius;
+    }
+
+    /// <summary>
     /// Простая проверка, видит ли охранник игрока в данный момент.
     /// </summary>
     public bool IsPlayerInFOV()

@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using static UnityEngine.UI.Image;
 
 public class GuardController : MonoBehaviour
 {
@@ -25,6 +27,7 @@ public class GuardController : MonoBehaviour
 
     private int currentNumPoint;
     private bool pointReached = false;
+    private Vector3 lastSeenPlayer;
 
     /// <summary>
     /// Текущее состояние охранника
@@ -56,8 +59,8 @@ public class GuardController : MonoBehaviour
     {
         switch (currentState)
         {
-            case State.Walking: Walking(); break;
-            case State.Chase: Chase(); break;
+            case State.Walking:     Walking();      break;
+            case State.Chase:       Chase();        break;
         }
 
         guardFOV?.UpdateFOV(transform.position, transform.forward);
@@ -68,8 +71,7 @@ public class GuardController : MonoBehaviour
         if (agent.pathPending || agent.pathStatus == NavMeshPathStatus.PathInvalid)
             return false;
 
-        return agent.remainingDistance <= agent.stoppingDistance
-               && agent.velocity.sqrMagnitude < 0.01f;
+        return agent.remainingDistance <= agent.stoppingDistance && agent.velocity.sqrMagnitude < 0.01f;
     }
 
     /// <summary>
@@ -95,6 +97,7 @@ public class GuardController : MonoBehaviour
 
         if (guardFOV.IsPlayerInFOV())
         {
+            lastSeenPlayer = player.position;
             guardFOV.SetYellowMaterial();
             currentState = State.Chase;
 
@@ -108,20 +111,77 @@ public class GuardController : MonoBehaviour
     /// </summary>
     private void Chase()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        float distance = Vector3.Distance(transform.position, player.position) + 1f;    // +1f берем с запасом
 
-        //if (distance > 1.5f)
-        //    transform.position = Vector3.MoveTowards(transform.position, player.position, 3f * Time.deltaTime);
+        Vector3 to_player = player.transform.position - transform.position;
+        bool check_obstacle = Physics.Raycast(transform.position, to_player, distance);
+        if (!check_obstacle)
+            lastSeenPlayer = player.position;
 
-        agent.SetDestination(player.position);
+        agent.SetDestination(lastSeenPlayer);
 
-        if (IsAgentAtDestination())
+        if (guardFOV.IsPlayerInFOV() && guardFOV.IsPersonInInstantRange(player))
         {
             guardFOV.SetRedMaterial();
             currentState = State.Stop;
             GameOver.Instance?.GameOverPanel();
         }
+        else if (IsAgentAtDestination())
+        {
+            currentState = State.Searching;
+            Searching();
+        }         
     }
+
+    private void Searching() => StartCoroutine(LookAround());
+
+    private IEnumerator LookAround()
+    {
+        agent.isStopped = true;
+        agent.updateRotation = false;
+
+        yield return RotateBy(70);                                              // Поворот вправо на 90°       
+        yield return new WaitForSeconds(0.5f);                                  // Пауза
+                                                                                // 
+        yield return RotateBy(-140);                                                      
+        yield return new WaitForSeconds(0.5f);           
+        
+        yield return RotateBy(70);                                              
+
+        agent.updateRotation = true;
+        agent.isStopped = false;
+
+        agent.speed = speedWalkMove;
+        agent.stoppingDistance = pointStoppingDistance;
+
+        agent.SetDestination(wayPoints[currentNumPoint]);
+
+        guardFOV.SetGreenMaterial();
+        currentState = State.Walking;                                           // Возвращаемся в исходное положение
+    }
+
+    private IEnumerator RotateBy(float degrees, float duration = 1.5f)
+    {
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = startRotation * Quaternion.Euler(0f, degrees, 0f);
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Smoothstep даёт плавный разгон и угасание (ease-in-out)
+            float smoothT = t * t * (3f - 2f * t);
+
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, smoothT);
+            yield return null;
+        }
+
+        transform.rotation = targetRotation;
+    }
+
 
     private void OnDrawGizmosSelected()
     {
