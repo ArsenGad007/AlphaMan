@@ -4,9 +4,9 @@ using UnityEngine;
 public abstract class FieldOfView : MonoBehaviour
 {
     [Header("Основные настройки")]
-    [SerializeField][Min(0)] protected float viewDistance = 8f;         // дальность
+    [SerializeField][Min(0)] protected float viewDistance = 7f;         // дальность
     [SerializeField][Range(0, 180)] protected float fovAngle = 90f;     // ширина (в градусах)
-    [SerializeField][Range(1, 50)] protected int rayCount = 10;         // кол-во лучей, на которые разбивается угол
+    [SerializeField][Range(1, 100)] protected int rayCount = 50;        // кол-во лучей, на которые разбивается угол
     [SerializeField] protected LayerMask obstacleMask;                  // маска слоёв, которые лучи считают препятствием
     [SerializeField] protected GameObject player;
 
