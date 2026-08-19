@@ -420,7 +420,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   player: {fileID: 1856030064}
-  instantDetectionRadius: 1.3
   updateMeshInterval: 0
 --- !u!23 &162722506
 MeshRenderer:
@@ -1107,6 +1106,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1856030064}
+    - target: {fileID: 4724280375729903123, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+      propertyPath: rayCount
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
       propertyPath: m_Name
       value: Police_v1 (1)
@@ -1609,7 +1612,7 @@ NavMeshAgent:
   m_AngularSpeed: 720
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 0
   m_Height: 1.7
   m_BaseOffset: 0
@@ -1628,10 +1631,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedWalkMove: 2
-  speedRunMove: 5
+  speedRunMove: 4.5
+  gameOverRadius: 1.3
+  walkDetectionRadius: 1.5
+  runDetectionRadius: 3
   pointStoppingDistance: 0.1
-  playerStoppingDistance: 1.5
+  playerStoppingDistance: 0
+  lostSightTimeout: 1
+  huntPathUpdateFactor: 0.03
   player: {fileID: 1653069414}
+  gameInput: {fileID: 431137513}
   wayPoints:
   - {x: -10, y: 0, z: 0}
   - {x: -1, y: 0, z: 0}
@@ -1728,9 +1737,25 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1856030064}
+    - target: {fileID: 4724280375729903123, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+      propertyPath: rayCount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724280375729903123, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+      propertyPath: viewDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724280375729903123, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+      propertyPath: updateMeshInterval
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
       propertyPath: m_Name
       value: Police_v1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8578265744850600937, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
       propertyPath: m_Materials.Array.size
@@ -1744,39 +1769,44 @@ PrefabInstance:
       propertyPath: guardPatrol
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 9217781428102828225, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+      propertyPath: minAnimationInterval
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1452420852}
+      insertIndex: 5
+      addedObject: {fileID: 1452420862}
     - targetCorrespondingSourceObject: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1452420862}
+      addedObject: {fileID: 1452420852}
   m_SourcePrefab: {fileID: 100100000, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
---- !u!1 &1452420851 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
-  m_PrefabInstance: {fileID: 1452420850}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1452420852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452420851}
+  m_GameObject: {fileID: 7737903139282806442}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56c46ad1f620da04a9496e50e75094e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speedWalkMove: 2
-  speedRunMove: 5
+  speedRunMove: 4.5
+  gameOverRadius: 1.3
+  walkDetectionRadius: 1.5
+  runDetectionRadius: 3
   pointStoppingDistance: 0.1
-  playerStoppingDistance: 1.5
+  playerStoppingDistance: 0
+  lostSightTimeout: 0.8
+  huntPathUpdateFactor: 0.03
   player: {fileID: 1653069414}
+  gameInput: {fileID: 431137513}
   wayPoints:
   - {x: -5.16, y: 1, z: 0}
   - {x: -0.77, y: 1, z: 0}
@@ -1787,7 +1817,7 @@ NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452420851}
+  m_GameObject: {fileID: 7737903139282806442}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.45
@@ -3114,6 +3144,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7737903139282806442 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7737903137981646936, guid: 83d7cd3673ce706459d3ee817011a7dc, type: 3}
+  m_PrefabInstance: {fileID: 1452420850}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

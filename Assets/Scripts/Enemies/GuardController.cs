@@ -4,35 +4,55 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(GuardFieldOfView), typeof(NavMeshAgent))]
 public class GuardController : MonoBehaviour
 {
     /// <summary>
     /// Состояния охранника
     /// </summary>
-    public enum State { Walking, Chase, Searching, Returning, Stop }
+    public enum State { Walking, Hunt, Searching, Returning, Stop }
 
+    [Header("Скорость")]
     [SerializeField][Min(0)] private float speedWalkMove = 2.0f;
     [SerializeField][Min(0)] private float speedRunMove = 4.5f;
 
+    [Header("Радиусы обнаружения")]
+    [Tooltip("Радиус зоны проигрыша (игрок проигрывает, если находится в этом радиусе и в зоне поля зрения)")]  
+    [SerializeField] private float gameOverRadius = 1.3f;
+
+    [Tooltip("Радиус зоны обнаружения, если игрок ходит (или стоит)")]
+    [SerializeField] private float walkDetectionRadius = 1.5f;
+
+    [Tooltip("Радиус зоны обнаружения, если игрок бежит")]
+    [SerializeField] private float runDetectionRadius = 3f;
+
+    [Header("Настройки NavMeshAgent")]
     [Tooltip("Дистанция, при которой NavMeshAgent считается дошедшим до точки патрулирования (way point)")]
     [SerializeField][Min(0)] private float pointStoppingDistance = 0.1f;
 
     [Tooltip("Дистанция, при которой NavMeshAgent считается дошедшим до игрока")]
     [SerializeField][Min(0)] private float playerStoppingDistance = 1.5f;
 
-    [Tooltip("Сколько секунд знаем позицию игрока после его потери")]
-    [SerializeField][Range(0, 5)] private float lostSightTimeout = 1f; 
+    [Header("Настройки преследования")]
+    [Tooltip("Кол-во секунд, в течении которых знаем позицию игрока после его потери")]
+    [SerializeField][Range(0, 5)] private float lostSightTimeout = 1f;
+
+    [Tooltip("Чем больше, тем реже обновляет путь при преследовании")]
+    [SerializeField][Range(0, 0.1f)] private float huntPathUpdateFactor = 0.03f; 
 
     [SerializeField] private Transform player;
+    [SerializeField] private GameInput gameInput;
     [SerializeField] private List<Vector3> wayPoints;
     
     private GuardFieldOfView guardFOV;
     private NavMeshAgent agent;
 
-    private int currentNumPoint;
-    private float lastSeenTime = 0f;
-    private bool pointReached = false;
-    private Vector3 lastSeenPlayer;
+    private int currentNumPoint;            // Текущий номер точки (для wayPoints)
+    private float lastTimeSeenPlayer = 0f;  // Последнее время, когда видели игрока
+    private float nextPathUpdateTime = 0f;  // Время обновления следующего пути
+    private bool pointReached = false;      
+    private Vector3 lastPosPlayer;          // Последняя позиция игрока
+    private int layerMask;                  // Маска слоев для Raycast
 
     /// <summary>
     /// Текущее состояние охранника
@@ -47,6 +67,7 @@ public class GuardController : MonoBehaviour
         if (wayPoints != null && wayPoints.Count != 0)
             currentNumPoint = 0;
 
+        layerMask = ~LayerMask.GetMask("Guard");        // Убираем слой охранников, чтобы не считали друг друга препятствием
         agent = GetComponent<NavMeshAgent>();
         guardFOV = GetComponent<GuardFieldOfView>();
     }
@@ -60,20 +81,20 @@ public class GuardController : MonoBehaviour
     {
         switch (currentState)
         {
-            case State.Walking:     Walking();      break;
-            case State.Chase:       Chase();        break;
+            case State.Walking: Walking();  break;
+            case State.Hunt:    Hunt();     break;
             case State.Searching:
-                if (guardFOV.IsPlayerInFOV())
+                if (guardFOV.IsPlayerInFOV() || CanDetectPlayer())
                 {
                     StopAllCoroutines();
                     StopSearching();
                     EnterRunningState();
-                    currentState = State.Chase;
+                    currentState = State.Hunt;
                 }               
                 break;
         }
 
-        guardFOV?.UpdateFOV(transform.position, transform.forward);
+        guardFOV.UpdateFOV(transform.position, transform.forward);
     }
 
     /// <summary>
@@ -94,7 +115,7 @@ public class GuardController : MonoBehaviour
     {
         if (IsAgentAtDestination())
         {
-            if (!pointReached)  // Защита если точки находятся близко
+            if (!pointReached)  // Защита если точки находятся близко (чтобы не вызывать все время SetDestination)
             {
                 currentNumPoint++;
 
@@ -108,42 +129,38 @@ public class GuardController : MonoBehaviour
         else
             pointReached = false;
 
-        if (guardFOV.IsPlayerInFOV())
+        if (guardFOV.IsPlayerInFOV() || CanDetectPlayer())
         {
             EnterRunningState();
-            currentState = State.Chase;
+            currentState = State.Hunt;
         }
     }
 
     /// <summary>
     /// Преследование игрока
     /// </summary>
-    private void Chase()
+    private void Hunt()
     {
-        Vector3 eye_offset = Vector3.up * 1.5f;    
-        Vector3 from = transform.position + eye_offset;
-        Vector3 to = player.position + eye_offset;
-        Vector3 dir = to - from;
-
-        float distance = dir.magnitude + 0.1f;          // 0.1f берем с запасом
-        int layer_mask = ~LayerMask.GetMask("Guard");   // Убираем слой охранников, чтобы не считали друг друга препятствием
-
-        RaycastHit hit_info;
-        bool check_hit = Physics.Raycast(from, dir.normalized, out hit_info, distance, layer_mask);
-        if (check_hit && hit_info.transform == player.transform)
+        float distance;
+        if (CheckObstacleToPlayerDir(out distance))
         {
-            lastSeenTime = Time.time;
-            lastSeenPlayer = player.position;
+            lastTimeSeenPlayer = Time.time;
+            lastPosPlayer = player.position;
         }
-        else if (Time.time - lastSeenTime < lostSightTimeout)   // Идем к позиции игрока после потери в течении lostSightTimeout
-            lastSeenPlayer = player.position;
+        else if (Time.time - lastTimeSeenPlayer < lostSightTimeout)   // Идем к позиции игрока после потери в течении lostSightTimeout
+            lastPosPlayer = player.position;
 
-        agent.SetDestination(lastSeenPlayer);
-
-        if (guardFOV.IsPlayerInFOV() && guardFOV.IsPersonInInstantRange(player))
+        if (Time.time >= nextPathUpdateTime)
+        {
+            agent.SetDestination(lastPosPlayer);
+            nextPathUpdateTime = Time.time + distance * huntPathUpdateFactor;  
+        }
+        
+        if (guardFOV.IsPlayerInFOV() && distance <= gameOverRadius)
         {
             guardFOV.SetRedMaterial();
             currentState = State.Stop;
+            agent.isStopped = true;
             GameOver.Instance?.GameOverPanel();
         }
         else if (IsAgentAtDestination())
@@ -161,13 +178,51 @@ public class GuardController : MonoBehaviour
         StartCoroutine(LookAround());
     }
 
+    //////////////////////////////////////// Вспомогательные методы //////////////////////////////////////// 
+
     /// <summary>
     /// Остановить поиск игрока
     /// </summary>
     private void StopSearching()
     {
         agent.isStopped = false;
-        agent.updateRotation = true;   
+        agent.updateRotation = true;
+    }
+    /// <summary>
+    /// Можно ли обнаружить игрока
+    /// </summary>
+    /// <returns></returns>
+    private bool CanDetectPlayer()
+    {
+        if (!CheckObstacleToPlayerDir(out float distance))
+            return false;
+
+        float detectionRadius = gameInput.IsRunning()
+            ? runDetectionRadius
+            : walkDetectionRadius;
+
+        return distance <= detectionRadius;
+    }
+
+    /// <summary>
+    /// Вычисляет есть ли препятствие между охранником и игроком
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    private bool CheckObstacleToPlayerDir(out float distance)
+    {
+        Vector3 eye_offset = Vector3.up * 1.5f;
+        Vector3 from = transform.position + eye_offset;
+        Vector3 to = player.position + eye_offset;
+        Vector3 dir = to - from;
+
+        distance = dir.magnitude;     
+
+        RaycastHit hit_info;
+        if (Physics.Raycast(from, dir.normalized, out hit_info, distance + 0.1f, layerMask))  // 0.1f в distance берем с запасом
+            return hit_info.transform == player.transform;
+
+        return false;            
     }
 
     /// <summary>
@@ -193,8 +248,8 @@ public class GuardController : MonoBehaviour
         agent.speed = speedRunMove;
         agent.stoppingDistance = playerStoppingDistance;
 
-        lastSeenPlayer = player.position;
-        agent.SetDestination(lastSeenPlayer);
+        lastPosPlayer = player.position;
+        agent.SetDestination(lastPosPlayer);
     }
 
     /// <summary>

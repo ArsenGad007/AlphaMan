@@ -20,7 +20,7 @@ public class GuardAnimator : MonoBehaviour
     {
         string next_animation = "idle";
 
-        if (guardController?.currentState == GuardController.State.Chase)
+        if (guardController?.currentState == GuardController.State.Hunt)
             next_animation = "run";
         else if (guardController?.currentState == GuardController.State.Walking)
             next_animation = "walk";

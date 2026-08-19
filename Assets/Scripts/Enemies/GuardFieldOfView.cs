@@ -3,13 +3,11 @@
 public class GuardFieldOfView : FieldOfView
 {
     public enum DetectionType { None, AlertDelay, InstantDeath }    // Состояние обнаружения у охранника
-
-    [Tooltip("Радиус ближней зоны мгновенного обнаружения")]
-    [SerializeField] private float instantDetectionRadius = 1.3f;  
     
     [Tooltip("Не пересчитывать меш чаще, чем раз в N секунд.")]
-    [SerializeField, Min(0)] private float updateMeshInterval = 0.0f;   
+    [SerializeField, Min(0)] private float updateMeshInterval = 0.0f;
 
+    private float instantDetectionRadius = 1.3f;    // УДАЛИТЬ!!!
 
     private Vector3 lastPosition = Vector3.zero;                    // Хранит позицию охранника на момент последней перестройки меша
     private Vector3 lastForward = Vector3.forward;                  // Хранит направление охранника на момент последней перестройки меша
