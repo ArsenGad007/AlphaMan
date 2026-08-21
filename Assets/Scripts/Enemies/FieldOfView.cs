@@ -3,15 +3,17 @@ using UnityEngine;
 
 public abstract class FieldOfView : MonoBehaviour
 {
-    [Header("Основные настройки")]
-    [SerializeField][Min(0)] protected float viewDistance = 7f;         // дальность
-    [SerializeField][Range(0, 180)] protected float fovAngle = 90f;     // ширина (в градусах)
-    [SerializeField][Range(1, 100)] protected int rayCount = 50;        // кол-во лучей, на которые разбивается угол
-    [SerializeField] protected LayerMask obstacleMask;                  // маска слоёв, которые лучи считают препятствием
-    [SerializeField] protected GameObject player;
+    [SerializeField] protected LayerMask obstacleMask;                 // маска слоёв, которые лучи считают препятствием
 
-    protected Mesh meshFOV;        // меш конуса обзора
-    protected Renderer rendFOV;    // рендер конуса обзора
+    [Header("Настройки поля зрения")]
+    [SerializeField][Min(0)] protected float viewDistance = 7f;        // дальность
+    [SerializeField][Range(0, 180)] protected float fovAngle = 90f;    // ширина (в градусах)
+    [SerializeField][Range(1, 180)] protected int maxRayCount = 50;    // максимальное кол-во лучей, на которые разбивается угол
+
+    protected Mesh meshFOV;     // меш конуса обзора
+    protected Renderer rendFOV; // рендер конуса обзора
+
+    protected GameObject player;
 
     protected static Material greenMat;
     protected static Material yellowMat;
@@ -21,15 +23,34 @@ public abstract class FieldOfView : MonoBehaviour
     
     protected float CosHalfFov => Mathf.Cos(fovAngle * 0.5f * Mathf.Deg2Rad);   // Косинус половины угла обзора. Используется для проверки "виден ли игрок"
 
+    protected int rayCount;
+
+    // Переиспользуемые буферы в RebuildMesh
+    private List<Vector3> pointsBuffer;
+    private Vector3[] verticesBuffer;
+    private Vector3[] normalsBuffer;
+    private int[] trianglesBuffer;
+    private int lastTriangleCount = -1;
+
     protected virtual void Awake()
     {
         meshFOV = new Mesh();
         GetComponent<MeshFilter>().mesh = meshFOV;
+        meshFOV.MarkDynamic();
+
         rendFOV = GetComponent<Renderer>();
 
         if (!greenMat)  greenMat = Resources.Load<Material>("FOV_mat/FOV_Walking");
         if (!yellowMat) yellowMat = Resources.Load<Material>("FOV_mat/FOV_Alert");
         if (!redMat)    redMat = Resources.Load<Material>("FOV_mat/FOV_Danger");
+
+        rayCount = maxRayCount;
+        pointsBuffer = new List<Vector3>(rayCount + 16);      
+    }
+
+    protected virtual void Start()
+    {
+        player = PlayerController.Instance.gameObject;
     }
 
     /// <summary>
@@ -74,17 +95,18 @@ public abstract class FieldOfView : MonoBehaviour
     /// </summary>
     protected void RebuildMesh(Vector3 origin, Vector3 forward)
     {
-        float halfFov = fovAngle * 0.5f;
+        float half_fov = fovAngle * 0.5f;
         float step = fovAngle / rayCount;
 
-        List<Vector3> points = new List<Vector3>() { origin };
+        pointsBuffer.Clear();
+        pointsBuffer.Add(origin);
 
-        float previousDistance = viewDistance;
-        bool previousHit = false;
+        float previous_distance = viewDistance;
+        bool previous_hit = false;
 
         for (int i = 0; i <= rayCount; i++)
         {
-            float angle = -halfFov + step * i;
+            float angle = -half_fov + step * i;
             Vector3 direction = Quaternion.Euler(0f, angle, 0f) * forward;
 
             bool hit = Physics.Raycast(
@@ -96,22 +118,21 @@ public abstract class FieldOfView : MonoBehaviour
                 QueryTriggerInteraction.Ignore
             );
 
-            Vector3 currentPoint = hit ? hitInfo.point : origin + direction * viewDistance;
+            Vector3 current_point = hit ? hitInfo.point : origin + direction * viewDistance;
+            float current_distance = hit ? hitInfo.distance : viewDistance;
 
-            float currentDistance = hit ? hitInfo.distance : viewDistance;
-
-            if (i > 0 && previousHit != hit && Mathf.Abs(previousDistance - currentDistance) > 0.5f)
+            if (i > 0 && previous_hit != hit && Mathf.Abs(previous_distance - current_distance) > 0.5f)
             {
-                float leftAngle = angle - step;
-                float rightAngle = angle;
+                float left_angle = angle - step;
+                float right_angle = angle;
 
                 for (int j = 0; j < 5; j++)
                 {
-                    float middleAngle = (leftAngle + rightAngle) * 0.5f;
+                    float middle_angle = (left_angle + right_angle) * 0.5f;
 
-                    Vector3 middleDirection = Quaternion.Euler(0f, middleAngle, 0f) * forward;
+                    Vector3 middleDirection = Quaternion.Euler(0f, middle_angle, 0f) * forward;
 
-                    bool middleHit = Physics.Raycast(
+                    bool middle_hit = Physics.Raycast(
                         origin,
                         middleDirection,
                         out _,
@@ -120,51 +141,67 @@ public abstract class FieldOfView : MonoBehaviour
                         QueryTriggerInteraction.Ignore
                     );
 
-                    if (middleHit == previousHit)
-                        leftAngle = middleAngle;
+                    if (middle_hit == previous_hit)
+                        left_angle = middle_angle;
                     else
-                        rightAngle = middleAngle;
+                        right_angle = middle_angle;
                 }
 
-                Vector3 boundaryDirection = Quaternion.Euler(0f, (leftAngle + rightAngle) * 0.5f, 0f) * forward;
+                Vector3 boundary_direction = Quaternion.Euler(0f, (left_angle + right_angle) * 0.5f, 0f) * forward;
 
                 if (Physics.Raycast(
                     origin,
-                    boundaryDirection,
-                    out RaycastHit boundaryHit,
+                    boundary_direction,
+                    out RaycastHit boundary_hit,
                     viewDistance,
                     obstacleMask,
                     QueryTriggerInteraction.Ignore))
                 {
-                    points.Add(boundaryHit.point);
+                    pointsBuffer.Add(boundary_hit.point);
                 }
                 else
-                    points.Add(origin + boundaryDirection * viewDistance);
+                    pointsBuffer.Add(origin + boundary_direction * viewDistance);
             }
 
-            points.Add(currentPoint);
+            pointsBuffer.Add(current_point);
 
-            previousDistance = currentDistance;
-            previousHit = hit;
+            previous_distance = current_distance;
+            previous_hit = hit;
+        }
+        
+        int count = pointsBuffer.Count;
+
+        // Массив нужного размера создаётся, только если старого либо ещё нет (null), либо его длина не совпадает с новым count
+        if (verticesBuffer == null || verticesBuffer.Length != count)
+        {
+            verticesBuffer = new Vector3[count];
+            normalsBuffer = new Vector3[count];
+
+            for (int i = 0; i < count; i++) 
+                normalsBuffer[i] = Vector3.up;
         }
 
-        Vector3[] vertices = new Vector3[points.Count];
+        for (int i = 0; i < count; i++)
+            verticesBuffer[i] = transform.InverseTransformPoint(pointsBuffer[i]);   // Заполнение вершин
 
-        for (int i = 0; i < points.Count; i++)
-            vertices[i] = transform.InverseTransformPoint(points[i]);
-
-        int[] triangles = new int[(points.Count - 2) * 3];
-
-        for (int i = 0; i < points.Count - 2; i++)
+        int triangles_count = (count - 2) * 3;
+        if (trianglesBuffer == null || lastTriangleCount != triangles_count)
         {
-            triangles[i * 3] = 0;
-            triangles[i * 3 + 1] = i + 1;
-            triangles[i * 3 + 2] = i + 2;
+            trianglesBuffer = new int[triangles_count];
+
+            for (int i = 0; i < count - 2; i++)
+            {
+                trianglesBuffer[i * 3] = 0;
+                trianglesBuffer[i * 3 + 1] = i + 1;
+                trianglesBuffer[i * 3 + 2] = i + 2;
+            }
+
+            lastTriangleCount = triangles_count;
         }
 
         meshFOV.Clear();
-        meshFOV.vertices = vertices;
-        meshFOV.triangles = triangles;
-        meshFOV.RecalculateNormals();
+        meshFOV.vertices = verticesBuffer;
+        meshFOV.normals = normalsBuffer;  
+        meshFOV.triangles = trianglesBuffer;
     }
 }

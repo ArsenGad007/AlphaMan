@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerAnimator : Singleton<PlayerAnimator>, ISpeedUpgradable
 {
-    [SerializeField] private PlayerController player;
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private float minAnimationInterval = 0.25f; 
     [SerializeField] [Range(1f, 2f)] private float minSpeedRunMultiplier = 1f; 
     [SerializeField] [Range(1f, 2f)] private float maxSpeedRunMultiplier = 1.4f; 
@@ -16,16 +14,16 @@ public class PlayerAnimator : Singleton<PlayerAnimator>, ISpeedUpgradable
     protected override void Awake()
     {
         base.Awake();
-        animator = player.GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         string next_animation = "idle";
 
-        if (gameInput.IsRunning())
+        if (GameInput.Instance.IsRunning())
             next_animation = "run";
-        else if (gameInput.IsWalking())
+        else if (GameInput.Instance.IsWalking())
             next_animation = "walk";
 
         if (currentAnimation != next_animation && Time.time - lastChangeTime > minAnimationInterval)

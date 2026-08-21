@@ -10,7 +10,7 @@ public class GuardController : MonoBehaviour
     /// <summary>
     /// Состояния охранника
     /// </summary>
-    public enum State { Walking, Hunt, Searching, Returning, Stop }
+    public enum State { Walking, Hunt, Searching, Stop, GameOver }
 
     [Header("Скорость")]
     [SerializeField][Min(0)] private float speedWalkMove = 2.0f;
@@ -37,18 +37,19 @@ public class GuardController : MonoBehaviour
     [Tooltip("Кол-во секунд, в течении которых знаем позицию игрока после его потери")]
     [SerializeField][Range(0, 5)] private float lostSightTimeout = 1f;
 
-    [Tooltip("Чем больше, тем реже обновляет путь при преследовании")]
+    [Tooltip("Множитель. Чем больше, тем реже обновляет путь при преследовании")]
     [SerializeField][Range(0, 0.1f)] private float huntPathUpdateFactor = 0.03f; 
-
-    [SerializeField] private Transform player;
-    [SerializeField] private GameInput gameInput;
+   
     [SerializeField] private List<Vector3> wayPoints;
-    
+        
     private GuardFieldOfView guardFOV;
     private NavMeshAgent agent;
+    private Transform playerTransform;      
 
-    private int currentNumPoint;            // Текущий номер точки (для wayPoints)
+    private int currentNumPoint = 0;        // Текущий номер точки (для wayPoints)
     private float lastTimeSeenPlayer = 0f;  // Последнее время, когда видели игрока
+    private float lastTimeRaycast = 0f;     // Последнее время использования Raycast
+    private bool lastResultRaycast = false; // Последний результат использования Raycast (кешируем)
     private float nextPathUpdateTime = 0f;  // Время обновления следующего пути
     private bool pointReached = false;      
     private Vector3 lastPosPlayer;          // Последняя позиция игрока
@@ -61,19 +62,20 @@ public class GuardController : MonoBehaviour
 
     private void Awake()
     {
-        if (!player)
-            Debug.LogError("К объекту охраны не привязан Player");
-
-        if (wayPoints != null && wayPoints.Count != 0)
-            currentNumPoint = 0;
+        if (wayPoints.Count == 0)       
+            wayPoints.Add(transform.position);
 
         layerMask = ~LayerMask.GetMask("Guard");        // Убираем слой охранников, чтобы не считали друг друга препятствием
         agent = GetComponent<NavMeshAgent>();
         guardFOV = GetComponent<GuardFieldOfView>();
+
+        if (!agent.isOnNavMesh)
+            Debug.LogError("NavMesh не запечен");
     }
 
     private void Start()
     {
+        playerTransform = PlayerController.Instance.gameObject.transform;
         EnterWalkingState();
     }
 
@@ -83,6 +85,7 @@ public class GuardController : MonoBehaviour
         {
             case State.Walking: Walking();  break;
             case State.Hunt:    Hunt();     break;
+            case State.Stop:
             case State.Searching:
                 if (guardFOV.IsPlayerInFOV() || CanDetectPlayer())
                 {
@@ -115,7 +118,9 @@ public class GuardController : MonoBehaviour
     {
         if (IsAgentAtDestination())
         {
-            if (!pointReached)  // Защита если точки находятся близко (чтобы не вызывать все время SetDestination)
+            if (wayPoints.Count == 1)       // Защита если точка одна
+                currentState = State.Stop;
+            else if (!pointReached)         // Защита если точки находятся близко (чтобы не вызывать все время SetDestination)
             {
                 currentNumPoint++;
 
@@ -145,10 +150,10 @@ public class GuardController : MonoBehaviour
         if (CheckObstacleToPlayerDir(out distance))
         {
             lastTimeSeenPlayer = Time.time;
-            lastPosPlayer = player.position;
+            lastPosPlayer = playerTransform.position;
         }
         else if (Time.time - lastTimeSeenPlayer < lostSightTimeout)   // Идем к позиции игрока после потери в течении lostSightTimeout
-            lastPosPlayer = player.position;
+            lastPosPlayer = playerTransform.position;
 
         if (Time.time >= nextPathUpdateTime)
         {
@@ -159,7 +164,7 @@ public class GuardController : MonoBehaviour
         if (guardFOV.IsPlayerInFOV() && distance <= gameOverRadius)
         {
             guardFOV.SetRedMaterial();
-            currentState = State.Stop;
+            currentState = State.GameOver;
             agent.isStopped = true;
             GameOver.Instance?.GameOverPanel();
         }
@@ -197,7 +202,7 @@ public class GuardController : MonoBehaviour
         if (!CheckObstacleToPlayerDir(out float distance))
             return false;
 
-        float detectionRadius = gameInput.IsRunning()
+        float detectionRadius = GameInput.Instance.IsRunning()
             ? runDetectionRadius
             : walkDetectionRadius;
 
@@ -213,16 +218,22 @@ public class GuardController : MonoBehaviour
     {
         Vector3 eye_offset = Vector3.up * 1.5f;
         Vector3 from = transform.position + eye_offset;
-        Vector3 to = player.position + eye_offset;
+        Vector3 to = playerTransform.position + eye_offset;
         Vector3 dir = to - from;
 
-        distance = dir.magnitude;     
+        distance = dir.magnitude;
 
-        RaycastHit hit_info;
-        if (Physics.Raycast(from, dir.normalized, out hit_info, distance + 0.1f, layerMask))  // 0.1f в distance берем с запасом
-            return hit_info.transform == player.transform;
+        if(Time.time - lastTimeRaycast >= 0.1f) // Раз в 0.1 секунду проверяем Raycast
+        {
+            lastTimeRaycast = Time.time;
 
-        return false;            
+            if (Physics.Raycast(from, dir.normalized, out RaycastHit hit_info, distance + 0.1f, layerMask))  // 0.1f в distance берем с запасом
+                lastResultRaycast = hit_info.transform == playerTransform;
+            else
+                lastResultRaycast = false;
+        }
+
+        return lastResultRaycast;            
     }
 
     /// <summary>
@@ -248,7 +259,7 @@ public class GuardController : MonoBehaviour
         agent.speed = speedRunMove;
         agent.stoppingDistance = playerStoppingDistance;
 
-        lastPosPlayer = player.position;
+        lastPosPlayer = playerTransform.position;
         agent.SetDestination(lastPosPlayer);
     }
 

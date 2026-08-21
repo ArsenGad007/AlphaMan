@@ -12,8 +12,10 @@ public class SecurityCamera : FieldOfView
 
     private bool isTriggered = false;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         SetGreenMaterial();
         RebuildMesh(GetRayStartPoint(), transform.forward);
     }

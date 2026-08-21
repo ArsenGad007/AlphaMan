@@ -14,8 +14,6 @@ public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
     [SerializeField] [Min(0)] private float maxAcceleration = 30.0f;
     [SerializeField] private float gravity = -9.81f;
 
-    [SerializeField] private GameInput gameInput;
-
     private CharacterController characterController;
     private Vector3 smooth_movement;
     private float verticalVelocity;
@@ -28,10 +26,10 @@ public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
 
     private void Update()
     {
-        Vector2 inputVector = gameInput.GetInputVectorNormalized();
+        Vector2 inputVector = GameInput.Instance.GetInputVectorNormalized();
         Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
 
-        float speed_move = gameInput.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
+        float speed_move = GameInput.Instance.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
         smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, SavesLogic.Get("acceleration", minAcceleration) * Time.deltaTime);
 
         // Гравитация
@@ -48,7 +46,7 @@ public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
         if (move_dir != Vector3.zero)
         {
             transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
-            if (gameInput.IsRunning())
+            if (GameInput.Instance.IsRunning())
                 SoundManager.PlayRun();
             else
                 SoundManager.PlayWalk();

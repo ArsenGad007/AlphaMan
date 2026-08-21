@@ -3,47 +3,70 @@
 public class GuardFieldOfView : FieldOfView
 {
     public enum DetectionType { None, AlertDelay, InstantDeath }    // Состояние обнаружения у охранника
-    
-    [Tooltip("Не пересчитывать меш чаще, чем раз в N секунд.")]
-    [SerializeField, Min(0)] private float updateMeshInterval = 0.0f;
+
+    [SerializeField, Range(2, 100)] private int minRayCount = 5;           // Минимальное кол-во лучей, на которые разбивается угол
+
+    [Tooltip("Сколько раз в секунду обновляется мэш")]
+    [SerializeField, Range(1, 144)] private int meshUpdateFPS = 60;
+
+    [Header("Настройки LOD меша")]
+    [Tooltip("Кол-во LOD для оптимизации rayCount")]
+    [SerializeField, Range(2, 10)] private int countLOD = 4;
+
+    [Tooltip("Менять LOD каждые N расстояний")]
+    [SerializeField, Range(2, 20)] private int distanceLODUpdate = 5;
+
+    [Tooltip("Не пересчитывать LOD чаще, чем раз в N секунд.")]
+    [SerializeField, Min(0)] private float updateLODInterval = 0.1f;
 
     private float instantDetectionRadius = 1.3f;    // УДАЛИТЬ!!!
 
-    private Vector3 lastPosition = Vector3.zero;                    // Хранит позицию охранника на момент последней перестройки меша
-    private Vector3 lastForward = Vector3.forward;                  // Хранит направление охранника на момент последней перестройки меша
-    private float lastUpdateTime;                                   // Время (в секундах) последнего вызова перестройки меша
+    private float meshUpdateInterval;
+    private float lastMeshUpdate;
+    private float lastUpdateLOD;                                    // Время (в секундах) последнего обновления LOD
     private readonly int detectionFramesRequired = 2;               // Минимальное количество последовательных кадров, в которых игрок виден, чтобы сработало обнаружение.
     private int visibleFramesCount = 0;                             // Текущий счётчик последовательных кадров видимости игрока
 
-    private const float POSITION_CHANGE_THRESHOLD_SQR = 0.01f;      // Квадрат минимального смещения позиции для обновления меша
-    private const float DIRECTION_CHANGE_COS_THRESHOLD = 0.99939f;  // Косинус порога угла поворота (~2°) для обновления меша
-
     public Transform PlayerTransform => player?.transform;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        if (maxRayCount < minRayCount)
+        {
+            Debug.LogError("maxRayCount меньше minRayCount");
+            maxRayCount = minRayCount;
+        }
+            
+        meshUpdateInterval = 1f / meshUpdateFPS;
+    }
 
     /// <summary>
     /// Обновляет визуальный меш
     /// </summary>
     public void UpdateFOV(Vector3 originPosition, Vector3 forwardDirection)
     {
-        if (Time.time - lastUpdateTime < updateMeshInterval)
-            return;
+        if (Time.time - lastUpdateLOD >= updateLODInterval)
+        {
+            float distance_player = Vector3.Distance(transform.position, player.transform.position);
+
+            int max_num_LOD = countLOD - 1;
+            int num_LOD = Mathf.Clamp(Mathf.FloorToInt(distance_player / distanceLODUpdate), 0, max_num_LOD);
+            rayCount = Mathf.RoundToInt(Mathf.Lerp(maxRayCount, minRayCount, (float)num_LOD / max_num_LOD));
+
+            lastUpdateLOD = Time.time;
+        }
 
         Vector3 forward = forwardDirection;
         forward.y = 0f;
-        forward = forward.sqrMagnitude < 0.0001f ? Vector3.forward : forward.normalized;
+        forward = forward.sqrMagnitude < 0.0001f ? Vector3.forward : forward.normalized;    // защита если forward почти равен нулю
 
-        bool shouldUpdate =
-            (originPosition - lastPosition).sqrMagnitude > POSITION_CHANGE_THRESHOLD_SQR ||
-            Vector3.Dot(lastForward, forward) < DIRECTION_CHANGE_COS_THRESHOLD;
-
-        if (!shouldUpdate)
-            return;
-
-        RebuildMesh(originPosition, forward);
-
-        lastPosition = originPosition;
-        lastForward = forward;
-        lastUpdateTime = Time.time;
+        if(Time.time - lastMeshUpdate >= meshUpdateInterval)
+        {
+            RebuildMesh(originPosition, forward);
+            lastMeshUpdate = Time.time;
+        }
     }
 
     /// <summary>
@@ -51,8 +74,6 @@ public class GuardFieldOfView : FieldOfView
     /// </summary>
     private bool IsPlayerBlocked(float distance)
     {
-        if (player == null) return true;
-
         Vector3 flatDirection = player.transform.position - transform.position;
         flatDirection.y = 0f;
 
@@ -90,8 +111,6 @@ public class GuardFieldOfView : FieldOfView
     /// <returns></returns>
     private bool IsPlayerNearWall(float distance)
     {
-        if (!player) return false;
-
         Vector3 toPlayer = player.transform.position - transform.position;
         toPlayer.y = 0f;
         toPlayer.Normalize();
@@ -106,12 +125,6 @@ public class GuardFieldOfView : FieldOfView
     /// </summary>
     public DetectionType CheckForDetection()
     {
-        if (player == null)
-        {
-            visibleFramesCount = 0;
-            return DetectionType.None;
-        }
-
         Vector3 directionToPlayer = player.transform.position - transform.position;
         directionToPlayer.y = 0f;
         float distance = directionToPlayer.magnitude;
@@ -157,22 +170,6 @@ public class GuardFieldOfView : FieldOfView
             visibleFramesCount = 0;
 
         return DetectionType.None;
-    }
-
-    /// <summary>
-    /// Проверяет, находится ли персонаж в радиусе мгновенного обнаружения (по горизонтали).
-    /// </summary>
-    /// <param name="person">Transform проверяемого персонажа.</param>
-    /// <returns>True, если расстояние по горизонтали меньше или равно instantDetectionRadius.</returns>
-    public bool IsPersonInInstantRange(Transform person)
-    {
-        if (person == null)
-            return false;
-
-        Vector3 delta = person.position - transform.position;
-        delta.y = 0f;   // Игнорируем разницу по высоте
-
-        return delta.sqrMagnitude <= instantDetectionRadius * instantDetectionRadius;
     }
 
     /// <summary>

@@ -26,7 +26,7 @@ public class GameOver : Singleton<GameOver>
 
         Time.timeScale = 0;
         SoundManager.PlayLose();
-        gameOverPanel.SetActive(true);  // Показать панель проигрыша
+        gameOverPanel?.SetActive(true);  // Показать панель проигрыша
 
         restartButton.onClick.RemoveListener(RestartGameOver); 
         restartButton.onClick.AddListener(RestartGameOver);

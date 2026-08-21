@@ -1,37 +1,19 @@
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class MenuMusic : MonoBehaviour
+public class MenuMusic : Singleton<MenuMusic>
 {
-    public static MenuMusic instance { get; private set; }
-
     private AudioSource musicSource;
 
-    private void Awake()
+    protected override bool IsDestroyOnLoad => false;
+
+    protected override void Awake()
     {
-        if(instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-
+        base.Awake();
         musicSource = GetComponent<AudioSource>();
     }
 
-    public static void Play() => instance.musicSource.Play();
-    public static void Stop() => instance.musicSource.Stop();
-    public static bool IsPlay()
-    {
-        if (instance == null)
-        {
-            GameObject prefab = Resources.Load<GameObject>("MenuMusic"); // имя префаба
-            GameObject obj = Instantiate(prefab);
-            instance = obj.GetComponent<MenuMusic>();
-            DontDestroyOnLoad(obj);
-        }
-        return instance.musicSource.isPlaying;
-    }
+    public static void Play() => Instance.musicSource.Play();
+    public static void Stop() => Instance.musicSource.Stop();
+    public static bool IsPlay() => Instance.musicSource.isPlaying;
 }
