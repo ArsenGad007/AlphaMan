@@ -13,7 +13,6 @@ public enum GameExitPlace
 /// </summary>
 public class GameExit : MonoBehaviour
 {
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private GameExitPlace gameExitPlace;   //  уда нужно выйти;
     [SerializeField] private GameObject gameExitPanel;      // —сылка на панель выхода;
     [SerializeField] private Button exitButton;

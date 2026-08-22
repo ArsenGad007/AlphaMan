@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 
 /// <summary>
@@ -14,7 +15,7 @@ public class GuardPatrol : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private Transform[] patrolPoints;
-    [SerializeField] private FieldOfView fieldOfView;
+    [SerializeField] private GuardFieldOfView fieldOfView;
     [SerializeField] private Transform playerTransform;
 
     #endregion
@@ -106,21 +107,10 @@ public class GuardPatrol : MonoBehaviour
     private List<GuardPatrol> allGuards = new List<GuardPatrol>();
     private LayerMask raycastMask;
 
-    // Материалы поля зрения
-    private Material fovGreen;
-    private Material fovYellow;
-    private Material fovRed;
     #endregion
 
     // ─── Инициализация ────────────────────────────────────────────────────────
     #region Unity lifecycle
-
-    private void Awake()
-    {
-        fovGreen = Resources.Load<Material>("FOV_mat/FOV_Walking");
-        fovYellow = Resources.Load<Material>("FOV_mat/FOV_Alert");
-        fovRed = Resources.Load<Material>("FOV_mat/FOV_Danger");
-    }
 
     private void Start()
     {
@@ -129,6 +119,7 @@ public class GuardPatrol : MonoBehaviour
         lastAnimPos = transform.position;
         raycastMask = ~LayerMask.GetMask("Guard");
         allGuards = new List<GuardPatrol>(FindObjectsByType<GuardPatrol>(FindObjectsSortMode.None));
+        fieldOfView?.SetGreenMaterial();
     }
 
     private void Update()
@@ -161,23 +152,23 @@ public class GuardPatrol : MonoBehaviour
         {
             case State.Walking:
                 HandleWalking();
-                fieldOfView?.SetMaterial(fovGreen);
+                fieldOfView?.SetGreenMaterial();
                 break;
 
             case State.Pursuing:
                 HandlePursuing();
-                fieldOfView?.SetMaterial(fovYellow);
+                fieldOfView?.SetYellowMaterial();
                 break;
 
             case State.Returning:
                 HandleReturning();
-                fieldOfView?.SetMaterial(fovYellow);
+                fieldOfView?.SetYellowMaterial();
                 break;
 
             case State.Alerted:
             case State.Searching:
                 HandleAlertedOrSearching();
-                fieldOfView?.SetMaterial(fovYellow);
+                fieldOfView?.SetYellowMaterial();
                 break;
         }
     }
@@ -192,16 +183,16 @@ public class GuardPatrol : MonoBehaviour
     /// </summary>
     private void PlayerCheck()
     {
-        FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
+        GuardFieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
 
-        if (detection == FieldOfView.DetectionType.InstantDeath)
+        if (detection == GuardFieldOfView.DetectionType.InstantDeath)
         {
             lastSeenPlayerPosition = fieldOfView.PlayerTransform.position;
             StartTurnAndDie(lastSeenPlayerPosition);
             return;
         }
 
-        if (detection == FieldOfView.DetectionType.None)
+        if (detection == GuardFieldOfView.DetectionType.None)
         {
             TryResetHiding();
 
@@ -261,8 +252,8 @@ public class GuardPatrol : MonoBehaviour
             case State.Pursuing:
                 isLookingAround = false;
                 lastSeenPlayerPosition = playerPosition;
-                animator?.SetBool("IsRunning", true);
-                animator?.SetBool("IsWalking", false);
+                animator?.SetBool("isRunning", true);
+                animator?.SetBool("isWalking", false);
                 break;
         }
     }
@@ -334,7 +325,7 @@ public class GuardPatrol : MonoBehaviour
         }
         else // State.Searching
         {
-            if (fieldOfView.CheckForDetection() != FieldOfView.DetectionType.None)
+            if (fieldOfView.CheckForDetection() != GuardFieldOfView.DetectionType.None)
             {
                 StartTurnAndDie(lastSeenPlayerPosition);
                 return;
@@ -361,9 +352,9 @@ public class GuardPatrol : MonoBehaviour
         if (playerTransform == null)
             return;
 
-        FieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
-        bool playerVisible = detection != FieldOfView.DetectionType.None
-                          && detection != FieldOfView.DetectionType.InstantDeath;
+        GuardFieldOfView.DetectionType detection = fieldOfView.CheckForDetection();
+        bool playerVisible = detection != GuardFieldOfView.DetectionType.None
+                          && detection != GuardFieldOfView.DetectionType.InstantDeath;
 
         if (playerVisible)
         {
@@ -380,7 +371,7 @@ public class GuardPatrol : MonoBehaviour
 
         float distToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        if (distToPlayer < MELEE_KILL_RADIUS)
+        if (distToPlayer < MELEE_KILL_RADIUS && !IsPlayerBehindWall(distToPlayer))
         {
             StartTurnAndDie(playerTransform.position);
             return;
@@ -451,8 +442,8 @@ public class GuardPatrol : MonoBehaviour
     {
         isLookingAround = false;
         lastSeenPlayerPosition = playerTransform.position;
-        animator?.SetBool("IsRunning", true);
-        animator?.SetBool("IsWalking", false);
+        animator?.SetBool("isRunning", true);
+        animator?.SetBool("isWalking", false);
         MoveWithSteering(lastSeenPlayerPosition, SPEED_RUN);
     }
 
@@ -464,8 +455,8 @@ public class GuardPatrol : MonoBehaviour
         lookStartRot = transform.rotation;
         isHiding = false;
         smoothMoveDir = Vector3.zero;
-        animator?.SetBool("IsRunning", false);
-        animator?.SetBool("IsWalking", false);
+        animator?.SetBool("isRunning", false);
+        animator?.SetBool("isWalking", false);
         HandleLookingAround();
         TryFinishLookAround();
     }
@@ -592,7 +583,7 @@ public class GuardPatrol : MonoBehaviour
     private void UpdateTurnToPlayer()
     {
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationToPlayer, SPEED_ROTATE * Time.deltaTime);
-        fieldOfView?.SetMaterial(fovRed);
+        fieldOfView?.SetRedMaterial();
 
         if (Time.time - turnStartTime >= GAMEOVER_TURN_TIME)
             isTurningToPlayer = false;
@@ -604,7 +595,7 @@ public class GuardPatrol : MonoBehaviour
         TriggerGameOver();
     }
 
-    private void TriggerGameOver() => gameOver.GameOverPanel();
+    private void TriggerGameOver() => gameOver?.GameOverPanel();
     #endregion
 
     // ─── Движение ─────────────────────────────────────────────────────────────
@@ -865,13 +856,13 @@ public class GuardPatrol : MonoBehaviour
 
         bool isMoving = rawSpeed > ANIM_SPEED_THRESHOLD;
 
-        animator.SetBool("IsWalking", false);
-        animator.SetBool("IsRunning", false);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
 
         if (currentState == State.Pursuing && isMoving)
-            animator.SetBool("IsRunning", true);
+            animator.SetBool("isRunning", true);
         else if (isMoving)
-            animator.SetBool("IsWalking", true);
+            animator.SetBool("isWalking", true);
     }
     #endregion
 

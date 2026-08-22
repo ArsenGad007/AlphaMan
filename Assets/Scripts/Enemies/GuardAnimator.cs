@@ -1,44 +1,51 @@
-using System.Collections;
 using UnityEngine;
 
 public class GuardAnimator : MonoBehaviour
-{
-    [SerializeField] private GuardPatrol guardPatrol;
-    [SerializeField] private float animationChangeDelay = 0.1f;
+{    
+    [SerializeField] private float minAnimationInterval = 0.1f;
 
-    [SerializeField] private Animator animator;
+    private GuardController guardController;
+    private Animator animator;
+
     private string currentAnimation = "idle";
-    private bool isChangingAnimation = false;
+    private float lastChangeTime;
 
-    void Start()
+    private void Awake()
     {
-        if (animator != null)
-            StartCoroutine(SetAnimationWithDelay(currentAnimation));
+        guardController = GetComponent<GuardController>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (guardPatrol == null) 
-            return;
+        string next_animation = "idle";
 
-        string nextAnimation = guardPatrol.IsMoving() ? "walk" : "idle";
+        if (guardController?.currentState == GuardController.State.Hunt)
+            next_animation = "run";
+        else if (guardController?.currentState == GuardController.State.Walking)
+            next_animation = "walk";
 
-        if (animator != null && currentAnimation != nextAnimation)
-            StartCoroutine(SetAnimationWithDelay(nextAnimation));
+        if (currentAnimation != next_animation && Time.time - lastChangeTime > minAnimationInterval)
+        {
+            SetAnimation(next_animation);
+            lastChangeTime = Time.time;
+        }
     }
 
-    public IEnumerator SetAnimationWithDelay(string tag)
+    private void SetAnimation(string tag)
     {
-        if (isChangingAnimation && tag != "idle") 
-            yield break;
-        isChangingAnimation = true;
+        // —брасываем все булевы параметры
+        animator.SetBool("isIdle", false);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
 
-        animator.ResetTrigger(currentAnimation);
-        animator.SetTrigger(tag);
+        switch (tag)
+        {
+            case "idle": animator.SetBool("isIdle", true); break;
+            case "walk": animator.SetBool("isWalking", true); break;
+            case "run": animator.SetBool("isRunning", true); break;
+        }
+
         currentAnimation = tag;
-        //Debug.Log("Guard animation: " + tag);
-
-        yield return new WaitForSeconds(tag == "idle" ? 0f : animationChangeDelay);
-        isChangingAnimation = false;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// ѕереход IRIS на другую сцену
 /// </summary>
-public class SceneTransition : MonoBehaviour
+public class SceneTransition : Singleton<SceneTransition>
 {
     public static bool dontOpenNextScene = false;
     public static string TargetScene { private set; get; }
@@ -14,26 +14,25 @@ public class SceneTransition : MonoBehaviour
 
     [SerializeField] private float speed = 5f;
    
-    private static SceneTransition instance;
     private bool showLoadingScene = false;
     private Material mat;
     private RawImage overlay;
 
-    void Awake()
+    protected override void Awake()
     {
-        instance = this;
-        overlay = GetComponentInChildren<RawImage>(true);   // true Ч находит неактивные
+        base.Awake();
 
+        overlay = GetComponentInChildren<RawImage>(true);   // true Ч находит неактивные
         overlay.gameObject.SetActive(true);
 
         mat = Instantiate(overlay.material);                // создаЄм копию
         overlay.material = mat;
-
-        mat.SetFloat("_Aspect", (float)Screen.width / Screen.height);
     }
 
     void Start()
-    {          
+    {
+        mat.SetFloat("_Aspect", (float)Screen.width / Screen.height);
+
         if (!dontOpenNextScene)
         {
             mat.SetFloat("_Radius", 0f);
@@ -53,8 +52,8 @@ public class SceneTransition : MonoBehaviour
     /// <param name="sceneName"></param>
     public static void Load(string sceneName, bool showLoadingScene = false)
     {
-        instance.showLoadingScene = showLoadingScene;
-        instance.GoTo(sceneName);
+        Instance.showLoadingScene = showLoadingScene;
+        Instance.GoTo(sceneName);
     }
 
     private void GoTo(string sceneName) => StartCoroutine(Go(sceneName));

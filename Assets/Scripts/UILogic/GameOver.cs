@@ -2,18 +2,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameOver : MonoBehaviour
+public class GameOver : Singleton<GameOver>
 {
     [SerializeField] private GameObject gameOverPanel;  // —сылка на панель проигрыша;
     [SerializeField] private Button restartButton;
-    PlayerController playerController;
 
     private bool isGameOver = false;
 
     void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        playerController = playerObj.GetComponent<PlayerController>();
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
     }
@@ -28,8 +26,7 @@ public class GameOver : MonoBehaviour
 
         Time.timeScale = 0;
         SoundManager.PlayLose();
-        playerController.StopAllComponents();//останавливаем перед проигрышем игрока(чтоб никуда не убежал)
-        gameOverPanel.SetActive(true);  // ѕоказать панель проигрыша
+        gameOverPanel?.SetActive(true);  // ѕоказать панель проигрыша
 
         restartButton.onClick.RemoveListener(RestartGameOver); 
         restartButton.onClick.AddListener(RestartGameOver);

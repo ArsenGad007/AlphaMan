@@ -5,10 +5,8 @@ using UnityEngine;
 /// Единый менеджер звука: фоновая музыка + все SFX.
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
-public class SoundManager : MonoBehaviour, ISpeedUpgradable
+public class SoundManager : Singleton<SoundManager>, ISpeedUpgradable
 {
-    public static SoundManager Instance;
-
     [Header("Фоновая музыка")]
     [SerializeField] private AudioSource musicSource; 
 
@@ -41,9 +39,9 @@ public class SoundManager : MonoBehaviour, ISpeedUpgradable
     private AudioSource sfxSource;
     private float lastStepTime = 0f;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         sfxSource = GetComponent<AudioSource>();
     }
 
@@ -121,30 +119,30 @@ public class SoundManager : MonoBehaviour, ISpeedUpgradable
     /// <summary>
     /// Воспроизводит звук ходьбы
     /// </summary>
-    public static void PlayWalk() => Instance.PlayRandomStep(Instance.walkSteps, Instance.walkStepInterval, Instance.walkStepVolume);
+    public static void PlayWalk() => Instance?.PlayRandomStep(Instance.walkSteps, Instance.walkStepInterval, Instance.walkStepVolume);
 
     /// <summary>
     /// Воспроизводит звук бега
     /// </summary>
-    public static void PlayRun() => Instance.PlayRandomStep(Instance.runSteps, SavesLogic.Get("run_step_sound", Instance.maxRunStepInterval), Instance.runStepVolume);
+    public static void PlayRun() => Instance?.PlayRandomStep(Instance.runSteps, SavesLogic.Get("run_step_sound", Instance.maxRunStepInterval), Instance.runStepVolume);
 
     /// <summary>
     /// Воспроизводит звук вз ятия предмета
     /// </summary>    
-    public static void PlayItemPickup() => Instance.PlaySFX(Instance.itemPickupSound, Instance.itemPickupVolume);
+    public static void PlayItemPickup() => Instance?.PlaySFX(Instance.itemPickupSound, Instance.itemPickupVolume);
 
     /// <summary>
     /// Воспроизводит звук взятия предмета
     /// </summary>    
-    public static void PlayCoinPickup() => Instance.PlaySFX(Instance.coinPickupSound, Instance.coinPickupVolume);
+    public static void PlayCoinPickup() => Instance?.PlaySFX(Instance.coinPickupSound, Instance.coinPickupVolume);
 
     /// <summary>
     /// Воспроизводит звук победы
     /// </summary>   
-    public static void PlayWin() => Instance.StartCoroutine(Instance.PlayImportant(Instance.winSound));
+    public static void PlayWin() => Instance?.StartCoroutine(Instance.PlayImportant(Instance.winSound));
 
     /// <summary>
     /// Воспроизводит звук поражения
     /// </summary>   
-    public static void PlayLose() => Instance.StartCoroutine(Instance.PlayImportant(Instance.loseSound));
+    public static void PlayLose() => Instance?.StartCoroutine(Instance.PlayImportant(Instance.loseSound));
 }

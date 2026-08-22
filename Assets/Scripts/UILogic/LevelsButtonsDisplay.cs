@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -11,19 +10,12 @@ public class ButtonStringPair
     public GameObject panelLevel;   
 }
 
-public class LevelsButtonsDisplay : MonoBehaviour
+public class LevelsButtonsDisplay : Singleton<LevelsButtonsDisplay>
 {
-    public static LevelsButtonsDisplay Instance;
-
     [SerializeField] private List<ButtonStringPair> buttonPairs;
 
     private string playerLevelKey = "player_level";
     public string selectedPanelName { get; private set; }
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     void Start()
     {

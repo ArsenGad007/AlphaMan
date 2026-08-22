@@ -1,46 +1,73 @@
-п»їusing UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 
-public class SecurityCamera : MonoBehaviour
+public class SecurityCamera : FieldOfView
 {
-    [SerializeField] private SecurityCameraFOV fieldOfView;
-    [SerializeField] private GameOver gameOver;
+    [Header("Смещения")]
+    [SerializeField] private float forwardMeshOffset = 0.7f;    // вперед(+) / назад(-)
+    [SerializeField] private float upMeshOffset = 0.2f;         // вверх (+) / вниз (-)
+    [SerializeField] private float rightMeshOffset = 0f;        // вправо(+) / влево(-)
+
+    [Header("Тест")]
+    [SerializeField] private bool debugUpdateFOV = false;
+
     private bool isTriggered = false;
-    private Material Green;
-    private Material Red;
-    private void Awake()
+
+    protected override void Start()
     {
-        Green = Resources.Load<Material>("FOV_mat/FOV_Walking");
-        Red = Resources.Load<Material>("FOV_mat/FOV_Danger");
+        base.Start();
+
+        SetGreenMaterial();
+        RebuildMesh(GetRayStartPoint(), transform.forward);
     }
-    private void Start()
+
+    private void Update()
     {
-        fieldOfView.SetMaterial(Green);
-    }
-    void Update()
-    {
-        if (fieldOfView != null && !isTriggered)
+        if (debugUpdateFOV)
+            RebuildMesh(GetRayStartPoint(), transform.forward);
+
+        if (!isTriggered && IsPlayerVisible())
         {
-            OnPlayerDetected();
+            isTriggered = true;
+            SetRedMaterial();
+            GameOver.Instance.GameOverPanel();
         }
     }
-    private void OnPlayerDetected()
+
+    /// <summary>
+    /// Применение смещения объектива камеры.
+    /// </summary>
+    private Vector3 GetRayStartPoint() =>
+        transform.position
+        + transform.forward * forwardMeshOffset
+        + Vector3.up * upMeshOffset
+        + Vector3.right * rightMeshOffset;
+        
+
+    /// <summary>
+    /// Проверка попадания игрока в поле зрения камеры.
+    /// </summary>
+    public bool IsPlayerVisible()
     {
-        if (fieldOfView.IsPlayerVisible())
+        if (!player) return false;
+
+        // Грубая быстрая отсечка перед дорогой проверкой
+        const float reserveDistanceSq = 4f;
+        if ((player.transform.position - transform.position).sqrMagnitude > viewDistance * viewDistance * reserveDistanceSq)
+            return false;
+
+        Vector3 start = GetRayStartPoint();
+
+        foreach (float height in CheckHeights)
         {
-            TriggerGameOver();
+            Vector3 dir = player.transform.position + Vector3.up * height - start;
+            float distance = dir.magnitude;
+
+            if (distance <= viewDistance &&
+                Vector3.Dot(transform.forward, dir / distance) >= CosHalfFov &&
+                !CheckObstacle(start, dir.normalized, distance))
+                return true;
         }
+
+        return false;
     }
-    private void TriggerGameOver()
-    {
-        if (isTriggered) return;
-        isTriggered = true;
-
-
-        fieldOfView.SetMaterial(Red);
-            gameOver.GameOverPanel();
-
-        Time.timeScale = 0f;
-    }
-
 }

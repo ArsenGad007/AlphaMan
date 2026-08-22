@@ -1,11 +1,12 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
 /// Обработчик пользовательского ввода
 /// </summary>
-public class GameInput : MonoBehaviour
+public class GameInput : Singleton<GameInput>
 {
     private bool isWalking = false;
     private bool isRunning = false;
@@ -15,6 +16,8 @@ public class GameInput : MonoBehaviour
 
     private Vector2 inputVector;
     private PlayerInputActions playerInputActions;
+
+    protected override bool IsDestroyOnLoad => false;
 
     private void Start()
     {
@@ -32,6 +35,9 @@ public class GameInput : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (Instance != this)   // дубликат: playerInputActions == null, нечего чистить
+            return;        
+
         playerInputActions.Player.Move.performed -= OnMovePerformed;
         playerInputActions.Player.Move.canceled -= OnMoveCanceled;
         playerInputActions.Player.Run.performed -= OnRunPerformed;

@@ -4,36 +4,32 @@
 /// Управление главным героем
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour, ISpeedUpgradable
+public class PlayerController : Singleton<PlayerController>, ISpeedUpgradable
 {
-    public static PlayerController Instance;
-
     [SerializeField] [Min(0)] private float speedWalkMove = 2.0f;
     [SerializeField] [Min(0)] private float minSpeedRunMove = 5.0f;
     [SerializeField] [Min(0)] private float maxSpeedRunMove = 6.5f;
-    [SerializeField] [Min(0)] private float speedRotate = 15.0f;
+    [SerializeField] [Min(0)] private float speedRotate = 10.0f;
     [SerializeField] [Min(0)] private float minAcceleration = 20.0f;
     [SerializeField] [Min(0)] private float maxAcceleration = 30.0f;
     [SerializeField] private float gravity = -9.81f;
 
-    [SerializeField] private GameInput gameInput;
-
     private CharacterController characterController;
     private Vector3 smooth_movement;
     private float verticalVelocity;
-    
-    private void Awake()
+
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
     {
-        Vector2 inputVector = gameInput.GetInputVectorNormalized();
+        Vector2 inputVector = GameInput.Instance.GetInputVectorNormalized();
         Vector3 move_dir = new(inputVector.x, 0, inputVector.y);
 
-        float speed_move = gameInput.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
+        float speed_move = GameInput.Instance.IsRunning() ? SavesLogic.Get("speed_run_move", minSpeedRunMove) : speedWalkMove;
         smooth_movement = Vector3.MoveTowards(smooth_movement, move_dir * speed_move, SavesLogic.Get("acceleration", minAcceleration) * Time.deltaTime);
 
         // Гравитация
@@ -50,31 +46,11 @@ public class PlayerController : MonoBehaviour, ISpeedUpgradable
         if (move_dir != Vector3.zero)
         {
             transform.forward = Vector3.Slerp(transform.forward, move_dir, speedRotate * Time.deltaTime);
-            if (gameInput.IsRunning())
+            if (GameInput.Instance.IsRunning())
                 SoundManager.PlayRun();
             else
                 SoundManager.PlayWalk();
         }
-    }
-    //тотальная остановка игрока
-    public void StopAllComponents()
-    {
-        // -ввод
-        gameInput.DisablePlayerInputActions();
-        //-звук
-        var audioSources = GetComponents<AudioSource>();
-        foreach (var audioSource in audioSources)
-        {
-            audioSource.Stop();
-            audioSource.enabled = false;
-        }
-        // -аниматор
-        var animator = GetComponent<Animator>();
-        animator.enabled = false;
-        animator.speed = 0f;
-        // -скорость движения
-        smooth_movement = Vector3.zero;
-        verticalVelocity = 0f;
     }
 
     public void SpeedProgressUpdate()

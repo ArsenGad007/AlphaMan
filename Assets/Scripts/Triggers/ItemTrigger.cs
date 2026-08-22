@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ItemTrigger : MonoBehaviour
 {
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private GameObject targetObject;
     [SerializeField] private string playerTag = "Player";
 
@@ -13,7 +12,7 @@ public class ItemTrigger : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            if (gameInput.IsInteract() && flagInteract && !itemCollected)
+            if (GameInput.Instance.IsInteract() && flagInteract && !itemCollected)
             {
                 SoundManager.PlayItemPickup();// звук взятия предмета
                 Invoke(nameof(HideObject), 0.05f);
@@ -23,7 +22,7 @@ public class ItemTrigger : MonoBehaviour
                 itemCollected = true;
                 flagInteract = false;
             }            
-            else if (!gameInput.IsInteract())
+            else if (!GameInput.Instance.IsInteract())
                 flagInteract = true;
         }
     }
