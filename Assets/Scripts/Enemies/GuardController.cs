@@ -34,6 +34,9 @@ public class GuardController : MonoBehaviour
     [SerializeField][Min(0)] private float playerStoppingDistance = 1.5f;
 
     [Header("Ќастройки преследовани€")]
+    [Tooltip("ћаксимальна€ дистанци€ видимости игрока")]
+    [SerializeField][Range(0, 30)] private float maxDistanceHunt = 10f;
+
     [Tooltip(" ол-во секунд, в течении которых знаем позицию игрока после его потери")]
     [SerializeField][Range(0, 5)] private float lostSightTimeout = 1f;
 
@@ -227,7 +230,7 @@ public class GuardController : MonoBehaviour
         {
             lastTimeRaycast = Time.time;
 
-            if (Physics.Raycast(from, dir.normalized, out RaycastHit hit_info, distance + 0.1f, layerMask))  // 0.1f в distance берем с запасом
+            if (Physics.Raycast(from, dir.normalized, out RaycastHit hit_info, maxDistanceHunt, layerMask))  // 0.1f в distance берем с запасом
                 lastResultRaycast = hit_info.transform == playerTransform;
             else
                 lastResultRaycast = false;
