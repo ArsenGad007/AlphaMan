@@ -35,11 +35,16 @@ public class GameExit : MonoBehaviour
         GameInput.IsExit += ExitPanel;
     }
 
+    private void OnDestroy()
+    {
+        GameInput.IsExit -= ExitPanel;
+    }
+
     private void ExitPanel()
     {
         Time.timeScale = 0;      
         OnMenuOpened?.Invoke();     // Поставить фоновую музыку на паузу
-        gameExitPanel.SetActive(true);
+        gameExitPanel?.SetActive(true);
 
         yesButton.onClick.RemoveListener(YesButton);
         yesButton.onClick.AddListener(YesButton);
