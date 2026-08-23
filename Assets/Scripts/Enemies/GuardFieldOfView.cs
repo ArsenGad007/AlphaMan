@@ -19,13 +19,9 @@ public class GuardFieldOfView : FieldOfView
     [Tooltip("Не пересчитывать LOD чаще, чем раз в N секунд.")]
     [SerializeField, Min(0)] private float updateLODInterval = 0.1f;
 
-    private float instantDetectionRadius = 1.3f;    // УДАЛИТЬ!!!
-
     private float meshUpdateInterval;
     private float lastMeshUpdate;
     private float lastUpdateLOD;                                    // Время (в секундах) последнего обновления LOD
-    private readonly int detectionFramesRequired = 2;               // Минимальное количество последовательных кадров, в которых игрок виден, чтобы сработало обнаружение.
-    private int visibleFramesCount = 0;                             // Текущий счётчик последовательных кадров видимости игрока
 
     public Transform PlayerTransform => player?.transform;
 
@@ -67,109 +63,6 @@ public class GuardFieldOfView : FieldOfView
             RebuildMesh(originPosition, forward);
             lastMeshUpdate = Time.time;
         }
-    }
-
-    /// <summary>
-    /// Проверяет, мешает ли стена между охранником и игроком.
-    /// </summary>
-    private bool IsPlayerBlocked(float distance)
-    {
-        Vector3 flatDirection = player.transform.position - transform.position;
-        flatDirection.y = 0f;
-
-        if (flatDirection.magnitude > distance)
-            return true;
-
-        int blockedCount = 0;
-        foreach (float height in CheckHeights)
-        {
-            Vector3 rayOrigin = transform.position + Vector3.up * height;
-            Vector3 toPlayer = player.transform.position - rayOrigin;
-
-            if (CheckObstacle(rayOrigin, toPlayer.normalized, toPlayer.magnitude))
-                blockedCount++;
-        }
-
-        return blockedCount >= 2;
-    }
-
-    /// <summary>
-    /// Проверяет есть ли рядом стена
-    /// </summary>
-    /// <param name="distance"></param>
-    /// <returns></returns>
-    private bool IsNearWall(float distance)
-    {
-        Vector3 origin = transform.position + Vector3.up;
-        return CheckObstacle(origin, transform.forward, distance) || CheckObstacle(origin, -transform.forward, distance);
-    }
-
-    /// <summary>
-    /// Проверяет есть ли игрок рядом с стеной
-    /// </summary>
-    /// <param name="distance"></param>
-    /// <returns></returns>
-    private bool IsPlayerNearWall(float distance)
-    {
-        Vector3 toPlayer = player.transform.position - transform.position;
-        toPlayer.y = 0f;
-        toPlayer.Normalize();
-
-        Vector3 playerOrigin = player.transform.position + Vector3.up;
-
-        return CheckObstacle(playerOrigin, toPlayer, distance) || CheckObstacle(playerOrigin, -toPlayer, distance);
-    }
-
-    /// <summary>
-    /// Определяет тип обнаружения игрока.
-    /// </summary>
-    public DetectionType CheckForDetection()
-    {
-        Vector3 directionToPlayer = player.transform.position - transform.position;
-        directionToPlayer.y = 0f;
-        float distance = directionToPlayer.magnitude;
-
-        bool isVisible = false;
-
-        if (distance <= instantDetectionRadius)
-        {
-            bool bothNearWall = IsNearWall(0.4f) && IsPlayerNearWall(0.4f);
-
-            if (!IsPlayerBlocked(instantDetectionRadius))
-            {
-                if (bothNearWall)
-                {
-                    Vector3 extraOrigin = transform.position + Vector3.up * 1.3f;
-
-                    if (CheckObstacle(extraOrigin, directionToPlayer.normalized, distance, out RaycastHit extraHit)) { 
-                        if (extraHit.collider.gameObject == player)
-                            isVisible = true;
-                    }
-                    else
-                      isVisible = true;
-                }
-                else
-                    isVisible = true;
-            }
-        }
-        else if (distance <= viewDistance)
-        {
-            Vector3 direction = directionToPlayer / distance;
-
-            if (Vector3.Dot(transform.forward, direction) >= CosHalfFov && !IsPlayerBlocked(viewDistance))
-                isVisible = true;
-        }
-
-        if (isVisible)
-        {
-            visibleFramesCount++;
-            if (visibleFramesCount >= detectionFramesRequired)
-                return distance <= instantDetectionRadius ? DetectionType.InstantDeath : DetectionType.AlertDelay;
-        }
-        else
-            visibleFramesCount = 0;
-
-        return DetectionType.None;
     }
 
     /// <summary>
