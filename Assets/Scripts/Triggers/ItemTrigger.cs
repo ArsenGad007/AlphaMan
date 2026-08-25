@@ -8,6 +8,11 @@ public class ItemTrigger : MonoBehaviour
     private bool itemCollected = false;
     private bool flagInteract = false;
 
+    private void Start()
+    {
+        targetObject.SetActive(true);
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag(playerTag))
